@@ -1,8 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { APP_BASE_URL } from '../config/constants';
+import { BasePage } from './BasePage';
 
-export class ProfilePage {
-  readonly page: Page;
+export class ProfilePage extends BasePage {
   readonly profilePage: Locator;
   readonly title: Locator;
   readonly userSection: Locator;
@@ -12,24 +11,22 @@ export class ProfilePage {
   readonly firstNameInput: Locator;
   readonly lastNameInput: Locator;
   readonly submitButton: Locator;
-  readonly profileUrl: string;
 
   constructor(page: Page) {
-    this.page = page;
-    this.profilePage = page.getByTestId('profile-page');
-    this.title = page.getByTestId('profile-title');
-    this.userSection = page.getByTestId('profile-user-section');
-    this.userTitle = page.getByTestId('profile-user-title');
-    this.editForm = page.getByTestId('user-edit-form');
-    this.emailInput = page.getByTestId('user-edit-email-input');
-    this.firstNameInput = page.getByTestId('user-edit-firstName-input');
-    this.lastNameInput = page.getByTestId('user-edit-lastName-input');
-    this.submitButton = page.getByTestId('user-edit-submit');
-    this.profileUrl = `${APP_BASE_URL}/profile`;
+    super(page, '/profile');
+    this.profilePage = this.byTestId('profile-page');
+    this.title = this.byTestId('profile-title');
+    this.userSection = this.byTestId('profile-user-section');
+    this.userTitle = this.byTestId('profile-user-title');
+    this.editForm = this.byTestId('user-edit-form');
+    this.emailInput = this.byTestId('user-edit-email-input');
+    this.firstNameInput = this.byTestId('user-edit-firstName-input');
+    this.lastNameInput = this.byTestId('user-edit-lastName-input');
+    this.submitButton = this.byTestId('user-edit-submit');
   }
 
   async verifyLoaded(user: { email: string; firstName: string; lastName: string }) {
-    await expect(this.page).toHaveURL(this.profileUrl);
+    await this.verifyUrl();
     await expect(this.profilePage).toBeVisible();
     await expect(this.title).toHaveText('Profile');
     await expect(this.userSection).toBeVisible();

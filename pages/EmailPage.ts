@@ -1,8 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { APP_BASE_URL } from '../config/constants';
+import { BasePage } from './BasePage';
 
-export class EmailPage {
-  readonly page: Page;
+export class EmailPage extends BasePage {
   readonly emailPage: Locator;
   readonly title: Locator;
   readonly form: Locator;
@@ -10,22 +9,20 @@ export class EmailPage {
   readonly subjectInput: Locator;
   readonly messageInput: Locator;
   readonly submitButton: Locator;
-  readonly emailUrl: string;
 
   constructor(page: Page) {
-    this.page = page;
-    this.emailPage = page.getByTestId('email-page');
-    this.title = page.getByTestId('email-page-title');
-    this.form = page.getByTestId('email-form');
-    this.toInput = page.getByTestId('email-to-input');
-    this.subjectInput = page.getByTestId('email-subject-input');
-    this.messageInput = page.getByTestId('email-message-input');
-    this.submitButton = page.getByTestId('email-submit-button');
-    this.emailUrl = `${APP_BASE_URL}/email`;
+    super(page, '/email');
+    this.emailPage = this.byTestId('email-page');
+    this.title = this.byTestId('email-page-title');
+    this.form = this.byTestId('email-form');
+    this.toInput = this.byTestId('email-to-input');
+    this.subjectInput = this.byTestId('email-subject-input');
+    this.messageInput = this.byTestId('email-message-input');
+    this.submitButton = this.byTestId('email-submit-button');
   }
 
   async verifyLoaded() {
-    await expect(this.page).toHaveURL(this.emailUrl);
+    await this.verifyUrl();
     await expect(this.emailPage).toBeVisible();
     await expect(this.title).toHaveText('Send Email');
     await expect(this.form).toBeVisible();

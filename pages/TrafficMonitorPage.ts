@@ -1,29 +1,26 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { APP_BASE_URL } from '../config/constants';
+import { BasePage } from './BasePage';
 
-export class TrafficMonitorPage {
-  readonly page: Page;
+export class TrafficMonitorPage extends BasePage {
   readonly trafficMonitorPage: Locator;
   readonly title: Locator;
   readonly connectionStatus: Locator;
   readonly statusContainer: Locator;
   readonly eventsTitle: Locator;
   readonly clearButton: Locator;
-  readonly trafficMonitorUrl: string;
 
   constructor(page: Page) {
-    this.page = page;
-    this.trafficMonitorPage = page.getByTestId('traffic-monitor-page');
-    this.title = page.getByTestId('traffic-title');
-    this.connectionStatus = page.getByTestId('traffic-connection-status');
-    this.statusContainer = page.getByTestId('traffic-status-container');
-    this.eventsTitle = page.getByTestId('traffic-events-title');
-    this.clearButton = page.getByTestId('traffic-clear-button');
-    this.trafficMonitorUrl = `${APP_BASE_URL}/traffic`;
+    super(page, '/traffic');
+    this.trafficMonitorPage = this.byTestId('traffic-monitor-page');
+    this.title = this.byTestId('traffic-title');
+    this.connectionStatus = this.byTestId('traffic-connection-status');
+    this.statusContainer = this.byTestId('traffic-status-container');
+    this.eventsTitle = this.byTestId('traffic-events-title');
+    this.clearButton = this.byTestId('traffic-clear-button');
   }
 
   async verifyLoaded() {
-    await expect(this.page).toHaveURL(this.trafficMonitorUrl);
+    await this.verifyUrl();
     await expect(this.trafficMonitorPage).toBeVisible();
     await expect(this.title).toHaveText('Traffic Monitor');
     await expect(this.connectionStatus).toBeVisible();

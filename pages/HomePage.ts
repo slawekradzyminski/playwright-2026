@@ -1,9 +1,8 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { APP_BASE_URL } from '../config/constants';
 import { LoggedInHeader } from '../components/LoggedInHeader';
+import { BasePage } from './BasePage';
 
-export class HomePage {
-  readonly page: Page;
+export class HomePage extends BasePage {
   readonly header: LoggedInHeader;
   readonly homePage: Locator;
   readonly welcomeTitle: Locator;
@@ -13,26 +12,22 @@ export class HomePage {
   readonly profileButton: Locator;
   readonly llmButton: Locator;
   readonly trafficButton: Locator;
-  readonly homeUrl: string;
-  readonly usersUrl: string;
 
   constructor(page: Page) {
-    this.page = page;
+    super(page, '/');
     this.header = new LoggedInHeader(page);
-    this.homePage = page.getByTestId('home-page');
-    this.welcomeTitle = page.getByTestId('home-welcome-title');
-    this.userEmail = page.getByTestId('home-user-email');
-    this.productsButton = page.getByTestId('home-products-button');
-    this.usersButton = page.getByTestId('home-users-button');
-    this.profileButton = page.getByTestId('home-profile-button');
-    this.llmButton = page.getByTestId('home-llm-button');
-    this.trafficButton = page.getByTestId('home-traffic-button');
-    this.homeUrl = `${APP_BASE_URL}/`;
-    this.usersUrl = `${APP_BASE_URL}/users`;
+    this.homePage = this.byTestId('home-page');
+    this.welcomeTitle = this.byTestId('home-welcome-title');
+    this.userEmail = this.byTestId('home-user-email');
+    this.productsButton = this.byTestId('home-products-button');
+    this.usersButton = this.byTestId('home-users-button');
+    this.profileButton = this.byTestId('home-profile-button');
+    this.llmButton = this.byTestId('home-llm-button');
+    this.trafficButton = this.byTestId('home-traffic-button');
   }
 
   async verifyLoggedInUser(user: { displayName: string; firstName: string; email: string }) {
-    await expect(this.page).toHaveURL(this.homeUrl);
+    await this.verifyUrl();
     await expect(this.homePage).toBeVisible();
     await expect(this.welcomeTitle).toHaveText(`Welcome, ${user.firstName}!`);
     await expect(this.userEmail).toHaveText(user.email);

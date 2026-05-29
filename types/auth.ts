@@ -21,6 +21,10 @@ export interface LoginResponseDto {
   roles: string[];
 }
 
+export interface AuthUser extends LoginResponseDto {
+  displayName: string;
+}
+
 export interface ErrorResponse {
   message?: string;
   errors?: Record<string, string[]>;

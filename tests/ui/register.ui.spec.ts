@@ -1,22 +1,9 @@
-import { expect, test } from '../../fixtures/ui.fixture';
+import { expect, test } from '../../fixtures/pages.fixture';
 import { RegisterClient } from '../../http-clients/RegisterClient';
-import { HomePage } from '../../pages/HomePage';
-import { LoginPage } from '../../pages/LoginPage';
-import { RegisterPage } from '../../pages/RegisterPage';
 import { createRegisterUser } from '../../generators/userGenerator';
 
 test.describe('Register UI tests', () => {
-  let homePage: HomePage;
-  let loginPage: LoginPage;
-  let registerPage: RegisterPage;
-
-  test.beforeEach(async ({ page }) => {
-    homePage = new HomePage(page);
-    loginPage = new LoginPage(page);
-    registerPage = new RegisterPage(page);
-  });
-
-  test('should register a new user and allow immediate login', async ({ page }) => {
+  test('should register a new user and allow immediate login', async ({ page, homePage, loginPage, registerPage }) => {
     // given
     const user = createRegisterUser();
     await registerPage.goto();
@@ -25,7 +12,7 @@ test.describe('Register UI tests', () => {
     await registerPage.register(user);
 
     // then
-    await expect(page).toHaveURL(loginPage.loginUrl);
+    await expect(page).toHaveURL(loginPage.url);
     await registerPage.verifySuccessfulRegistrationToast();
 
     // when
@@ -42,7 +29,7 @@ test.describe('Register UI tests', () => {
     });
   });
 
-  test('should show error for already used username', async ({ page, request }) => {
+  test('should show error for already used username', async ({ page, registerPage, request }) => {
     // given
     const registerClient = new RegisterClient(request);
     const existingUser = createRegisterUser();
@@ -57,11 +44,11 @@ test.describe('Register UI tests', () => {
     await registerPage.register(userWithExistingUsername);
 
     // then
-    await expect(page).toHaveURL(registerPage.registerUrl);
+    await expect(page).toHaveURL(registerPage.url);
     await registerPage.verifyUsernameAlreadyExistsToast();
   });
 
-  test('should show error for already used email', async ({ page, request }) => {
+  test('should show error for already used email', async ({ page, registerPage, request }) => {
     // given
     const registerClient = new RegisterClient(request);
     const existingUser = createRegisterUser();
@@ -76,11 +63,11 @@ test.describe('Register UI tests', () => {
     await registerPage.register(userWithExistingEmail);
 
     // then
-    await expect(page).toHaveURL(registerPage.registerUrl);
+    await expect(page).toHaveURL(registerPage.url);
     await registerPage.verifyErrorToastVisible();
   });
 
-  test('should show validation errors for empty required fields', async ({ page }) => {
+  test('should show validation errors for empty required fields', async ({ page, registerPage }) => {
     // given
     const signupRequests: string[] = [];
     page.on('request', request => {
@@ -94,7 +81,7 @@ test.describe('Register UI tests', () => {
     await registerPage.submit();
 
     // then
-    await expect(page).toHaveURL(registerPage.registerUrl);
+    await expect(page).toHaveURL(registerPage.url);
     await registerPage.verifyRequiredFieldErrors();
     await registerPage.verifyNoToast();
     expect(signupRequests).toHaveLength(0);

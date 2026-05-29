@@ -1,22 +1,14 @@
-import { test as base } from '@playwright/test';
+import type { Page } from '@playwright/test';
 import { createRegisterUser } from '../generators/userGenerator';
-import { enablePlaywrightUiStyleSnapshots } from './ui.fixture';
 import { LoginClient } from '../http-clients/LoginClient';
 import { RegisterClient } from '../http-clients/RegisterClient';
-
-interface AuthUser {
-  username: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  displayName: string;
-  roles: string[];
-  token: string;
-  refreshToken: string;
-}
+import type { AuthUser } from '../types/auth';
+import { enablePlaywrightUiStyleSnapshots } from './base.fixture';
+import { test as base } from './pages.fixture';
 
 interface AuthFixtures {
   authUser: AuthUser;
+  page: Page;
 }
 
 export const test = base.extend<AuthFixtures>({

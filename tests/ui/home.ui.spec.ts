@@ -1,50 +1,29 @@
 import { test } from '../../fixtures/auth.fixture';
-import { CartPage } from '../../pages/CartPage';
-import { EmailPage } from '../../pages/EmailPage';
-import { HomePage } from '../../pages/HomePage';
-import { LlmPage } from '../../pages/LlmPage';
-import { LoginPage } from '../../pages/LoginPage';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { ProfilePage } from '../../pages/ProfilePage';
-import { QrCodePage } from '../../pages/QrCodePage';
-import { TrafficMonitorPage } from '../../pages/TrafficMonitorPage';
 
 test.describe('Home UI tests', () => {
-  let cartPage: CartPage;
-  let emailPage: EmailPage;
-  let homePage: HomePage;
-  let llmPage: LlmPage;
-  let loginPage: LoginPage;
-  let productsPage: ProductsPage;
-  let profilePage: ProfilePage;
-  let qrCodePage: QrCodePage;
-  let trafficMonitorPage: TrafficMonitorPage;
-
-  test.beforeEach(async ({ page }) => {
-    cartPage = new CartPage(page);
-    emailPage = new EmailPage(page);
-    homePage = new HomePage(page);
-    llmPage = new LlmPage(page);
-    loginPage = new LoginPage(page);
-    productsPage = new ProductsPage(page);
-    profilePage = new ProfilePage(page);
-    qrCodePage = new QrCodePage(page);
-    trafficMonitorPage = new TrafficMonitorPage(page);
-  });
-
-  test('should open home page as authenticated user', async ({ page, authUser }) => {
+  test('should open home page as authenticated user', async ({ homePage, authUser }) => {
     // given
 
     // when
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
 
     // then
     await homePage.verifyLoggedInUser(authUser);
   });
 
-  test('should navigate with logged in header links', async ({ page, authUser }) => {
+  test('should navigate with logged in header links', async ({
+    authUser,
+    cartPage,
+    emailPage,
+    homePage,
+    llmPage,
+    productsPage,
+    profilePage,
+    qrCodePage,
+    trafficMonitorPage
+  }) => {
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
     await homePage.header.verifyVisible(authUser);
 
     // when
@@ -96,9 +75,9 @@ test.describe('Home UI tests', () => {
     await homePage.verifyLoggedInUser(authUser);
   });
 
-  test('should logout from logged in header', async ({ page, authUser }) => {
+  test('should logout from logged in header', async ({ authUser, homePage, loginPage }) => {
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
     await homePage.header.verifyVisible(authUser);
 
     // when
@@ -108,9 +87,16 @@ test.describe('Home UI tests', () => {
     await loginPage.verifyLoaded();
   });
 
-  test('should navigate with home page links', async ({ page, authUser }) => {
+  test('should navigate with home page links', async ({
+    authUser,
+    homePage,
+    llmPage,
+    productsPage,
+    profilePage,
+    trafficMonitorPage
+  }) => {
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
 
     // when
     await homePage.productsButton.click();
@@ -119,7 +105,7 @@ test.describe('Home UI tests', () => {
     await productsPage.verifyLoaded();
 
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
 
     // when
     await homePage.profileButton.click();
@@ -128,7 +114,7 @@ test.describe('Home UI tests', () => {
     await profilePage.verifyLoaded(authUser);
 
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
 
     // when
     await homePage.llmButton.click();
@@ -137,7 +123,7 @@ test.describe('Home UI tests', () => {
     await llmPage.verifyLoaded();
 
     // given
-    await page.goto(homePage.homeUrl);
+    await homePage.goto();
 
     // when
     await homePage.trafficButton.click();
