@@ -1,12 +1,16 @@
 import type { Locator, Page } from '@playwright/test';
+import { ToastAlert } from '../components/ToastAlert';
 import type { LoginDto } from '../types/auth';
 import { APP_BASE_URL } from '../config/constants';
 
 export class LoginPage {
   readonly page: Page;
+  readonly toast: ToastAlert;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly submitButton: Locator;
+  readonly usernameError: Locator;
+  readonly passwordError: Locator;
   readonly registerButton: Locator;
   readonly registerLink: Locator;
   readonly loginUrl: string;
@@ -14,11 +18,14 @@ export class LoginPage {
 
   constructor(page: Page) {
     this.page = page;
-    this.usernameInput = page.getByRole('textbox', { name: 'Username' });
-    this.passwordInput = page.getByRole('textbox', { name: 'Password' });
+    this.toast = new ToastAlert(page);
+    this.usernameInput = page.getByTestId('login-username-input');
+    this.passwordInput = page.getByTestId('login-password-input');
     this.submitButton = page.getByTestId('login-submit-button');
-    this.registerButton = page.getByRole('button', { name: 'Register' });
-    this.registerLink = page.getByRole('link', { name: 'Register' });
+    this.usernameError = page.getByTestId('login-username-error');
+    this.passwordError = page.getByTestId('login-password-error');
+    this.registerButton = page.getByTestId('login-register-link');
+    this.registerLink = page.getByTestId('register-link');
     this.loginUrl = `${APP_BASE_URL}/login`;
     this.registerUrl = `${APP_BASE_URL}/register`;
   }
