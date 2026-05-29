@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 import { ToastAlert } from '../components/ToastAlert';
 import type { LoginDto } from '../types/auth';
 import { APP_BASE_URL } from '../config/constants';
@@ -6,6 +6,7 @@ import { APP_BASE_URL } from '../config/constants';
 export class LoginPage {
   readonly page: Page;
   readonly toast: ToastAlert;
+  readonly loginPage: Locator;
   readonly usernameInput: Locator;
   readonly passwordInput: Locator;
   readonly submitButton: Locator;
@@ -19,6 +20,7 @@ export class LoginPage {
   constructor(page: Page) {
     this.page = page;
     this.toast = new ToastAlert(page);
+    this.loginPage = page.getByTestId('login-page');
     this.usernameInput = page.getByTestId('login-username-input');
     this.passwordInput = page.getByTestId('login-password-input');
     this.submitButton = page.getByTestId('login-submit-button');
@@ -32,6 +34,14 @@ export class LoginPage {
 
   async goto() {
     await this.page.goto(this.loginUrl);
+  }
+
+  async verifyLoaded() {
+    await expect(this.page).toHaveURL(this.loginUrl);
+    await expect(this.loginPage).toBeVisible();
+    await expect(this.usernameInput).toBeVisible();
+    await expect(this.passwordInput).toBeVisible();
+    await expect(this.submitButton).toBeVisible();
   }
 
   async login(credentials: LoginDto) {
