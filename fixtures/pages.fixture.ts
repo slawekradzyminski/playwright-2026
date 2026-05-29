@@ -3,6 +3,7 @@ import { EmailPage } from '../pages/EmailPage';
 import { HomePage } from '../pages/HomePage';
 import { LlmPage } from '../pages/LlmPage';
 import { LoginPage } from '../pages/LoginPage';
+import { ProductDetailsPage } from '../pages/ProductDetailsPage';
 import { ProductsPage } from '../pages/ProductsPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { QrCodePage } from '../pages/QrCodePage';
@@ -16,6 +17,7 @@ interface PageFixtures {
   homePage: HomePage;
   llmPage: LlmPage;
   loginPage: LoginPage;
+  productDetailsPage: ProductDetailsPage;
   productsPage: ProductsPage;
   profilePage: ProfilePage;
   qrCodePage: QrCodePage;
@@ -42,6 +44,10 @@ export const test = base.extend<PageFixtures>({
 
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
+  },
+
+  productDetailsPage: async ({ page }, use) => {
+    await use(new ProductDetailsPage(page));
   },
 
   productsPage: async ({ page }, use) => {

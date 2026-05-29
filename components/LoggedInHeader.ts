@@ -39,4 +39,8 @@ export class LoggedInHeader {
     await expect(this.profileLink).toHaveText(user.displayName);
     await expect(this.logoutButton).toBeVisible();
   }
+
+  async verifyCartQuantity(quantity: number) {
+    await expect(this.cartLink).toContainText(String(quantity));
+  }
 }

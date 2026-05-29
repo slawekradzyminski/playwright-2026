@@ -16,6 +16,11 @@ export class ToastAlert {
     await expect(this.description).toHaveText(message);
   }
 
+  async verifyAlert(title: string, message: string) {
+    await expect(this.title).toHaveText(title);
+    await expect(this.description).toHaveText(message);
+  }
+
   async verifyAlertFailure(message: string) {
     await expect(this.title).toHaveText('Error');
     await expect(this.description).toHaveText(message);
