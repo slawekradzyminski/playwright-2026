@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
+import { LoginPage } from '../../pages/LoginPage';
 import type { LoginDto } from '../../types/auth';
-
-const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:8081';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'LocalDemoAdmin123!';
-const LOGIN_URL = `${APP_BASE_URL}/login`;
-const REGISTER_URL = `${APP_BASE_URL}/register`;
+import { ADMIN_PASSWORD } from '../../config/constants';
 
 test.describe('Login UI tests', () => {
+  let loginPage: LoginPage;
+
   test.beforeEach(async ({ page }) => {
-    await page.goto(LOGIN_URL);
+    loginPage = new LoginPage(page);
+    await loginPage.goto();
   });
 
   test('should successfully login with valid credentials', async ({ page }) => {
@@ -19,12 +19,10 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
-    await page.getByTestId('login-submit-button').click();
+    await loginPage.login(credentials);
 
     // then
-    await expect(page).not.toHaveURL(LOGIN_URL);
+    await expect(page).not.toHaveURL(loginPage.loginUrl);
   });
 
   test('should show error for empty password', async ({ page }) => {
@@ -35,12 +33,10 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
-    await page.getByTestId('login-submit-button').click();
+    await loginPage.login(credentials);
 
     // then
-    await expect(page).toHaveURL(LOGIN_URL);
+    await expect(page).toHaveURL(loginPage.loginUrl);
   });
 
   test('should show error for invalid credentials', async ({ page }) => {
@@ -51,30 +47,28 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
-    await page.getByTestId('login-submit-button').click();
+    await loginPage.login(credentials);
 
     // then
-    await expect(page).toHaveURL(LOGIN_URL);
+    await expect(page).toHaveURL(loginPage.loginUrl);
   });
 
   test('should navigate to register page when register button is clicked', async ({ page }) => {
     // given
     // when
-    await page.getByRole('button', { name: 'Register' }).click();
+    await loginPage.clickRegisterButton();
 
     // then
-    await expect(page).toHaveURL(REGISTER_URL);
+    await expect(page).toHaveURL(loginPage.registerUrl);
   });
 
   test('should navigate to register page when register link is clicked', async ({ page }) => {
     // given
     // when
-    await page.getByRole('link', { name: 'Register' }).click();
+    await loginPage.clickRegisterLink();
 
     // then
-    await expect(page).toHaveURL(REGISTER_URL);
+    await expect(page).toHaveURL(loginPage.registerUrl);
   });
 
   test('should have proper form validation for short username', async ({ page }) => {
@@ -85,12 +79,10 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
-    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
-    await page.getByTestId('login-submit-button').click();
+    await loginPage.login(credentials);
 
     // then
-    await expect(page).toHaveURL(LOGIN_URL);
+    await expect(page).toHaveURL(loginPage.loginUrl);
   });
 
 }); 
