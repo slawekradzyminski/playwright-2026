@@ -98,10 +98,10 @@ Screen coverage here means a Playwright UI test opens or reaches the routed scre
 | Home | `/` | User | `tests/ui/home.ui.spec.ts` | Covered |
 | Catalog | `/products` | User | `tests/ui/products.ui.spec.ts`, header and home navigation checks | Covered workflow |
 | Catalog | `/products/:id` | User | `tests/ui/products.ui.spec.ts` | Covered workflow |
-| Cart | `/cart` | User | Header navigation to empty cart | Covered smoke |
-| Checkout | `/checkout` | User | None | Missing |
+| Cart | `/cart` | User | Header navigation to empty cart; `tests/ui/cart-checkout.ui.spec.ts` product-in-cart workflow | Covered workflow |
+| Checkout | `/checkout` | User | `tests/ui/cart-checkout.ui.spec.ts` reaches checkout when supported after real cart setup | Covered workflow |
 | Orders | `/orders` | User | None | Missing redirect assertion |
-| Orders | `/orders/:id` | User/Admin | None | Missing |
+| Orders | `/orders/:id` | User/Admin | `tests/ui/cart-checkout.ui.spec.ts` asserts order details when checkout completes | Covered workflow |
 | Profile | `/profile` | User | Header/home navigation and profile form assertions | Covered |
 | Email | `/email` | User | Header navigation smoke check | Covered smoke |
 | QR | `/qr` | User | Header navigation smoke check | Covered smoke |
@@ -112,7 +112,7 @@ Screen coverage here means a Playwright UI test opens or reaches the routed scre
 | Traffic | `/traffic` | User | Header/home navigation smoke check | Covered smoke |
 | Users | `/users` | Admin behavior in protected user route | None | Missing |
 | Users | `/users/:username/edit` | Admin behavior in protected user route | None | Missing |
-| Admin | `/admin` | Admin | None | Missing |
+| Admin | `/admin` | Admin | `tests/ui/admin-access/` | Covered smoke |
 | Admin | `/admin/products` | Admin | None | Missing |
 | Admin | `/admin/products/new` | Admin | None | Missing |
 | Admin | `/admin/products/edit/:id` | Admin | None | Missing |
@@ -120,8 +120,8 @@ Screen coverage here means a Playwright UI test opens or reaches the routed scre
 
 Current automated screen coverage:
 
-- Covered or smoke-covered concrete screens: 11/26.
-- Missing concrete screens: 15/26.
+- Covered or smoke-covered concrete screens: 14/26.
+- Missing concrete screens: 12/26.
 - Missing route behavior assertion: `/orders` redirect to `/profile`.
 
 ## Regular User Plan
@@ -162,6 +162,7 @@ Add:
 Status:
 
 - Implemented workflow coverage for catalog rendering, filtering, search, sorting, product details navigation, and add-to-cart entry points.
+- Implemented cart/checkout workflow coverage in `tests/ui/cart-checkout.ui.spec.ts`: a regular generated user adds a real product through the UI, verifies the cart with real API state, proceeds to checkout when the app allows it, and asserts either order details after order creation or the observed redirect behavior.
 
 Scenarios:
 
@@ -312,7 +313,11 @@ Suggested file:
 
 Add:
 
-- `tests/ui/admin-access.ui.spec.ts`
+- `tests/ui/admin-access/`
+
+Status:
+
+- Implemented read-only access smoke coverage with an admin fixture that signs in through the real `/api/v1/users/signin` endpoint and seeds localStorage with returned tokens.
 
 Scenarios:
 

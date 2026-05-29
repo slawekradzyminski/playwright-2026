@@ -1,8 +1,10 @@
 import { CartPage } from '../pages/CartPage';
+import { CheckoutPage } from '../pages/CheckoutPage';
 import { EmailPage } from '../pages/EmailPage';
 import { HomePage } from '../pages/HomePage';
 import { LlmPage } from '../pages/LlmPage';
 import { LoginPage } from '../pages/LoginPage';
+import { OrderDetailsPage } from '../pages/OrderDetailsPage';
 import { ProductDetailsPage } from '../pages/ProductDetailsPage';
 import { ProductsPage } from '../pages/ProductsPage';
 import { ProfilePage } from '../pages/ProfilePage';
@@ -13,10 +15,12 @@ import { test as base } from './ui.fixture';
 
 interface PageFixtures {
   cartPage: CartPage;
+  checkoutPage: CheckoutPage;
   emailPage: EmailPage;
   homePage: HomePage;
   llmPage: LlmPage;
   loginPage: LoginPage;
+  orderDetailsPage: OrderDetailsPage;
   productDetailsPage: ProductDetailsPage;
   productsPage: ProductsPage;
   profilePage: ProfilePage;
@@ -28,6 +32,10 @@ interface PageFixtures {
 export const test = base.extend<PageFixtures>({
   cartPage: async ({ page }, use) => {
     await use(new CartPage(page));
+  },
+
+  checkoutPage: async ({ page }, use) => {
+    await use(new CheckoutPage(page));
   },
 
   emailPage: async ({ page }, use) => {
@@ -44,6 +52,10 @@ export const test = base.extend<PageFixtures>({
 
   loginPage: async ({ page }, use) => {
     await use(new LoginPage(page));
+  },
+
+  orderDetailsPage: async ({ page }, use) => {
+    await use(new OrderDetailsPage(page));
   },
 
   productDetailsPage: async ({ page }, use) => {
