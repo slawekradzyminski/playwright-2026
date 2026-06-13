@@ -22,8 +22,13 @@ This repository contains automated API and UI tests for the local training envir
 │   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
 │   └── ui/
 │       └── login.ui.spec.ts        # UI tests for the login page
+├── pages/
+│   └── LoginPage.ts                # Page Object Model for login UI interactions
+├── config/
+│   └── constants.ts                # Shared test configuration values
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
+├── .env.example                    # Local environment variable template
 ├── playwright.config.ts            # Playwright configuration
 ├── package.json                    # Project metadata and dependencies
 └── ...
@@ -52,7 +57,26 @@ npm install
 npx playwright install chromium
 ```
 
-3. **Start the Dockerized Environment**
+3. **Configure Local Environment Variables**
+
+Create a local `.env` file from the committed template:
+
+```bash
+cp .env.example .env
+```
+
+Update `.env` with values for your local training stack:
+
+```bash
+APP_BASE_URL=http://localhost:8081
+ADMIN_PASSWORD=your-local-admin-password
+```
+
+`ADMIN_PASSWORD` is required. The tests fail fast with a clear error if it is missing.
+
+The `.env` file is ignored by git and must not be committed. Keep real passwords, tokens, and machine-specific settings there. Commit only safe placeholders in `.env.example` so other contributors know which variables they need.
+
+4. **Start the Dockerized Environment**
 
 Follow the instructions in the awesome-localstack repository and start the lightweight profile:
 
@@ -68,19 +92,9 @@ The tests expect the following public app URL:
 - **Login Page**: `http://localhost:8081/login`
 - **Auth API**: `http://localhost:8081/api/v1/users/signin`
 
-If you run the app on a different host or port, override the default:
+If you run the app on a different host or port, update `APP_BASE_URL` in `.env`.
 
-```bash
-APP_BASE_URL=http://localhost:8081 npx playwright test
-```
-
-If the training stack uses a different seeded admin password, override that too:
-
-```bash
-ADMIN_PASSWORD=your-password npx playwright test
-```
-
-4. **Run Tests**
+5. **Run Tests**
 
 **API Tests**
 
