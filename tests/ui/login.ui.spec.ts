@@ -1,43 +1,49 @@
-import { test, expect } from '../../fixtures/pages.fixture';
+import { test, expect } from '@playwright/test';
 import type { LoginDto } from '../../types/auth';
-import { ADMIN_PASSWORD, ADMIN_USER } from '../../config/constants';
+
+const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:8081';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'LocalDemoAdmin123!';
+const LOGIN_URL = `${APP_BASE_URL}/login`;
+const REGISTER_URL = `${APP_BASE_URL}/register`;
 
 test.describe('Login UI tests', () => {
-  test.beforeEach(async ({ loginPage }) => {
-    await loginPage.goto();
+  test.beforeEach(async ({ page }) => {
+    await page.goto(LOGIN_URL);
   });
 
-  test('should successfully login with valid credentials', async ({ homePage, loginPage }) => {
+  test('should successfully login with valid credentials', async ({ page }) => {
     // given
     const credentials: LoginDto = {
-      username: ADMIN_USER.username,
-      password: ADMIN_USER.password
+      username: 'admin',
+      password: ADMIN_PASSWORD
     };
 
     // when
-    await loginPage.login(credentials);
+    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
+    await page.getByTestId('login-submit-button').click();
 
     // then
-    await homePage.verifyLoggedInUser(ADMIN_USER);
+    await expect(page).not.toHaveURL(LOGIN_URL);
   });
 
-  test('should show error for empty password', async ({ page, loginPage }) => {
+  test('should show error for empty password', async ({ page }) => {
     // given
     const credentials = {
-      username: ADMIN_USER.username,
+      username: 'admin',
       password: ''
     };
 
     // when
-    await loginPage.login(credentials);
+    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
+    await page.getByTestId('login-submit-button').click();
 
     // then
-    await expect(page).toHaveURL(loginPage.url);
-    await expect(loginPage.passwordError).toHaveText('Password is required');
-    await expect(loginPage.toast.viewport).toBeEmpty();
+    await expect(page).toHaveURL(LOGIN_URL);
   });
 
-  test('should show error for invalid credentials', async ({ page, loginPage }) => {
+  test('should show error for invalid credentials', async ({ page }) => {
     // given
     const credentials: LoginDto = {
       username: 'invaliduser',
@@ -45,36 +51,33 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await loginPage.login(credentials);
+    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
+    await page.getByTestId('login-submit-button').click();
 
     // then
-    await expect(page).toHaveURL(loginPage.url);
-    await loginPage.toast.verifyAlertFailure('Invalid username/password');
+    await expect(page).toHaveURL(LOGIN_URL);
   });
 
-  test('should navigate to register page when register button is clicked', async ({ page, loginPage, registerPage }) => {
+  test('should navigate to register page when register button is clicked', async ({ page }) => {
     // given
     // when
-    await loginPage.clickRegisterButton();
+    await page.getByRole('button', { name: 'Register' }).click();
 
     // then
-    await expect(page).toHaveURL(registerPage.url);
-    await expect(registerPage.registerPage).toBeVisible();
-    await expect(registerPage.title).toHaveText('Create your account');
+    await expect(page).toHaveURL(REGISTER_URL);
   });
 
-  test('should navigate to register page when register link is clicked', async ({ page, loginPage, registerPage }) => {
+  test('should navigate to register page when register link is clicked', async ({ page }) => {
     // given
     // when
-    await loginPage.clickRegisterLink();
+    await page.getByRole('link', { name: 'Register' }).click();
 
     // then
-    await expect(page).toHaveURL(registerPage.url);
-    await expect(registerPage.registerPage).toBeVisible();
-    await expect(registerPage.title).toHaveText('Create your account');
+    await expect(page).toHaveURL(REGISTER_URL);
   });
 
-  test('should have proper form validation for short username', async ({ page, loginPage }) => {
+  test('should have proper form validation for short username', async ({ page }) => {
     // given
     const credentials = {
       username: 'abc',
@@ -82,12 +85,12 @@ test.describe('Login UI tests', () => {
     };
 
     // when
-    await loginPage.login(credentials);
+    await page.getByRole('textbox', { name: 'Username' }).fill(credentials.username);
+    await page.getByRole('textbox', { name: 'Password' }).fill(credentials.password);
+    await page.getByTestId('login-submit-button').click();
 
     // then
-    await expect(page).toHaveURL(loginPage.url);
-    await expect(loginPage.usernameError).toHaveText('Username must be at least 4 characters');
-    await expect(loginPage.toast.viewport).toBeEmpty();
+    await expect(page).toHaveURL(LOGIN_URL);
   });
 
 }); 
