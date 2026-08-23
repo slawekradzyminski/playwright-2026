@@ -1,6 +1,9 @@
-# 🧪 Test Automation in Practice 2025
+# 🧪 Test Automation in Practice 2026
 
 A TypeScript-based Playwright suite for validating the current gateway-first application stack powered by awesome-localstack.
+
+This setup was last verified on August 23, 2026 with Node.js 24 LTS, Playwright
+1.62.1, and the lightweight application stack at `http://localhost:8081`.
 
 ## 📦 Project Overview
 
@@ -24,6 +27,7 @@ This repository contains automated API and UI tests for the local training envir
 │       └── login.ui.spec.ts        # UI tests for the login page
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
+├── .nvmrc                          # Course Node.js major version
 ├── playwright.config.ts            # Playwright configuration
 ├── package.json                    # Project metadata and dependencies
 └── ...
@@ -36,19 +40,21 @@ This repository contains automated API and UI tests for the local training envir
 - Node.js LTS only, recommended `v24.x.x`
 - Docker
 
+If you use nvm, select the repository's declared Node.js version with `nvm use`.
+
 ### Setup
 
 1. **Clone the Repository**
 
 ```bash
-git clone https://github.com/slawekradzyminski/playwright-2025
-cd playwright-2025
+git clone https://github.com/slawekradzyminski/playwright-2026
+cd playwright-2026
 ```
 
 2. **Install Dependencies**
 
 ```bash
-npm install
+npm ci
 npx playwright install chromium
 ```
 
@@ -72,6 +78,13 @@ If you run the app on a different host or port, override the default:
 
 ```bash
 APP_BASE_URL=http://localhost:8081 npx playwright test
+```
+
+PowerShell equivalent:
+
+```powershell
+$env:APP_BASE_URL = "http://localhost:8081"
+npx playwright test
 ```
 
 If the training stack uses a different seeded admin password, override that too:
@@ -141,7 +154,7 @@ These tests validate the login page's functionality and user experience:
 - **Playwright**: End-to-end testing framework for web applications
 - **TypeScript**: Typed superset of JavaScript
 - **Docker**: Containerization platform
-- **awesome-localstack**: Dockerized local AWS environment for development and testing
+- **awesome-localstack**: Containerized local application environment for development and testing
 
 ## Current Target Architecture
 
@@ -152,24 +165,45 @@ The tests assume a gateway-first local setup:
 - backend API is exposed behind the same origin under `/api/v1/...`
 - no test should depend on raw backend port `4001`
 
-## Playwright MCP
+## AI-assisted browser testing
+
+The agent must run on the same computer as the application, or be able to execute
+commands in its local terminal. A remote-only agent usually cannot reach your
+`http://localhost:8081` without additional networking or tunneling.
+
+For coding agents, Playwright now provides two official integration paths:
+
+- **Playwright CLI + skills** for compact, command-based agent workflows
+- **Playwright MCP** for persistent browser sessions and structured accessibility snapshots
+
+The CLI option can be installed globally and then exposed to a compatible agent:
+
+```bash
+npm install -g @playwright/cli@latest
+playwright-cli install --skills
+```
+
+Read more in the official
+[Playwright coding-agent guide](https://playwright.dev/docs/getting-started-cli).
+
+### Playwright MCP
 
 The Playwright MCP (Model Context Protocol) server enables browser automation capabilities, allowing AI coding assistants to interact with web pages through structured accessibility snapshots.
 
-Read more about Playwright MCP here: https://github.com/microsoft/playwright-mcp
+Read more in the official [Playwright MCP documentation](https://playwright.dev/docs/getting-started-mcp).
 
-### Prerequisites
+#### Prerequisites
 
-- Node.js 18 or newer (LTS releases only)
+- Node.js 24 LTS for this course
 - Playwright installed
 
-### Cursor
+#### Cursor
 
 1. Navigate to `Cursor Settings` → `MCP` → `Add new MCP Server`
 2. Name it "playwright" and set the command to `npx @playwright/mcp@latest`
 3. Save the configuration
 
-### VS Code (GitHub Copilot)
+#### VS Code (GitHub Copilot)
 
 **Option 1: Using CLI**
 
@@ -198,7 +232,7 @@ Add the following configuration:
 
 Restart VS Code or reload the window.
 
-### Codex
+#### Codex
 
 **Option 1: Using CLI**
 
@@ -216,7 +250,7 @@ command = "npx"
 args = ["@playwright/mcp@latest"]
 ```
 
-### Claude Code
+#### Claude Code
 
 Use the Claude Code CLI to add the Playwright MCP server:
 
@@ -224,7 +258,7 @@ Use the Claude Code CLI to add the Playwright MCP server:
 claude mcp add playwright npx @playwright/mcp@latest
 ```
 
-### Claude Desktop
+#### Claude Desktop
 
 Open the configuration file:
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
