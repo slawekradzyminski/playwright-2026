@@ -15,4 +15,16 @@ export class ApiClient {
       }
     });
   }
+
+  protected getJson(endpoint: string, token?: string): Promise<APIResponse> {
+    return this.request.get(`${this.baseUrl}${endpoint}`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined
+    });
+  }
+
+  protected deleteRequest(endpoint: string, token: string): Promise<APIResponse> {
+    return this.request.delete(`${this.baseUrl}${endpoint}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+  }
 }

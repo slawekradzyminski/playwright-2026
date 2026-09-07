@@ -4,3 +4,5 @@
 - parametrise tests when possible
 - report bugs in reports/bugs if you see any
 - before automating tests do exploratory tests first, make sure endpoints work as described in doc
+- initialise endpoint API clients in `test.beforeEach`
+- keep tests for each API endpoint in a separate spec file
