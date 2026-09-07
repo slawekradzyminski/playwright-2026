@@ -22,11 +22,19 @@ This repository contains automated API and UI tests for the local training envir
 .
 ├── tests/
 │   ├── api/
-│   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
+│   │   └── login.api.spec.ts       # All signin endpoint API tests
 │   └── ui/
 │       └── login.ui.spec.ts        # UI tests for the login page
+├── http/
+│   ├── apiClient.ts                 # Shared JSON HTTP client abstraction
+│   └── loginClient.ts               # Client for the signin endpoint
+├── validators/
+│   ├── authResponse.ts              # Login response and refresh-token validation
+│   └── jwt.ts                       # JWT structure validation
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
+├── reports/bugs/
+│   └── BUG-003-swagger-login-sends-bearer-auth.md # Swagger auth inheritance report
 ├── .nvmrc                          # Course Node.js major version
 ├── playwright.config.ts            # Playwright configuration
 ├── test-config.ts                  # .env-backed test configuration
@@ -152,8 +160,10 @@ The `playwright.config.ts` file is configured to:
 These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ordered by response code:
 
 - **Successful Authentication (200)**: Valid credentials return a 200 status with a JWT token and complete user information
-- **Validation Errors (400)**: Tests for empty username, short username, and short password scenarios with appropriate error messages
-- **Authentication Errors (422)**: Invalid credentials result in 422 status codes with error messages
+- **Validation Errors (400)**: A parameterized test covers empty username, short username, and short password scenarios with appropriate error messages
+- **Token validation**: The response validator checks the JSON contract, JWT compact serialization/header structure, and the opaque `refreshToken` format
+
+Authentication failures (422) remain in the same signin API suite as the 200 and 400 cases.
 
 ### UI Tests (`tests/ui/login.ui.spec.ts`)
 
