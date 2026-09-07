@@ -7,12 +7,20 @@ export class ApiClient {
     private readonly baseUrl = APP_BASE_URL
   ) {}
 
-  protected postJson<TPayload>(endpoint: string, payload: TPayload): Promise<APIResponse> {
+  protected postJson<TPayload>(endpoint: string, payload: TPayload, token?: string): Promise<APIResponse> {
     return this.request.post(`${this.baseUrl}${endpoint}`, {
       data: payload,
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        ...(token ? { Authorization: `Bearer ${token}` } : {})
       }
+    });
+  }
+
+  protected putJson(endpoint: string, payload: unknown, token?: string): Promise<APIResponse> {
+    return this.request.put(`${this.baseUrl}${endpoint}`, {
+      data: payload,
+      headers: { 'Content-Type': 'application/json', ...(token ? { Authorization: `Bearer ${token}` } : {}) }
     });
   }
 
@@ -22,9 +30,9 @@ export class ApiClient {
     });
   }
 
-  protected deleteRequest(endpoint: string, token: string): Promise<APIResponse> {
+  protected deleteRequest(endpoint: string, token?: string): Promise<APIResponse> {
     return this.request.delete(`${this.baseUrl}${endpoint}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: token ? { Authorization: `Bearer ${token}` } : undefined
     });
   }
 }

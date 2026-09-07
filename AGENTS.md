@@ -1,8 +1,10 @@
 - use English
 - use given (test setup), when (tested action) and then (assertion)
+- separate the given, when and then sections with one blank line
 - order api tests via response code ascending (200 -> 400 -> ...)
 - parametrise tests when possible
 - report bugs in reports/bugs if you see any
 - before automating tests do exploratory tests first, make sure endpoints work as described in doc
 - initialise endpoint API clients in `test.beforeEach`
 - keep tests for each API endpoint in a separate spec file
+- document discovered bugs in reports/bugs, but do not add tests that reproduce known bugs or mark them as expected failures

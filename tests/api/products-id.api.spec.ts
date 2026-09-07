@@ -1,7 +1,7 @@
 import { ProductClient } from '../../http/productClient';
-import { expect, test } from '../../fixtures/loggedInUser.fixture';
-import type { ProductDto } from '../../types/product';
-import { expectValidProduct, expectValidProductCollection } from '../../validators/productResponse';
+import { expect, test } from '../../fixtures/products.fixture';
+import { generateProduct } from '../../generators/productGenerator';
+import { expectValidProduct } from '../../validators/productResponse';
 
 const UNKNOWN_PRODUCT_ID = '9223372036854775807';
 
@@ -13,21 +13,24 @@ test.describe('/api/v1/products/{id} API tests', () => {
   });
 
   test('should return a product by its ID to an authenticated user - 200', async ({
-    loggedInUser
+    loggedInUser, adminToken, productIds
   }) => {
     // given
-    const productsResponse = await productClient.getAllProducts(loggedInUser.token);
-    expect(productsResponse.status()).toBe(200);
-    const products = (await productsResponse.json()) as ProductDto[];
-    expectValidProductCollection(products);
-    const productId = products[0].id;
+    const payload = generateProduct();
+    const created = await productClient.createProduct(payload, adminToken);
+    const product = await created.json();
+    if (product.id) productIds.add(product.id);
+    expect(created.status()).toBe(201);
+    const productId = product.id;
 
     // when
     const response = await productClient.getProductById(productId, loggedInUser.token);
 
     // then
     expect(response.status()).toBe(200);
-    expectValidProduct(await response.json());
+    const body = await response.json();
+    expectValidProduct(body);
+    expect(body).toEqual(product);
   });
 
   test('should reject a non-numeric product ID - 400', async ({ loggedInUser }) => {
