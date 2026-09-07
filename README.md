@@ -2,8 +2,8 @@
 
 A TypeScript-based Playwright suite for validating the current gateway-first application stack powered by awesome-localstack.
 
-This setup was last verified on August 23, 2026 with Node.js 24 LTS, Playwright
-1.62.1, and the lightweight application stack at `http://localhost:8081`.
+This setup was last verified on August 23, 2026 with Node.js 24 LTS and
+Playwright 1.63.0.
 
 ## 📦 Project Overview
 
@@ -14,7 +14,7 @@ This repository contains automated API and UI tests for the local training envir
 - **API Testing**: Validates authentication endpoints with various scenarios, including successful logins and error handling.
 - **UI Testing**: Ensures the login interface behaves correctly, covering form validations, navigation, and accessibility.
 - **TypeScript Support**: Utilizes TypeScript for type safety and better developer experience with dedicated types in `/types` folder.
-- **Dockerized Environment**: Tests are designed to run against services provided by the awesome-localstack Docker setup.
+- **Configurable Environment**: Tests can target either the shared training URL or a local awesome-localstack Docker setup.
 
 ## 🗂️ Project Structure
 
@@ -29,6 +29,8 @@ This repository contains automated API and UI tests for the local training envir
 │   └── auth.ts                     # TypeScript interfaces for authentication
 ├── .nvmrc                          # Course Node.js major version
 ├── playwright.config.ts            # Playwright configuration
+├── test-config.ts                  # .env-backed test configuration
+├── .env.example                    # Safe configuration template
 ├── package.json                    # Project metadata and dependencies
 └── ...
 ```
@@ -38,7 +40,7 @@ This repository contains automated API and UI tests for the local training envir
 ### Prerequisites
 
 - Node.js LTS only, recommended `v24.x.x`
-- Docker
+- Docker (only when using the local application stack)
 
 If you use nvm, select the repository's declared Node.js version with `nvm use`.
 
@@ -58,7 +60,39 @@ npm ci
 npx playwright install chromium
 ```
 
-3. **Start the Dockerized Environment**
+3. **Configure the application URL and credentials**
+
+Create a `.env` file using one of the following templates. The variable names
+are the same in both cases; only the target URL changes.
+
+For local Docker execution:
+
+```dotenv
+# .env (local)
+APP_BASE_URL=http://localhost:8081
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=LocalDemoAdmin123!
+```
+
+For the shared AI Testers application (no Docker required):
+
+```dotenv
+# .env (AI Testers)
+APP_BASE_URL=https://aitesters.byst.re
+ADMIN_USERNAME=admin
+ADMIN_PASSWORD=LocalDemoAdmin123!
+```
+
+Alternatively, copy the ready-to-use AI Testers template:
+
+```bash
+cp .env.example .env
+```
+
+`.env` is ignored by git. Each participant can therefore keep their own URL
+and project credentials locally.
+
+If you use the local application, start the Dockerized environment:
 
 Follow the instructions in the awesome-localstack repository and start the lightweight profile:
 
@@ -68,30 +102,11 @@ cd awesome-localstack
 docker compose -f lightweight-docker-compose.yml up -d
 ```
 
-The tests expect the following public app URL:
+The local stack exposes the following gateway routes:
 
 - **App Gateway**: `http://localhost:8081`
 - **Login Page**: `http://localhost:8081/login`
 - **Auth API**: `http://localhost:8081/api/v1/users/signin`
-
-If you run the app on a different host or port, override the default:
-
-```bash
-APP_BASE_URL=http://localhost:8081 npx playwright test
-```
-
-PowerShell equivalent:
-
-```powershell
-$env:APP_BASE_URL = "http://localhost:8081"
-npx playwright test
-```
-
-If the training stack uses a different seeded admin password, override that too:
-
-```bash
-ADMIN_PASSWORD=your-password npx playwright test
-```
 
 4. **Run Tests**
 
@@ -158,9 +173,9 @@ These tests validate the login page's functionality and user experience:
 
 ## Current Target Architecture
 
-The tests assume a gateway-first local setup:
+The tests use the gateway URL from `APP_BASE_URL`:
 
-- browser traffic goes to `http://localhost:8081`
+- browser traffic goes to the configured `APP_BASE_URL`
 - frontend routes are served by the gateway
 - backend API is exposed behind the same origin under `/api/v1/...`
 - no test should depend on raw backend port `4001`

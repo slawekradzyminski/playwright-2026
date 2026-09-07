@@ -1,8 +1,7 @@
 import { test, expect } from '@playwright/test';
 import type { LoginDto } from '../../types/auth';
+import { ADMIN_PASSWORD, ADMIN_USERNAME, APP_BASE_URL } from '../../test-config';
 
-const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:8081';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'LocalDemoAdmin123!';
 const LOGIN_URL = `${APP_BASE_URL}/login`;
 const REGISTER_URL = `${APP_BASE_URL}/register`;
 
@@ -14,7 +13,7 @@ test.describe('Login UI tests', () => {
   test('should successfully login with valid credentials', async ({ page }) => {
     // given
     const credentials: LoginDto = {
-      username: 'admin',
+      username: ADMIN_USERNAME,
       password: ADMIN_PASSWORD
     };
 
@@ -30,7 +29,7 @@ test.describe('Login UI tests', () => {
   test('should show error for empty password', async ({ page }) => {
     // given
     const credentials = {
-      username: 'admin',
+      username: ADMIN_USERNAME,
       password: ''
     };
 

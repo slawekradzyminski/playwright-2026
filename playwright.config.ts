@@ -1,12 +1,19 @@
 import { defineConfig, devices } from '@playwright/test';
+import { loadEnvFile } from 'node:process';
 
 /**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
+ * Load local configuration when a .env file is present.
+ * Node.js 24 provides this without an additional dependency.
  */
-// import dotenv from 'dotenv';
-// import path from 'path';
-// dotenv.config({ path: path.resolve(__dirname, '.env') });
+try {
+  loadEnvFile('.env');
+} catch (error) {
+  if ((error as NodeJS.ErrnoException).code !== 'ENOENT') {
+    throw error;
+  }
+}
+
+const appBaseUrl = (process.env.APP_BASE_URL ?? 'http://localhost:8081').replace(/\/+$/, '');
 
 /**
  * See https://playwright.dev/docs/test-configuration.
@@ -26,7 +33,7 @@ export default defineConfig({
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
-    // baseURL: 'http://127.0.0.1:3000',
+    baseURL: appBaseUrl,
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',

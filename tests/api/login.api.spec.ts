@@ -1,15 +1,14 @@
 import { test, expect } from '@playwright/test';
 import type { LoginDto, LoginResponseDto } from '../../types/auth';
+import { ADMIN_PASSWORD, ADMIN_USERNAME, APP_BASE_URL } from '../../test-config';
 
-const APP_BASE_URL = process.env.APP_BASE_URL ?? 'http://localhost:8081';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD ?? 'LocalDemoAdmin123!';
 const SIGNIN_ENDPOINT = '/api/v1/users/signin';
 
 test.describe('/api/v1/users/signin API tests', () => {
   test('should successfully authenticate with valid credentials - 200', async ({ request }) => {
     // given
     const loginData: LoginDto = {
-      username: 'admin',
+      username: ADMIN_USERNAME,
       password: ADMIN_PASSWORD
     };
 
@@ -80,7 +79,7 @@ test.describe('/api/v1/users/signin API tests', () => {
   test('should return validation error for password too short - 400', async ({ request }) => {
     // given
     const loginData: LoginDto = {
-      username: 'admin',
+      username: ADMIN_USERNAME,
       password: 'abc'
     };
 
