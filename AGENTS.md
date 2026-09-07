@@ -3,4 +3,4 @@
 - order api tests via response code ascending (200 -> 400 -> ...)
 - parametrise tests when possible
 - report bugs in reports/bugs if you see any
-- before automating tests do exploratory tests first, make sure endpoints work as described in swagger/docs
+- before automating tests do exploratory tests first, make sure endpoints work as described in doc

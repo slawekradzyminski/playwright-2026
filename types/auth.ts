@@ -3,6 +3,14 @@ export interface LoginDto {
   password: string;
 }
 
+export interface SignupDto {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}
+
 export interface LoginResponseDto {
   token: string;
   refreshToken: string;
