@@ -1,8 +1,8 @@
-import { test, expect } from '../../fixtures/products.fixture';
-import { expectUpdatedProduct, expectPersistedProduct } from '../../validators/productResponse';
-import { ProductClient } from '../../http/productClient';
-import { generateProduct } from '../../generators/productGenerator';
-import type { ProductDto } from '../../types/product';
+import { test, expect } from '../../../fixtures/products.fixture';
+import { expectUpdatedProduct, expectPersistedProduct } from '../../../validators/productResponse';
+import { ProductClient } from '../../../http/productClient';
+import { generateProduct } from '../../../generators/productGenerator';
+import type { ProductDto } from '../../../types/product';
 import { invalidProductCases, validProductCases, INVALID_PRODUCT_ID, unauthorizedCases } from './product-cases';
 
 let client: ProductClient;

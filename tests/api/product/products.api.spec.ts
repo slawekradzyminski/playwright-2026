@@ -1,6 +1,6 @@
-import { ProductClient } from '../../http/productClient';
-import { expect, test } from '../../fixtures/loggedInUser.fixture';
-import { expectValidProductCollection } from '../../validators/productResponse';
+import { ProductClient } from '../../../http/productClient';
+import { expect, test } from '../../../fixtures/loggedInUser.fixture';
+import { expectValidProductCollection } from '../../../validators/productResponse';
 
 test.describe('/api/v1/products API tests', () => {
   let productClient: ProductClient;

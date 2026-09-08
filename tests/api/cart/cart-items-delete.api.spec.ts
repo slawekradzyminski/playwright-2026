@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/carts.fixture';
-import { CartClient } from '../../http/cartClient';
-import { expectCart } from '../../validators/cartResponse';
+import { test, expect } from '../../../fixtures/carts.fixture';
+import { CartClient } from '../../../http/cartClient';
+import { expectCart } from '../../../validators/cartResponse';
 import { cartItem, seedCart, cartUnauthorizedCases } from './cart-helpers';
 
 let client: CartClient;
@@ -22,7 +22,7 @@ test('200 - customer removes only the selected line from its own cart', async ({
 });
 
 // Documentation bug BUG-006: OpenAPI advertises CartDto for 400; runtime correctly returns an error.
-// See ../../reports/bugs/BUG-006-cart-error-response-contract.md.
+// See ../../../reports/bugs/BUG-006-cart-error-response-contract.md.
 test('400 - reject malformed product ID without changing customer carts', async ({ cartSetup }) => {
   // given
   const { owner, other, products: [first] } = cartSetup;
@@ -41,7 +41,7 @@ test('400 - reject malformed product ID without changing customer carts', async 
 });
 
 // Documentation bug BUG-006: OpenAPI advertises CartDto for 401; runtime correctly returns an error.
-// See ../../reports/bugs/BUG-006-cart-error-response-contract.md.
+// See ../../../reports/bugs/BUG-006-cart-error-response-contract.md.
 for (const { label, token, message } of cartUnauthorizedCases) {
   test(`401 - reject ${label} without changing customer carts`, async ({ cartSetup }) => {
     // given

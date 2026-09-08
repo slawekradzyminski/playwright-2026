@@ -1,7 +1,7 @@
 import { expect } from '@playwright/test';
-import { CartClient } from '../../http/cartClient';
-import type { ProductDto } from '../../types/product';
-import type { ExpectedCartItem } from '../../validators/cartResponse';
+import { CartClient } from '../../../http/cartClient';
+import type { ProductDto } from '../../../types/product';
+import type { ExpectedCartItem } from '../../../validators/cartResponse';
 
 export function cartItem(product: ProductDto, quantity: number): ExpectedCartItem {
   return { productId: product.id, quantity, price: product.price };

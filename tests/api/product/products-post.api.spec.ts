@@ -1,7 +1,7 @@
-import { test, expect } from '../../fixtures/products.fixture';
-import { expectProductMatchesPayload, expectPersistedProduct } from '../../validators/productResponse';
-import { ProductClient } from '../../http/productClient';
-import { generateProduct } from '../../generators/productGenerator';
+import { test, expect } from '../../../fixtures/products.fixture';
+import { expectProductMatchesPayload, expectPersistedProduct } from '../../../validators/productResponse';
+import { ProductClient } from '../../../http/productClient';
+import { generateProduct } from '../../../generators/productGenerator';
 import { invalidProductCases, validProductCases, unauthorizedCases } from './product-cases';
 
 let client: ProductClient;

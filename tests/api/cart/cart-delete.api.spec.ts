@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/carts.fixture';
-import { CartClient } from '../../http/cartClient';
-import { expectCart } from '../../validators/cartResponse';
+import { test, expect } from '../../../fixtures/carts.fixture';
+import { CartClient } from '../../../http/cartClient';
+import { expectCart } from '../../../validators/cartResponse';
 import { cartItem, seedCart, cartUnauthorizedCases } from './cart-helpers';
 
 let client: CartClient;

@@ -1,7 +1,7 @@
-import { ProductClient } from '../../http/productClient';
-import { expect, test } from '../../fixtures/products.fixture';
-import { generateProduct } from '../../generators/productGenerator';
-import { expectValidProduct } from '../../validators/productResponse';
+import { ProductClient } from '../../../http/productClient';
+import { expect, test } from '../../../fixtures/products.fixture';
+import { generateProduct } from '../../../generators/productGenerator';
+import { expectValidProduct } from '../../../validators/productResponse';
 
 const UNKNOWN_PRODUCT_ID = '9223372036854775807';
 
