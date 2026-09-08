@@ -4,8 +4,8 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 
 - Reviewed: 2026-09-08. Contract version: 1.0.
 - Contract SHA-256: `3ee5c47bc7c13cb76cee3cabd334361dc95c05d7dcf1b245ce73c31293a55aa1`.
-- Endpoint breadth: **22/55 = 40.0%**. Remaining: **33**.
-- Documented operation/status pairs with assertions: **75/176 = 42.6%**.
+- Endpoint breadth: **35/55 = 63.6%**. Remaining: **20**.
+- Documented operation/status pairs with assertions: **115/176 = 65.3%**.
 - These are implementation inventory metrics, not pass rates, code coverage, schema completeness, or complete behavior coverage. Fixture/cleanup calls do not count. Undocumented asserted statuses appear below but do not inflate the documented-status numerator.
 - Current-run health: not measured by this generator. Record actual execution separately in [the plan](test-plan.md).
 
@@ -15,11 +15,11 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 | `DELETE /api/v1/cart/items/{productId}` | [cart/cart-items-delete.api.spec.ts](../../tests/api/cart/cart-items-delete.api.spec.ts) | 200, 400, 401, 404 | 200, 400, 401, 404 | — |
 | `DELETE /api/v1/local/email/outbox` | Not automated | 200, 500 | — | 200, 500 |
 | `DELETE /api/v1/products/{id}` | [product/products-delete.api.spec.ts](../../tests/api/product/products-delete.api.spec.ts) | 204, 400, 401, 403, 404 | 204, 400, 401, 403, 404 | — |
-| `DELETE /api/v1/users/{username}` | Not automated | 204, 401, 403, 404 | — | 204, 401, 403, 404 |
-| `DELETE /api/v1/users/{username}/right-to-be-forgotten` | Not automated | 204, 401, 403, 404 | — | 204, 401, 403, 404 |
-| `GET /api/v1/admin/inventory` | Not automated | 200, 401, 403 | — | 200, 401, 403 |
-| `GET /api/v1/admin/inventory/{productId}` | Not automated | 200, 401, 403 | — | 200, 401, 403 |
-| `GET /api/v1/admin/inventory/{productId}/movements` | Not automated | 200, 401, 403 | — | 200, 401, 403 |
+| `DELETE /api/v1/users/{username}` | [accounts/user-delete.api.spec.ts](../../tests/api/accounts/user-delete.api.spec.ts) | 204, 401, 403, 404 | 204, 401, 403, 404 | — |
+| `DELETE /api/v1/users/{username}/right-to-be-forgotten` | [accounts/user-forget.api.spec.ts](../../tests/api/accounts/user-forget.api.spec.ts) | 204, 401, 403, 404 | 204, 401, 403, 404 | — |
+| `GET /api/v1/admin/inventory` | [inventory/inventory-list.api.spec.ts](../../tests/api/inventory/inventory-list.api.spec.ts) | 200, 401, 403 | 200, 400, 401, 403 | — |
+| `GET /api/v1/admin/inventory/{productId}` | [inventory/inventory-detail.api.spec.ts](../../tests/api/inventory/inventory-detail.api.spec.ts) | 200, 401, 403 | 200, 400, 401, 403 | — |
+| `GET /api/v1/admin/inventory/{productId}/movements` | [inventory/inventory-movements.api.spec.ts](../../tests/api/inventory/inventory-movements.api.spec.ts) | 200, 401, 403 | 200, 400, 401, 403 | — |
 | `GET /api/v1/cart` | [cart/cart-get.api.spec.ts](../../tests/api/cart/cart-get.api.spec.ts) | 200, 401 | 200, 401 | — |
 | `GET /api/v1/local/email/outbox` | Not automated | 200 | — | 200 |
 | `GET /api/v1/ollama/chat/tools/definitions` | Not automated | 200, 401 | — | 200, 401 |
@@ -31,14 +31,14 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 | `GET /api/v1/traffic/info` | Not automated | 200 | — | 200 |
 | `GET /api/v1/traffic/logs` | Not automated | 200, 400 | — | 200, 400 |
 | `GET /api/v1/traffic/logs/{correlationId}` | Not automated | 200, 404 | — | 200, 404 |
-| `GET /api/v1/users` | Not automated | 200, 401 | — | 200, 401 |
-| `GET /api/v1/users/{username}` | Not automated | 200, 401, 404 | — | 200, 401, 404 |
+| `GET /api/v1/users` | [accounts/users-get.api.spec.ts](../../tests/api/accounts/users-get.api.spec.ts) | 200, 401 | 200, 401 | — |
+| `GET /api/v1/users/{username}` | [accounts/user-get.api.spec.ts](../../tests/api/accounts/user-get.api.spec.ts) | 200, 401, 404 | 200, 401, 404 | — |
 | `GET /api/v1/users/2fa/status` | Not automated | 200, 401 | — | 200, 401 |
-| `GET /api/v1/users/chat-system-prompt` | Not automated | 200, 401 | — | 200, 401 |
+| `GET /api/v1/users/chat-system-prompt` | [prompts/chat-system-prompt-get.api.spec.ts](../../tests/api/prompts/chat-system-prompt-get.api.spec.ts) | 200, 401 | 200, 401 | — |
 | `GET /api/v1/users/me` | [users/me.api.spec.ts](../../tests/api/users/me.api.spec.ts) | 200, 401 | 200, 401 | — |
 | `GET /api/v1/users/me/email-events` | Not automated | 200, 401 | — | 200, 401 |
-| `GET /api/v1/users/tool-system-prompt` | Not automated | 200, 401 | — | 200, 401 |
-| `POST /api/v1/admin/inventory/{productId}/adjustments` | Not automated | 201, 401, 403 | — | 201, 401, 403 |
+| `GET /api/v1/users/tool-system-prompt` | [prompts/tool-system-prompt-get.api.spec.ts](../../tests/api/prompts/tool-system-prompt-get.api.spec.ts) | 200, 401 | 200, 401 | — |
+| `POST /api/v1/admin/inventory/{productId}/adjustments` | [inventory/inventory-adjustments.api.spec.ts](../../tests/api/inventory/inventory-adjustments.api.spec.ts) | 201, 401, 403 | 201, 400, 401, 403, 409 | — |
 | `POST /api/v1/cart/items` | [cart/cart-items-post.api.spec.ts](../../tests/api/cart/cart-items-post.api.spec.ts) | 200, 400, 401, 404 | 200, 400, 401, 404, 409 | — |
 | `POST /api/v1/email` | Not automated | 200, 400, 401 | — | 200, 400, 401 |
 | `POST /api/v1/ollama/chat` | Not automated | 200, 400, 401, 404, 500 | — | 200, 400, 401, 404, 500 |
@@ -63,6 +63,6 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 | `PUT /api/v1/cart/items/{productId}` | [cart/cart-items-put.api.spec.ts](../../tests/api/cart/cart-items-put.api.spec.ts) | 200, 400, 401, 404 | 200, 400, 401, 404, 409 | — |
 | `PUT /api/v1/orders/{id}/status` | [orders/orders-status.api.spec.ts](../../tests/api/orders/orders-status.api.spec.ts) | 200, 400, 401, 403, 404 | 200, 400, 401, 403, 404 | — |
 | `PUT /api/v1/products/{id}` | [product/products-put.api.spec.ts](../../tests/api/product/products-put.api.spec.ts) | 200, 400, 401, 403, 404 | 200, 400, 401, 403, 404 | — |
-| `PUT /api/v1/users/{username}` | Not automated | 200, 400, 401, 403, 404 | — | 200, 400, 401, 403, 404 |
-| `PUT /api/v1/users/chat-system-prompt` | Not automated | 200, 400, 401 | — | 200, 400, 401 |
-| `PUT /api/v1/users/tool-system-prompt` | Not automated | 200, 400, 401 | — | 200, 400, 401 |
+| `PUT /api/v1/users/{username}` | [accounts/user-put.api.spec.ts](../../tests/api/accounts/user-put.api.spec.ts) | 200, 400, 401, 403, 404 | 200, 400, 401, 403, 404 | — |
+| `PUT /api/v1/users/chat-system-prompt` | [prompts/chat-system-prompt-put.api.spec.ts](../../tests/api/prompts/chat-system-prompt-put.api.spec.ts) | 200, 400, 401 | 200, 400, 401 | — |
+| `PUT /api/v1/users/tool-system-prompt` | [prompts/tool-system-prompt-put.api.spec.ts](../../tests/api/prompts/tool-system-prompt-put.api.spec.ts) | 200, 400, 401 | 200, 400, 401 | — |

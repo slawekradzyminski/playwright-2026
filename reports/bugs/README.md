@@ -9,13 +9,15 @@ Keep filenames as `BUG-NNN-short-description.md`. Choose the next unused number 
 - **Functional**: incorrect application behavior, validation, permissions, persistence, or user-facing error messages.
 - **Documentation/contract**: a discrepancy involving API documentation or schemas. This classification does not predetermine whether code or documentation needs correction.
 
+Delete reports confirmed to be false positives caused by probe, setup or interpretation errors, together with their references; do not retain them as closed or not-reproduced bugs. A failed reproduction alone leaves a finding unresolved.
+
 Use one report for the same mismatch rather than duplicate functional and documentation reports. Record status, proposed severity with impact rationale, endpoint, environment, preconditions, exact reproduction, expected behavior and its source, actual behavior, evidence, cleanup, and follow-up. A suspected issue with an ambiguous requirement remains tracked until clarified. Severity reflects impact, not the issue type.
 
 Documentation-only findings do not block tests of verified, intended runtime behavior. Link the report in a comment above affected tests; retain representative 400/401 coverage for each endpoint that returns those responses. Do not assert a functional defect as correct behavior.
 
 ## Existing findings
 
-These reports preserve observations from 2026-09-07; formatting updates are not fresh verification.
+Older reports preserve their original observation dates. Inventory/accounts/prompts findings below include verification on 2026-09-08.
 
 | ID | Type | Status | Finding |
 | --- | --- | --- | --- |
@@ -32,3 +34,9 @@ These reports preserve observations from 2026-09-07; formatting updates are not 
 | [BUG-011](BUG-011-order-invalid-status-unauthorized.md) | Functional | Open | Invalid order status body returns 401 for valid admin |
 | [BUG-012](BUG-012-checkout-stock-conflict-undocumented.md) | Documentation/contract | Open | Checkout stock conflicts return undocumented 409 |
 | [BUG-013](BUG-013-order-mutation-stale-updated-at.md) | Functional | Suspected | Order mutation updatedAt differs from persisted readback |
+| [BUG-014](BUG-014-inventory-malformed-request-id-401.md) | Functional | Suspected | Malformed inventory adjustment UUID returns 401 for a valid administrator |
+| [BUG-015](BUG-015-inventory-invalid-query-and-path-error-schema.md) | Documentation/contract | Open | Inventory error statuses and schemas missing or incorrect |
+| [BUG-020](BUG-020-user-read-error-schemas.md) | Documentation/contract | Open | User read authentication errors modeled as successful DTOs |
+| [BUG-021](BUG-021-user-edit-error-schemas.md) | Documentation/contract | Open | User edit error responses modeled as UserEntity |
+| [BUG-022](BUG-022-cart-read-after-account-deletion-500.md) | Functional | Suspected | Cart read with a deleted-user token returns 500 |
+| [BUG-027](BUG-027-prompt-error-schema-mismatch.md) | Documentation/contract | Open | Prompt authentication errors modeled as prompt DTOs |

@@ -1,6 +1,8 @@
 # Immediate bug reporting
 
-As soon as something suspicious appears, create or update a report in `reports/bugs` and tell the person requesting the work; do not wait until automation or the end of the task. Start with status `Suspected` if evidence is incomplete. Check for duplicates, reproduce with a minimal request when feasible, and preserve the original observation. A failed attempt to reproduce is information, not a reason to discard a finding.
+As soon as something suspicious appears, create or update a report in `reports/bugs` and tell the person requesting the work; do not wait until automation or the end of the task. Start with status `Suspected` if evidence is incomplete. Check for duplicates and reproduce with a minimal request, verifying the actual HTTP method, URL, authentication and serialized payload. A failed reproduction alone does not disprove a finding.
+
+When corrected exploration confirms that a report was a false positive caused by a probe, setup or interpretation error, delete the bug file and remove its index entries, links, test comments and plan blockers. Do not retain a closed or “Not reproduced” report for a confirmed false positive. Keep the corrected verified behavior in the exploration evidence; retain genuinely unresolved findings as `Suspected`.
 
 Use the project bug template when present; otherwise use the structure below. Distinguish functional behavior from documentation/contract mismatches using the `Type` field. Keep stable `BUG-NNN` IDs and filenames so existing links survive. One report per independently actionable issue; link related issues.
 

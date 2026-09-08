@@ -20,6 +20,6 @@ Admin setup or cleanup may support a customer test, but must not replace the cus
 
 ## Verification and handover
 
-Run the affected specs, then the project's relevant API suite against the configured environment. Record commands, target, outcomes, and blockers. Investigate failures rather than weakening assertions. Map automated cases to exploration IDs and account for omitted or blocked scenarios.
+Run the affected specs, then the project's relevant API suite against the configured environment. After required checks pass, repeat or broaden verification only for a relevant change, failure or unresolved risk. Instruction-only maintenance uses document validation instead of this runtime workflow. Record commands, target, outcomes, and blockers. Investigate failures rather than weakening assertions. Map automated cases to exploration IDs and account for omitted or blocked scenarios.
 
 Hand over source/deployed revision alignment, assessment evidence, lower-level gaps and proposed cases, exploration evidence, bug reports, selected API case count and rationale by endpoint/role, test results, and outstanding cleanup or requirement questions. Never describe unexecuted checks as passed.

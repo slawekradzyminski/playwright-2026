@@ -210,6 +210,129 @@
         404
       ],
       "reviewedSha256": "7376aa6c9d772d776ccac4ab01508e40d9dbf889bf81756e0fa0d91fa49ef69d"
+    },
+    "GET /api/v1/admin/inventory": {
+      "spec": "tests/api/inventory/inventory-list.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "reviewedSha256": "ce2815c20dac72778c1c0441dfd40bb1c7e3f9af34790f4aac62ff285c06d71a"
+    },
+    "GET /api/v1/admin/inventory/{productId}": {
+      "spec": "tests/api/inventory/inventory-detail.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "reviewedSha256": "3f565500ee48fede939b4fbbc564ba21eb941759ec139b68ca338ebdc8dbb7d5"
+    },
+    "GET /api/v1/admin/inventory/{productId}/movements": {
+      "spec": "tests/api/inventory/inventory-movements.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "reviewedSha256": "adb3dd1dc7242cd7448901ae30ba27dc3caad8821f9d49ec2f5292fb72c61613"
+    },
+    "POST /api/v1/admin/inventory/{productId}/adjustments": {
+      "spec": "tests/api/inventory/inventory-adjustments.api.spec.ts",
+      "assertedStatuses": [
+        201,
+        400,
+        401,
+        403,
+        409
+      ],
+      "reviewedSha256": "e8d5bf036c0a9a0d664559f2ab29bc6612a384c6a474d5f71b4a2995c5d19a7b"
+    },
+    "GET /api/v1/users": {
+      "spec": "tests/api/accounts/users-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "99d17cf988b0969a4be8df888c1dea1cd22fe84e41fd3e68671a065e00f2cea5"
+    },
+    "GET /api/v1/users/{username}": {
+      "spec": "tests/api/accounts/user-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401,
+        404
+      ],
+      "reviewedSha256": "deaf6284eb6f2ddba587b669d1a42b432e191b4ef0d7e77522b5f098e7bef884"
+    },
+    "PUT /api/v1/users/{username}": {
+      "spec": "tests/api/accounts/user-put.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "7467555b90985f5363275eb56a6c74e5441d8d1fb7b98e5266f7153f738ae8a5"
+    },
+    "DELETE /api/v1/users/{username}": {
+      "spec": "tests/api/accounts/user-delete.api.spec.ts",
+      "assertedStatuses": [
+        204,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "2e268a89e0a62b4a0a4a32466c830c1f381019b56ccafa309bb631bdeeb9b190"
+    },
+    "DELETE /api/v1/users/{username}/right-to-be-forgotten": {
+      "spec": "tests/api/accounts/user-forget.api.spec.ts",
+      "assertedStatuses": [
+        204,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "f1c8b36b2e71c086739a0353cc87aa9d2a6c45acb2c6cc2b45df3d67d205130d"
+    },
+    "GET /api/v1/users/chat-system-prompt": {
+      "spec": "tests/api/prompts/chat-system-prompt-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "a046594367f08288d51294701b910b9981d66a544eb5077c82475a53bee1ca6c"
+    },
+    "PUT /api/v1/users/chat-system-prompt": {
+      "spec": "tests/api/prompts/chat-system-prompt-put.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "ab898465008b8ed49f028644659effac9af2e3a7dc5ef639c66ced9151fac118"
+    },
+    "GET /api/v1/users/tool-system-prompt": {
+      "spec": "tests/api/prompts/tool-system-prompt-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "6d9bb066546debb703dfa0590ae1e2bf1df054a5da882bdcad977a0d03e2e701"
+    },
+    "PUT /api/v1/users/tool-system-prompt": {
+      "spec": "tests/api/prompts/tool-system-prompt-put.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "9198402646c16e7dc8240c05e50011f9f07265c2d22c9c12fbc9ee7f65fec06a"
     }
   }
 }
