@@ -34,7 +34,7 @@ This repository contains automated API and UI tests for the local training envir
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
 ├── reports/bugs/
-│   └── BUG-003-swagger-login-sends-bearer-auth.md # Swagger auth inheritance report
+│   └── README.md                       # Bug index, classification, and template
 ├── .nvmrc                          # Course Node.js major version
 ├── playwright.config.ts            # Playwright configuration
 ├── test-config.ts                  # .env-backed test configuration
@@ -152,6 +152,10 @@ The `playwright.config.ts` file is configured to:
 - Use list reporter for test output
 - Retry failed tests on CI (up to 2 retries)
 - Use single worker on CI, parallel workers locally
+
+## API testing workflow
+
+Before adding or changing API tests, follow the [API testing procedure](docs/api-testing-procedure.md): assess backend code and lower-level test coverage, design exploration, execute terminal HTTP checks, report defects immediately, and then automate verified behaviors with the appropriate role fixtures. The procedure includes a reusable agent prompt. Use the [bug reporting guide](reports/bugs/README.md) for all findings.
 
 ## 🧪 Test Details
 

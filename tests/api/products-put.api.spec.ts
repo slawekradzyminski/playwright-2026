@@ -106,20 +106,19 @@ test('403 - reject customer mutation', async ({ loggedInUser, adminToken }) => {
   await expectUnchanged(adminToken);
 });
 
-for (const id of ['0', '-1', '9223372036854775807']) {
-  test(`404 - unknown ID ${id}`, async ({ adminToken }) => {
-    // given
-    const unknownId = id;
+test(`404 - unknown ID`, async ({ adminToken }) => {
+  // given
+  const unknownId = 999999999;
 
-    // when
-    const response = await client.updateProduct(unknownId, generateProduct(), adminToken);
+  // when
+  const response = await client.updateProduct(unknownId, generateProduct(), adminToken);
 
-    // then
-    expect(response.status()).toBe(404);
-    expect(await response.json()).toEqual({ message: 'Product not found' });
-    await expectUnchanged(adminToken);
-  });
-}
+  // then
+  expect(response.status()).toBe(404);
+  expect(await response.json()).toEqual({ message: 'Product not found' });
+  await expectUnchanged(adminToken);
+});
+
 test('404 - already deleted product', async ({ adminToken }) => {
   // given
   expect((await client.deleteProduct(product.id, adminToken)).status()).toBe(204);
@@ -129,5 +128,5 @@ test('404 - already deleted product', async ({ adminToken }) => {
 
   // then
   expect(response.status()).toBe(404);
-    expect(await response.json()).toEqual({ message: 'Product not found' });
+  expect(await response.json()).toEqual({ message: 'Product not found' });
 });

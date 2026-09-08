@@ -8,3 +8,4 @@
 - initialise endpoint API clients in `test.beforeEach`
 - keep tests for each API endpoint in a separate spec file
 - document discovered bugs in reports/bugs, but do not add tests that reproduce known bugs or mark them as expected failures
+- read ./docs/*
