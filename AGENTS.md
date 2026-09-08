@@ -18,6 +18,7 @@
 - run only api tests as verification - `npm run test:api`
 
 ## UI test rules
+- run functional UI tests once on the configured desktop viewport; keep mobile/tablet and breakpoint coverage in exploration, not a viewport matrix in the automated suite
 - before automating tests do exploratory tests first using playwright-cli, use dedicated skill
 - follow [the UI exploration workflow](docs/ui-exploration.md) for viewport coverage, screenshot review and selective human review
 - use page object model

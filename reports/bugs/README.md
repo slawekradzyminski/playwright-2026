@@ -2,6 +2,8 @@
 
 Use [TEMPLATE.md](TEMPLATE.md) for every finding. For API findings, follow the [API testing skill](../../.agents/skills/api-testing/SKILL.md); for UI findings, follow the [UI exploration workflow](../../docs/ui-exploration.md). Report suspicious behavior immediately, even if it still needs confirmation. Keep unknown details explicit; never invent evidence.
 
+For UI findings, embed relevant inspected screenshots inline in the Markdown report, with a short state/viewport caption. Keep evidence local and Git-ignored, state its workspace-only availability, and retain textual reproduction steps for readers without the images.
+
 ## Classification and naming
 
 Keep filenames as `BUG-NNN-short-description.md`. Choose the next unused number across all types; keep the ID stable when triage changes the classification. The `Type` field distinguishes:
@@ -40,3 +42,5 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-021](BUG-021-user-edit-error-schemas.md) | Documentation/contract | Open | User edit error responses modeled as UserEntity |
 | [BUG-022](BUG-022-cart-read-after-account-deletion-500.md) | Functional | Suspected | Cart read with a deleted-user token returns 500 |
 | [BUG-027](BUG-027-prompt-error-schema-mismatch.md) | Documentation/contract | Open | Prompt authentication errors modeled as prompt DTOs |
+| [BUG-028](BUG-028-register-sign-in-creates-account.md) | Functional | Open | Registration Sign in button also creates an account when the form is valid |
+| [BUG-029](BUG-029-mobile-toasts-cover-footer-actions.md) | Functional | Suspected | Mobile bottom toasts overlap footer actions; placement requirement needs clarification |
