@@ -9,3 +9,5 @@
 - keep tests for each API endpoint in a separate spec file
 - document discovered bugs in reports/bugs
 - read ./docs/*
+
+- for API test work, follow `.agents/skills/api-testing/SKILL.md` and its relevant references (mirrored in `.claude/skills/api-testing`)

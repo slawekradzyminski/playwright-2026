@@ -155,7 +155,7 @@ The `playwright.config.ts` file is configured to:
 
 ## API testing workflow
 
-Before adding or changing API tests, follow the [API testing procedure](docs/api-testing-procedure.md): assess backend code and lower-level test coverage, design exploration, execute terminal HTTP checks, report defects immediately, and then automate verified behaviors with the appropriate role fixtures. The procedure includes a reusable agent prompt. Use the [bug reporting guide](reports/bugs/README.md) for all findings.
+Before adding or changing API tests, follow the [API testing skill](.agents/skills/api-testing/SKILL.md): assess backend code and lower-level test coverage, design exploration, execute terminal HTTP checks, report defects immediately, and then automate verified behaviors with the appropriate role fixtures. The skill contains the workflow and supporting references; an identical copy is available for [Claude Code](.claude/skills/api-testing/SKILL.md). Use the [bug reporting guide](reports/bugs/README.md) for all findings.
 
 ## 🧪 Test Details
 

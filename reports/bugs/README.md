@@ -1,6 +1,6 @@
 # Bug reporting
 
-Use [TEMPLATE.md](TEMPLATE.md) for every finding and follow the [API testing procedure](../../docs/api-testing-procedure.md). Report suspicious behavior immediately, even if it still needs confirmation. Keep unknown details explicit; never invent evidence.
+Use [TEMPLATE.md](TEMPLATE.md) for every finding and follow the [API testing skill](../../.agents/skills/api-testing/SKILL.md). Report suspicious behavior immediately, even if it still needs confirmation. Keep unknown details explicit; never invent evidence.
 
 ## Classification and naming
 
