@@ -12,7 +12,7 @@ This repository contains automated API and UI tests for the local training envir
 ## 🔧 Features
 
 - **API Testing**: Validates authentication endpoints with various scenarios, including successful logins and error handling.
-- **UI Testing**: Ensures the login interface behaves correctly, covering form validations, navigation, and accessibility.
+- **UI Testing**: Validates user-facing behavior through focused browser scenarios with API-based setup and cleanup.
 - **TypeScript Support**: Utilizes TypeScript for type safety and better developer experience with dedicated types in `/types` folder.
 - **Configurable Environment**: Tests can target either the shared training URL or a local awesome-localstack Docker setup.
 
@@ -23,8 +23,11 @@ This repository contains automated API and UI tests for the local training envir
 ├── tests/
 │   ├── api/
 │   │   └── login.api.spec.ts       # All signin endpoint API tests
-│   └── ui/
-│       └── login.ui.spec.ts        # UI tests for the login page
+│   └── ui/                        # UI test scenarios
+├── pages/                         # Page objects and shared BasePage
+│   └── components/               # Reusable UI components
+├── fixtures/
+│   └── ui/                       # UI fixtures with API setup and cleanup
 ├── http/
 │   ├── apiClient.ts                 # Shared JSON HTTP client abstraction
 │   └── loginClient.ts               # Client for the signin endpoint
@@ -130,8 +133,6 @@ npx playwright test tests/api/login.api.spec.ts
 
 ```bash
 npm run test:ui
-# or
-npx playwright test tests/ui/login.ui.spec.ts
 ```
 
 **All Tests**
@@ -171,14 +172,16 @@ These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ord
 
 Authentication failures (422) remain in the same signin API suite as the 200 and 400 cases.
 
-### UI Tests (`tests/ui/login.ui.spec.ts`)
+### UI Tests
 
-These tests validate the login page's functionality and user experience:
+Browser tests live in [`tests/ui`](tests/ui). Run them with `npm run test:ui`.
+See [`AGENTS.md`](AGENTS.md) for contribution and testing conventions.
 
-- **Successful Login**: Valid credentials redirect the user away from the login page
-- **Form Validation**: Empty password and invalid credentials keep the user on the login page
-- **Navigation**: Clicking on "Register" buttons or links navigates to the registration page
-- **Input Validation**: Short username validation prevents form submission
+### Application source references
+
+- [Backend repository](https://github.com/slawekradzyminski/test-secure-backend): API implementation and account lifecycle.
+- [Frontend repository](https://github.com/slawekradzyminski/vite-react-frontend): UI behavior and `data-testid` selectors.
+- [Playwright Page Object Models](https://playwright.dev/docs/pom): page object design reference.
 
 ## 🧰 Technologies Used
 

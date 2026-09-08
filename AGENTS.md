@@ -20,6 +20,7 @@
 ## UI test rules
 - before automating tests do exploratory tests first using playwright-cli, use dedicated skill
 - use page object model
+- always initialise the page object under test in `test.beforeEach`
 - use data-testid selectors when possible
 - use http API clients for test setup and test cleanup
 - run only ui tests as verification - `npm run test:ui`
