@@ -1,3 +1,4 @@
+import { expectJson } from '../../validators/jsonResponse';
 import { expect, test } from '@playwright/test';
 import type { LoginDto } from '../../types/auth';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
@@ -60,8 +61,7 @@ test.describe('/api/v1/users/signin API tests', () => {
       const response = await loginClient.signIn(validationCase.credentials);
 
       // then
-      expect(response.status()).toBe(400);
-      const responseBody = await response.json();
+      const responseBody = await expectJson(response, 400);
       expect(responseBody[validationCase.field]).toBe(validationCase.message);
     });
   }
@@ -74,8 +74,7 @@ test.describe('/api/v1/users/signin API tests', () => {
     });
 
     // then
-    expect(response.status()).toBe(422);
-    await expect(response.json()).resolves.toEqual({
+    expect(await expectJson(response, 422)).toEqual({
       message: 'Invalid username/password supplied'
     });
   });

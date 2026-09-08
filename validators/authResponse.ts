@@ -1,5 +1,6 @@
 import { expect, type APIResponse } from '@playwright/test';
 import type { LoginResponseDto } from '../types/auth';
+import { expectJson } from './jsonResponse';
 import { expectValidJwt } from './jwt';
 
 const BASE64_URL = /^[A-Za-z0-9_-]+$/;
@@ -13,9 +14,7 @@ export async function expectValidLoginResponse(
   response: APIResponse,
   expectedUsername: string
 ): Promise<LoginResponseDto> {
-  expect(response.headers()['content-type']).toContain('application/json');
-
-  const body = (await response.json()) as LoginResponseDto;
+  const body = await expectJson<LoginResponseDto>(response, 200);
 
   expectValidJwt(body.token);
   expectValidOpaqueToken(body.refreshToken, 'refreshToken');

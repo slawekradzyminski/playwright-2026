@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/carts.fixture';
 import { CartClient } from '../../../http/cartClient';
 import { expectCart } from '../../../validators/cartResponse';
@@ -41,9 +42,7 @@ for (const scenario of [
     const response = await client.updateItem(productId, { quantity: scenario.quantity }, owner.token);
 
     // then
-    expect(response.status()).toBe(400);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual(scenario.error);
+    expect(await expectJson(response, 400)).toEqual(scenario.error);
     await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
     await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
   });
@@ -62,9 +61,7 @@ for (const { label, token, message } of cartUnauthorizedCases) {
     const response = await client.updateItem(first.id, { quantity: 1 }, token);
 
     // then
-    expect(response.status()).toBe(401);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({ message });
+    expect(await expectJson(response, 401)).toEqual({ message });
     await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
     await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
   });
@@ -80,9 +77,7 @@ test('404 - customer cannot update a line present only in another cart', async (
   const response = await client.updateItem(first.id, { quantity: 1 }, owner.token);
 
   // then
-  expect(response.status()).toBe(404);
-  expect(response.headers()['content-type']).toContain('application/json');
-  expect(await response.json()).toEqual({ message: 'Cart item not found' });
+  expect(await expectJson(response, 404)).toEqual({ message: 'Cart item not found' });
   await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(second, 2)]);
   await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
 });
@@ -99,9 +94,7 @@ test('409 - reject insufficient stock and roll back the cart mutation', async ({
   const response = await client.updateItem(first.id, { quantity: 21 }, owner.token);
 
   // then
-  expect(response.status()).toBe(409);
-  expect(response.headers()['content-type']).toContain('application/json');
-  expect(await response.json()).toEqual({ message: `Insufficient stock for product ${first.id}` });
+  expect(await expectJson(response, 409)).toEqual({ message: `Insufficient stock for product ${first.id}` });
   await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
   await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
 });

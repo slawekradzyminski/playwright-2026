@@ -1,3 +1,5 @@
+import type { CartDto } from '../../../types/cart';
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/carts.fixture';
 import { CartClient } from '../../../http/cartClient';
 import { ADMIN_USERNAME } from '../../../test-config';
@@ -32,9 +34,7 @@ test('200 - admin can read its own cart', async ({ adminToken }) => {
   const response = await client.getCart(token);
 
   // then
-  expect(response.status()).toBe(200);
-  expect(response.headers()['content-type']).toContain('application/json');
-  const cart = await response.json();
+  const cart = await expectJson<CartDto>(response, 200);
   expect(cart.username).toBe(ADMIN_USERNAME);
   expect(Array.isArray(cart.items)).toBe(true);
   for (const item of cart.items) {
@@ -60,9 +60,7 @@ for (const { label, token, message } of cartUnauthorizedCases) {
     const response = await client.getCart(token);
 
     // then
-    expect(response.status()).toBe(401);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({ message });
+    expect(await expectJson(response, 401)).toEqual({ message });
     await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
     await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
   });

@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/carts.fixture';
 import { CartClient } from '../../../http/cartClient';
 import { expectCart } from '../../../validators/cartResponse';
@@ -33,9 +34,7 @@ test('400 - reject malformed product ID without changing customer carts', async 
   const response = await client.removeItem('not-a-number', owner.token);
 
   // then
-  expect(response.status()).toBe(400);
-  expect(response.headers()['content-type']).toContain('application/json');
-  expect(await response.json()).toEqual({ error: 'For input string: "not-a-number"' });
+  expect(await expectJson(response, 400)).toEqual({ error: 'For input string: "not-a-number"' });
   await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
   await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
 });
@@ -53,9 +52,7 @@ for (const { label, token, message } of cartUnauthorizedCases) {
     const response = await client.removeItem(first.id, token);
 
     // then
-    expect(response.status()).toBe(401);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({ message });
+    expect(await expectJson(response, 401)).toEqual({ message });
     await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(first, 2)]);
     await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
   });
@@ -71,9 +68,7 @@ test('404 - customer cannot remove a line present only in another cart', async (
   const response = await client.removeItem(first.id, owner.token);
 
   // then
-  expect(response.status()).toBe(404);
-  expect(response.headers()['content-type']).toContain('application/json');
-  expect(await response.json()).toEqual({ message: 'Cart item not found' });
+  expect(await expectJson(response, 404)).toEqual({ message: 'Cart item not found' });
   await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(second, 2)]);
   await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
 });

@@ -1,11 +1,11 @@
+import type { CartDto } from '../types/cart';
+import { expectJson } from './jsonResponse';
 import { expect, type APIResponse } from '@playwright/test';
 
 export type ExpectedCartItem = { productId: number; quantity: number; price: number };
 
 export async function expectCart(response: APIResponse, username: string, items: ExpectedCartItem[]) {
-  expect(response.status()).toBe(200);
-  expect(response.headers()['content-type']).toContain('application/json');
-  const body = await response.json();
+  const body = await expectJson<CartDto>(response, 200);
   expect(body.username).toBe(username);
   expect(body.items).toHaveLength(items.length);
   expect(body.items).toEqual(expect.arrayContaining(items.map(({ productId, quantity }) => ({ productId, quantity }))));

@@ -16,3 +16,5 @@
 - cover representative 400 and 401 responses for every endpoint in scope that returns them
 
 - maintain `reports/api/test-plan.md` and `reports/api/coverage-map.json` after API test or contract changes; review target assertions (not fixture/cleanup calls), refresh reviewed spec hashes, run `npm run coverage:api` and `npm run coverage:api:check`, and record actual execution results separately from endpoint breadth
+
+- reuse `validators/jsonResponse.ts` (`expectJson`, or `expectError` for message errors) for JSON response assertions; keep endpoint-specific body checks and register created resource IDs before assertions that could interrupt cleanup

@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { ProductClient } from '../../../http/productClient';
 import { expect, test } from '../../../fixtures/loggedInUser.fixture';
 import { expectValidProductCollection } from '../../../validators/productResponse';
@@ -16,9 +17,7 @@ test.describe('/api/v1/products API tests', () => {
     const response = await productClient.getAllProducts(loggedInUser.token);
 
     // then
-    expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expectValidProductCollection(await response.json());
+    expectValidProductCollection(await expectJson(response, 200));
   });
 
   test('should reject a request without a JWT token - 401', async () => {
@@ -28,7 +27,6 @@ test.describe('/api/v1/products API tests', () => {
     const response = await productClient.getAllProducts();
 
     // then
-    expect(response.status()).toBe(401);
-    await expect(response.json()).resolves.toEqual({ message: 'Unauthorized' });
+    expect(await expectJson(response, 401)).toEqual({ message: 'Unauthorized' });
   });
 });

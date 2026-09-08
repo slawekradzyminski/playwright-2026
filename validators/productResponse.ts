@@ -1,3 +1,4 @@
+import { expectJson } from './jsonResponse';
 import { expect, type APIResponse } from '@playwright/test';
 import type { ProductDto } from '../types/product';
 
@@ -65,6 +66,5 @@ export function expectUpdatedProduct(
 }
 
 export async function expectPersistedProduct(response: APIResponse, product: ProductDto): Promise<void> {
-  expect(response.status()).toBe(200);
-  expect(await response.json()).toEqual(product);
+  expect(await expectJson(response, 200)).toEqual(product);
 }

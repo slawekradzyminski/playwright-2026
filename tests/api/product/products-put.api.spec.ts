@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/products.fixture';
 import { expectUpdatedProduct, expectPersistedProduct } from '../../../validators/productResponse';
 import { ProductClient } from '../../../http/productClient';
@@ -30,8 +31,7 @@ for (const { label, overrides } of validProductCases) {
     const response = await client.updateProduct(product.id, payload, adminToken);
 
     // then
-    expect(response.status()).toBe(200);
-    const updated = await response.json();
+    const updated = await expectJson(response, 200);
     expectUpdatedProduct(updated, product, payload);
     const persisted = await client.getProductById(product.id, adminToken);
     await expectPersistedProduct(persisted, updated);
@@ -46,8 +46,7 @@ for (const payload of [{ price: 0.01 }, { stockQuantity: 0 }, {}, { name: null }
     const response = await client.updateProduct(product.id, payload, adminToken);
 
     // then
-    expect(response.status()).toBe(200);
-    const updated = await response.json();
+    const updated = await expectJson(response, 200);
     expectUpdatedProduct(updated, original, payload);
     const persisted = await client.getProductById(product.id, adminToken);
     await expectPersistedProduct(persisted, updated);
@@ -62,8 +61,7 @@ for (const { label, field, value } of invalidProductCases) {
     const response = await client.updateProduct(product.id, payload, adminToken);
 
     // then
-    expect(response.status()).toBe(400);
-    expect((await response.json())[field]).toEqual(expect.any(String));
+    expect((await expectJson(response, 400))[field]).toEqual(expect.any(String));
     await expectUnchanged(adminToken);
   });
 }
@@ -88,8 +86,7 @@ for (const { label, token, message } of unauthorizedCases) {
     const response = await client.updateProduct(id, generateProduct(), token);
 
     // then
-    expect(response.status()).toBe(401);
-    expect(await response.json()).toEqual({ message });
+    expect(await expectJson(response, 401)).toEqual({ message });
     await expectUnchanged(adminToken);
   });
 }
@@ -101,8 +98,7 @@ test('403 - reject customer mutation', async ({ loggedInUser, adminToken }) => {
   const response = await client.updateProduct(id, generateProduct(), loggedInUser.token);
 
   // then
-  expect(response.status()).toBe(403);
-  expect(await response.json()).toEqual({ message: 'Access denied' });
+  expect(await expectJson(response, 403)).toEqual({ message: 'Access denied' });
   await expectUnchanged(adminToken);
 });
 
@@ -114,8 +110,7 @@ test(`404 - unknown ID`, async ({ adminToken }) => {
   const response = await client.updateProduct(unknownId, generateProduct(), adminToken);
 
   // then
-  expect(response.status()).toBe(404);
-  expect(await response.json()).toEqual({ message: 'Product not found' });
+  expect(await expectJson(response, 404)).toEqual({ message: 'Product not found' });
   await expectUnchanged(adminToken);
 });
 
@@ -127,6 +122,5 @@ test('404 - already deleted product', async ({ adminToken }) => {
   const response = await client.updateProduct(product.id, generateProduct(), adminToken);
 
   // then
-  expect(response.status()).toBe(404);
-  expect(await response.json()).toEqual({ message: 'Product not found' });
+  expect(await expectJson(response, 404)).toEqual({ message: 'Product not found' });
 });

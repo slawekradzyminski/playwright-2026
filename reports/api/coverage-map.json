@@ -8,7 +8,7 @@
         400,
         422
       ],
-      "reviewedSha256": "7ef828f4a819d38b88b86c6cb1128934f16609a8a408c9172453bb1d285e3520"
+      "reviewedSha256": "cda5c77246c6e400592c4034f926450e0cb198dbe13535c605dbf2d6a1108a83"
     },
     "POST /api/v1/users/signup": {
       "spec": "tests/api/signup.api.spec.ts",
@@ -16,7 +16,7 @@
         201,
         400
       ],
-      "reviewedSha256": "13c7757e00c4fe84fcb9f96a749d989e83fe2cf89f4fc9c306ffbb669240ca88"
+      "reviewedSha256": "b3e280eaa82c30e627087a7e5e47cea28513d821374e11d9c1b2574ac6dc727c"
     },
     "POST /api/v1/qr/create": {
       "spec": "tests/api/qr-create.api.spec.ts",
@@ -33,7 +33,7 @@
         200,
         401
       ],
-      "reviewedSha256": "9ca93b9aaf8ed65741e90c5a91c73c409e0f01f43102211bcc88e9ac813ea667"
+      "reviewedSha256": "9ae41d6a37690102858ae9ece530657b79f3e75d4166f8f87df0c8b594040d74"
     },
     "POST /api/v1/products": {
       "spec": "tests/api/product/products-post.api.spec.ts",
@@ -43,7 +43,7 @@
         401,
         403
       ],
-      "reviewedSha256": "b7531f7015d011b9cef201909b14e36bd5e975efb3e4825fc64492fe068cdc7d"
+      "reviewedSha256": "dcc491bfc3e2e83eabc20490813d51475132154ff18238a89b94886f3972bc85"
     },
     "GET /api/v1/products/{id}": {
       "spec": "tests/api/product/products-id.api.spec.ts",
@@ -53,7 +53,7 @@
         401,
         404
       ],
-      "reviewedSha256": "38d64bead13b2bf21ce02f7d0e4611540a578b599024e99b6a5ba60679a7a87b"
+      "reviewedSha256": "d00837d6e44f3880af0c82af5a31694f403bf0bec2d74a281f520d15c563556c"
     },
     "PUT /api/v1/products/{id}": {
       "spec": "tests/api/product/products-put.api.spec.ts",
@@ -64,7 +64,7 @@
         403,
         404
       ],
-      "reviewedSha256": "986aa469444e519d6ae8931ed62a6dbb01e19c88b38f79c3ac2ec32aa3cf4f4c"
+      "reviewedSha256": "1eb5a1ba9c194c72bce72ca7a5393e1ec5736086c948a4e20c6aca94db4441aa"
     },
     "DELETE /api/v1/products/{id}": {
       "spec": "tests/api/product/products-delete.api.spec.ts",
@@ -75,7 +75,7 @@
         403,
         404
       ],
-      "reviewedSha256": "3cb508988a1b5c508e4233706c51953df6b06435a2d369d97c3aa949be7d589b"
+      "reviewedSha256": "a349d153dba4ba4498cde2c3d5befca66d371d23928780aa21491cd393c0a610"
     },
     "GET /api/v1/cart": {
       "spec": "tests/api/cart/cart-get.api.spec.ts",
@@ -83,7 +83,7 @@
         200,
         401
       ],
-      "reviewedSha256": "b69beef592673c0a625a12f192ec1732a64f768ed155b1aea05dc2e8b404b2e4"
+      "reviewedSha256": "311b683df891893a44320630975de133cda78734b0501fb6080249ce4d990a9e"
     },
     "DELETE /api/v1/cart": {
       "spec": "tests/api/cart/cart-delete.api.spec.ts",
@@ -91,7 +91,7 @@
         204,
         401
       ],
-      "reviewedSha256": "6a531aa9f3e9f33b2b945b343a085f968ed7bafc851efc0bbd8f10abae25597d"
+      "reviewedSha256": "e8d7139ecb1d115370c355d8b76046299e830265c88cc40663c90fab503278c6"
     },
     "POST /api/v1/cart/items": {
       "spec": "tests/api/cart/cart-items-post.api.spec.ts",
@@ -102,7 +102,7 @@
         404,
         409
       ],
-      "reviewedSha256": "ea0819c8314b34e3392966f31c85af3a635149f9092d4d01b034e2a3ccbcce3d"
+      "reviewedSha256": "3ae37bbebc135f864bbc324b8e2e9ac3b0eaa2c7528aad3d0ecc08b47418ab28"
     },
     "PUT /api/v1/cart/items/{productId}": {
       "spec": "tests/api/cart/cart-items-put.api.spec.ts",
@@ -113,7 +113,7 @@
         404,
         409
       ],
-      "reviewedSha256": "0e2a2183d43195e67dd4ff4c836820925f880cee6e1d1646715770a9237dd06c"
+      "reviewedSha256": "ba48f2107f6fc9d275b62071184851dcec2541b5d6c9dc5fe0f4cf2ca22e30df"
     },
     "DELETE /api/v1/cart/items/{productId}": {
       "spec": "tests/api/cart/cart-items-delete.api.spec.ts",
@@ -123,7 +123,93 @@
         401,
         404
       ],
-      "reviewedSha256": "b24d0a9dc6591be3540a3435175bc2cfee50262ecd8d88fbe036fe8ccaa1980f"
+      "reviewedSha256": "25ffb5c1857cf58542d4791f5e38d8d3c866c4d6940645a575625da561f6cde8"
+    },
+    "POST /api/v1/users/refresh": {
+      "spec": "tests/api/users/refresh.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "d35882d5555e7712c07b879c51e43ce853a73efd9b2d19f70745885017182343"
+    },
+    "POST /api/v1/users/logout": {
+      "spec": "tests/api/users/logout.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "d354b5045014d9ee4ce0f8bf7208096fb79f8cd063e668052b61c860034efb31"
+    },
+    "GET /api/v1/users/me": {
+      "spec": "tests/api/users/me.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "e2d3d7909634c84efe56e4d5ba920c9e096ceed5e44676c964dfe13713dc25c0"
+    },
+    "POST /api/v1/orders": {
+      "spec": "tests/api/orders/orders-post.api.spec.ts",
+      "assertedStatuses": [
+        201,
+        400,
+        401,
+        409
+      ],
+      "reviewedSha256": "96c9482910ad4998f4a4b3019c745026a1fd07ae15d3b13f4a06e308718de84c"
+    },
+    "GET /api/v1/orders": {
+      "spec": "tests/api/orders/orders-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "e922a9f7499776d7461ed8d7012532f6d7126965ac7fa7d6097f2e39fb9dc59c"
+    },
+    "GET /api/v1/orders/{id}": {
+      "spec": "tests/api/orders/orders-id.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        404
+      ],
+      "reviewedSha256": "89ace36db466415b83cf30e5b3412768863fbb6f177838af95c7080a934ecdea"
+    },
+    "GET /api/v1/orders/admin": {
+      "spec": "tests/api/orders/orders-admin.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403
+      ],
+      "reviewedSha256": "1969a88f667b813eee3d95998830cb2bf6b37b015df234270a027fe0b010fc23"
+    },
+    "POST /api/v1/orders/{id}/cancel": {
+      "spec": "tests/api/orders/orders-cancel.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "9e165384d488dc8e877d0fe096f22d3b8fda88b5e4c78cb5eae28df9730f16a2"
+    },
+    "PUT /api/v1/orders/{id}/status": {
+      "spec": "tests/api/orders/orders-status.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "7376aa6c9d772d776ccac4ab01508e40d9dbf889bf81756e0fa0d91fa49ef69d"
     }
   }
 }

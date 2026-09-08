@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/carts.fixture';
 import { CartClient } from '../../../http/cartClient';
 import { expectCart } from '../../../validators/cartResponse';
@@ -35,9 +36,7 @@ for (const { label, token, message } of cartUnauthorizedCases) {
     const response = await client.clearCart(token);
 
     // then
-    expect(response.status()).toBe(401);
-    expect(response.headers()['content-type']).toContain('application/json');
-    expect(await response.json()).toEqual({ message });
+    expect(await expectJson(response, 401)).toEqual({ message });
     await expectCart(await client.getCart(owner.token), owner.user.username, [cartItem(second, 2)]);
     await expectCart(await client.getCart(other.token), other.user.username, [cartItem(first, 1)]);
   });

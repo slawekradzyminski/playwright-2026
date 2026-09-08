@@ -1,3 +1,4 @@
+import { expectJson } from '../../validators/jsonResponse';
 import { expect, test } from '@playwright/test';
 import {
   generateMalformedEmail,
@@ -108,8 +109,7 @@ test.describe('/api/v1/users/signup API tests', () => {
       const response = await signupClient.signUp(validationCase.payload);
 
       // then
-      expect(response.status()).toBe(400);
-      const responseBody = await response.json();
+      const responseBody = await expectJson(response, 400);
       expect(responseBody[validationCase.field]).toBe(validationCase.message);
     });
   }
@@ -125,8 +125,7 @@ test.describe('/api/v1/users/signup API tests', () => {
       const response = await signupClient.signUp(duplicateCase.createDuplicatePayload(payload));
 
       // then
-      expect(response.status()).toBe(400);
-      await expect(response.json()).resolves.toEqual({ message: duplicateCase.message });
+      expect(await expectJson(response, 400)).toEqual({ message: duplicateCase.message });
     });
   }
 });

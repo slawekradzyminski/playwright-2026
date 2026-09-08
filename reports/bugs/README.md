@@ -27,3 +27,8 @@ These reports preserve observations from 2026-09-07; formatting updates are not 
 | [BUG-006](BUG-006-cart-error-response-contract.md) | Documentation/contract | Open | Cart errors advertised as CartDto |
 | [BUG-007](BUG-007-cart-stock-conflict-undocumented.md) | Documentation/contract | Open | Cart stock conflicts return undocumented 409 |
 | [BUG-008](BUG-008-product-delete-referenced-by-cart.md) | Functional | Open | Deleting a product referenced by a cart returns 500 |
+| [BUG-009](BUG-009-order-reopening-inventory.md) | Functional | Open | Cancelled orders may reopen without deducting restored stock |
+| [BUG-010](BUG-010-auth-orders-error-contract.md) | Documentation/contract | Open | Auth/orders errors advertised as success DTOs |
+| [BUG-011](BUG-011-order-invalid-status-unauthorized.md) | Functional | Open | Invalid order status body returns 401 for valid admin |
+| [BUG-012](BUG-012-checkout-stock-conflict-undocumented.md) | Documentation/contract | Open | Checkout stock conflicts return undocumented 409 |
+| [BUG-013](BUG-013-order-mutation-stale-updated-at.md) | Functional | Suspected | Order mutation updatedAt differs from persisted readback |

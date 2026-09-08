@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { ProductClient } from '../../../http/productClient';
 import { expect, test } from '../../../fixtures/products.fixture';
 import { generateProduct } from '../../../generators/productGenerator';
@@ -27,8 +28,7 @@ test.describe('/api/v1/products/{id} API tests', () => {
     const response = await productClient.getProductById(productId, loggedInUser.token);
 
     // then
-    expect(response.status()).toBe(200);
-    const body = await response.json();
+    const body = await expectJson(response, 200);
     expectValidProduct(body);
     expect(body).toEqual(product);
   });
@@ -46,8 +46,7 @@ test.describe('/api/v1/products/{id} API tests', () => {
     const response = await productClient.getProductById(1);
 
     // then
-    expect(response.status()).toBe(401);
-    await expect(response.json()).resolves.toEqual({ message: 'Unauthorized' });
+    expect(await expectJson(response, 401)).toEqual({ message: 'Unauthorized' });
   });
 
   test('should return not found for an unknown product ID - 404', async ({
@@ -57,7 +56,6 @@ test.describe('/api/v1/products/{id} API tests', () => {
     const response = await productClient.getProductById(UNKNOWN_PRODUCT_ID, loggedInUser.token);
 
     // then
-    expect(response.status()).toBe(404);
-    await expect(response.json()).resolves.toEqual({ message: 'Product not found' });
+    expect(await expectJson(response, 404)).toEqual({ message: 'Product not found' });
   });
 });

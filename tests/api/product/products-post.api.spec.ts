@@ -1,3 +1,4 @@
+import { expectJson } from '../../../validators/jsonResponse';
 import { test, expect } from '../../../fixtures/products.fixture';
 import { expectProductMatchesPayload, expectPersistedProduct } from '../../../validators/productResponse';
 import { ProductClient } from '../../../http/productClient';
@@ -59,8 +60,7 @@ for (const { label, token, message } of unauthorizedCases) {
     expect(response.status()).toBe(401);
     expect(body).toEqual({ message });
     const catalog = await client.getAllProducts(adminToken);
-    expect(catalog.status()).toBe(200);
-    expect(await catalog.json()).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: payload.name })]));
+    expect(await expectJson(catalog, 200)).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: payload.name })]));
   });
 }
 test('403 - customer cannot create a product', async ({ loggedInUser, adminToken, productIds }) => {
@@ -76,6 +76,5 @@ test('403 - customer cannot create a product', async ({ loggedInUser, adminToken
   expect(response.status()).toBe(403);
   expect(body).toEqual({ message: 'Access denied' });
   const catalog = await client.getAllProducts(adminToken);
-  expect(catalog.status()).toBe(200);
-  expect(await catalog.json()).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: payload.name })]));
+  expect(await expectJson(catalog, 200)).not.toEqual(expect.arrayContaining([expect.objectContaining({ name: payload.name })]));
 });
