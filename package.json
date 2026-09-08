@@ -5,7 +5,9 @@
   "scripts": {
     "test": "playwright test",
     "test:api": "playwright test tests/api/",
-    "test:ui": "playwright test tests/ui/"
+    "test:ui": "playwright test tests/ui/",
+    "coverage:api": "node scripts/api-coverage.mjs",
+    "coverage:api:check": "node scripts/api-coverage.mjs --check"
   },
   "keywords": [
     "playwright",

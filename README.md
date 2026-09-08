@@ -315,3 +315,19 @@ Restart Claude Desktop.
 This project is licensed under the ISC License.
 
 For more information on setting up and using the Dockerized environment, refer to the awesome-localstack repository.
+
+## API test plan and coverage
+
+The maintained [API test plan](reports/api/test-plan.md) contains priorities, dependencies,
+parallel work packages, known gaps and update instructions. The generated
+[endpoint inventory](reports/api/coverage.md) tracks every OpenAPI method/path and documented
+response status against reviewed dedicated tests. These percentages measure implemented
+breadth, not passing tests or complete behavior coverage.
+
+After changing API specs or the contract, review [the mapping](reports/api/coverage-map.json)
+and follow the plan's maintenance checklist, then run:
+
+```bash
+npm run coverage:api
+npm run coverage:api:check
+```

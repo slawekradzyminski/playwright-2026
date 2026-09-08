@@ -1,0 +1,129 @@
+{
+  "reviewedOn": "2026-09-08",
+  "operations": {
+    "POST /api/v1/users/signin": {
+      "spec": "tests/api/login.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        422
+      ],
+      "reviewedSha256": "7ef828f4a819d38b88b86c6cb1128934f16609a8a408c9172453bb1d285e3520"
+    },
+    "POST /api/v1/users/signup": {
+      "spec": "tests/api/signup.api.spec.ts",
+      "assertedStatuses": [
+        201,
+        400
+      ],
+      "reviewedSha256": "13c7757e00c4fe84fcb9f96a749d989e83fe2cf89f4fc9c306ffbb669240ca88"
+    },
+    "POST /api/v1/qr/create": {
+      "spec": "tests/api/qr-create.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "876c6957a03890b58415cc5ae1cd95c234fa281aad5031c44ae57db7fa92cae8"
+    },
+    "GET /api/v1/products": {
+      "spec": "tests/api/product/products.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "9ca93b9aaf8ed65741e90c5a91c73c409e0f01f43102211bcc88e9ac813ea667"
+    },
+    "POST /api/v1/products": {
+      "spec": "tests/api/product/products-post.api.spec.ts",
+      "assertedStatuses": [
+        201,
+        400,
+        401,
+        403
+      ],
+      "reviewedSha256": "b7531f7015d011b9cef201909b14e36bd5e975efb3e4825fc64492fe068cdc7d"
+    },
+    "GET /api/v1/products/{id}": {
+      "spec": "tests/api/product/products-id.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        404
+      ],
+      "reviewedSha256": "38d64bead13b2bf21ce02f7d0e4611540a578b599024e99b6a5ba60679a7a87b"
+    },
+    "PUT /api/v1/products/{id}": {
+      "spec": "tests/api/product/products-put.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "986aa469444e519d6ae8931ed62a6dbb01e19c88b38f79c3ac2ec32aa3cf4f4c"
+    },
+    "DELETE /api/v1/products/{id}": {
+      "spec": "tests/api/product/products-delete.api.spec.ts",
+      "assertedStatuses": [
+        204,
+        400,
+        401,
+        403,
+        404
+      ],
+      "reviewedSha256": "3cb508988a1b5c508e4233706c51953df6b06435a2d369d97c3aa949be7d589b"
+    },
+    "GET /api/v1/cart": {
+      "spec": "tests/api/cart/cart-get.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "b69beef592673c0a625a12f192ec1732a64f768ed155b1aea05dc2e8b404b2e4"
+    },
+    "DELETE /api/v1/cart": {
+      "spec": "tests/api/cart/cart-delete.api.spec.ts",
+      "assertedStatuses": [
+        204,
+        401
+      ],
+      "reviewedSha256": "6a531aa9f3e9f33b2b945b343a085f968ed7bafc851efc0bbd8f10abae25597d"
+    },
+    "POST /api/v1/cart/items": {
+      "spec": "tests/api/cart/cart-items-post.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        404,
+        409
+      ],
+      "reviewedSha256": "ea0819c8314b34e3392966f31c85af3a635149f9092d4d01b034e2a3ccbcce3d"
+    },
+    "PUT /api/v1/cart/items/{productId}": {
+      "spec": "tests/api/cart/cart-items-put.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        404,
+        409
+      ],
+      "reviewedSha256": "0e2a2183d43195e67dd4ff4c836820925f880cee6e1d1646715770a9237dd06c"
+    },
+    "DELETE /api/v1/cart/items/{productId}": {
+      "spec": "tests/api/cart/cart-items-delete.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401,
+        404
+      ],
+      "reviewedSha256": "b24d0a9dc6591be3540a3435175bc2cfee50262ecd8d88fbe036fe8ccaa1980f"
+    }
+  }
+}
