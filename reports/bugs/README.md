@@ -21,3 +21,4 @@ These reports preserve observations from 2026-09-07; formatting updates are not 
 | [BUG-002](BUG-002-product-update-blank-fields.md) | Functional | Suspected | Update accepts blank catalog fields; requirement needs confirmation |
 | [BUG-003](BUG-003-product-delete-error-body.md) | Documentation/contract | Open | DELETE 404 body differs from ErrorDto contract |
 | [BUG-004](BUG-004-product-description-contract.md) | Documentation/contract | Open | Create rejects schema-permitted empty description |
+| [BUG-005](BUG-005-qr-error-response-content-type-contract.md) | Documentation/contract | Open | QR error responses are documented as PNG instead of JSON |
