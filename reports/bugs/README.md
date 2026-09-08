@@ -11,6 +11,8 @@ Keep filenames as `BUG-NNN-short-description.md`. Choose the next unused number 
 
 Use one report for the same mismatch rather than duplicate functional and documentation reports. Record status, proposed severity with impact rationale, endpoint, environment, preconditions, exact reproduction, expected behavior and its source, actual behavior, evidence, cleanup, and follow-up. A suspected issue with an ambiguous requirement remains tracked until clarified. Severity reflects impact, not the issue type.
 
+Documentation-only findings do not block tests of verified, intended runtime behavior. Link the report in a comment above affected tests; retain representative 400/401 coverage for each endpoint that returns those responses. Do not assert a functional defect as correct behavior.
+
 ## Existing findings
 
 These reports preserve observations from 2026-09-07; formatting updates are not fresh verification.
@@ -22,3 +24,6 @@ These reports preserve observations from 2026-09-07; formatting updates are not 
 | [BUG-003](BUG-003-product-delete-error-body.md) | Documentation/contract | Open | DELETE 404 body differs from ErrorDto contract |
 | [BUG-004](BUG-004-product-description-contract.md) | Documentation/contract | Open | Create rejects schema-permitted empty description |
 | [BUG-005](BUG-005-qr-error-response-content-type-contract.md) | Documentation/contract | Open | QR error responses are documented as PNG instead of JSON |
+| [BUG-006](BUG-006-cart-error-response-contract.md) | Documentation/contract | Open | Cart errors advertised as CartDto |
+| [BUG-007](BUG-007-cart-stock-conflict-undocumented.md) | Documentation/contract | Open | Cart stock conflicts return undocumented 409 |
+| [BUG-008](BUG-008-product-delete-referenced-by-cart.md) | Functional | Open | Deleting a product referenced by a cart returns 500 |

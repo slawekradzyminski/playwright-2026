@@ -157,6 +157,8 @@ The `playwright.config.ts` file is configured to:
 
 Before adding or changing API tests, follow the [API testing skill](.agents/skills/api-testing/SKILL.md): assess backend code and lower-level test coverage, design exploration, execute terminal HTTP checks, report defects immediately, and then automate verified behaviors with the appropriate role fixtures. The skill contains the workflow and supporting references; an identical copy is available for [Claude Code](.claude/skills/api-testing/SKILL.md). Use the [bug reporting guide](reports/bugs/README.md) for all findings.
 
+Documentation-only bugs do not block tests of verified, intended API behavior. Keep representative 400/401 coverage for every endpoint in scope that returns those responses, and link the documentation bug in a comment above affected tests. Functional defects remain tracked separately.
+
 ## 🧪 Test Details
 
 ### API Tests (`tests/api/login.api.spec.ts`)

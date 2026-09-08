@@ -17,7 +17,7 @@ type Fixtures = {
   loggedInUser: LoggedInUser;
 };
 
-async function registerAndLoginUser(request: APIRequestContext): Promise<LoggedInUser> {
+export async function registerAndLoginUser(request: APIRequestContext): Promise<LoggedInUser> {
   const user = generateSignupUser();
   const signupClient = new SignupClient(request);
   const loginClient = new LoginClient(request);
@@ -37,7 +37,7 @@ async function registerAndLoginUser(request: APIRequestContext): Promise<LoggedI
   };
 }
 
-async function deleteUserAsAdmin(request: APIRequestContext, username: string): Promise<void> {
+export async function deleteUserAsAdmin(request: APIRequestContext, username: string): Promise<void> {
   const loginClient = new LoginClient(request);
   const userClient = new UserClient(request);
 

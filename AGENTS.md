@@ -11,3 +11,6 @@
 - read ./docs/*
 
 - for API test work, follow `.agents/skills/api-testing/SKILL.md` and its relevant references (mirrored in `.claude/skills/api-testing`)
+
+- documentation-only bugs do not block tests of verified, intended API behavior; add a bug-reference comment above affected tests
+- cover representative 400 and 401 responses for every endpoint in scope that returns them

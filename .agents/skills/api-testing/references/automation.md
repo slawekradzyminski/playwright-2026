@@ -8,6 +8,7 @@ Use these conventions, respecting explicit project and user instructions:
 - Keep each HTTP method/path in a separate spec file. Order tests by expected response code ascending (200, 201, 204, 400, 401, 403, 404, ...), including parameterized groups.
 - Parameterize equivalent scenarios where possible, using descriptive case names.
 - In Playwright, initialize the endpoint API client in `test.beforeEach`; use the equivalent per-test setup in another framework. Reuse existing clients, generators, and validators.
+- Cover representative 400 validation/path-binding failures and 401 authentication failures for each endpoint in scope that supports them; do not invent these outcomes for endpoints that do not return them. Documentation-only bugs do not suppress this coverage. Link the report in a comment above each affected test or parameterized group and assert verified intended runtime behavior.
 - Assert the relevant response contract and observable state, not just a status code. Tests must be independent and clean up their own data, including after failures.
 
 

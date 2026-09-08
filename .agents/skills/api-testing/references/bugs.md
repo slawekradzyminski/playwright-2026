@@ -6,7 +6,9 @@ Use the project bug template when present; otherwise use the structure below. Di
 
 State the expected behavior and its source separately from the actual result. If a requirement is ambiguous, record the observed behavior and the question to resolve. Do not downgrade an issue merely because it concerns documentation or an error message: describe its concrete impact and propose severity with a rationale. Do not claim a fix or a fresh reproduction without evidence.
 
-Do not add automated tests that reproduce known open bugs, mark them as expected failures, skip them to disguise the gap, or assert incorrect behavior just to get a passing suite. Link the excluded scenarios to their reports. After a fix and exploratory verification, ordinary passing regression coverage can be added.
+Do not assert a known functional defect as correct behavior, mark it as an expected failure, or hide it with a skip. Link excluded functional scenarios to their reports; add passing regression coverage after a fix and exploratory verification.
+
+A documentation-only mismatch does not block automation of correct, explored runtime behavior. Keep tests for supported success and error responses even when OpenAPI has the wrong schema, media type, or an omitted status. Add a short comment immediately above the affected test or parameterized group naming the documentation bug and linking its report. Assert the verified intended status, body, headers and state; do not assert the incorrect documentation. The bug classification alone is not proof that runtime behavior is correct: establish that from requirements, user clarification and exploration. Record genuinely unresolved expectations instead of treating arbitrary observed behavior as correct.
 
 ## Classification and report structure
 
