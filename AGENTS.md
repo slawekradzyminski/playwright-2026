@@ -19,6 +19,7 @@
 
 ## UI test rules
 - before automating tests do exploratory tests first using playwright-cli, use dedicated skill
+- follow [the UI exploration workflow](docs/ui-exploration.md) for viewport coverage, screenshot review and selective human review
 - use page object model
 - always initialise the page object under test in `test.beforeEach`
 - use data-testid selectors when possible

@@ -18,4 +18,5 @@ artifacts
 .idea
 .env
 
+# Local exploration evidence, including UI screenshots and review indexes
 reports/exploration/*
