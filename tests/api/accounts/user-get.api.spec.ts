@@ -17,7 +17,7 @@ test('200 - return the requested customer public account details', async ({ logg
   expect(await expectAccount(response)).toMatchObject({ username: user.username, email: user.email, firstName: user.firstName, lastName: user.lastName, roles: ['ROLE_CLIENT'] });
 });
 
-// BUG-020: ../../../reports/bugs/BUG-020-user-read-error-schemas.md.
+// BUG-020: ../../../reports/bugs/[M][D]-BUG-020-user-read-error-schemas.md.
 test('401 - reject anonymous account lookup', async ({ loggedInUser }) => {
   // given
   const token = undefined;

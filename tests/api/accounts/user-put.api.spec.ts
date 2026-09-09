@@ -37,7 +37,7 @@ test('200 - allow an admin to edit another customer profile', async ({ adminToke
   expect(await expectAccount(await client.getUser(account.user.username, adminToken))).toMatchObject(validEdit);
 });
 
-// BUG-021: ../../../reports/bugs/BUG-021-user-edit-error-schemas.md.
+// BUG-021: ../../../reports/bugs/[M][D]-BUG-021-user-edit-error-schemas.md.
 test('400 - reject an invalid profile edit', async ({ adminToken, loggedInUser }) => {
   // given
   const invalidEdit = { email: '', firstName: 'abc', lastName: 'abc' };
@@ -51,7 +51,7 @@ test('400 - reject an invalid profile edit', async ({ adminToken, loggedInUser }
   expect(await expectAccount(await client.getUser(loggedInUser.user.username, adminToken))).toMatchObject({ email: loggedInUser.user.email, firstName: loggedInUser.user.firstName, lastName: loggedInUser.user.lastName });
 });
 
-// BUG-021: ../../../reports/bugs/BUG-021-user-edit-error-schemas.md.
+// BUG-021: ../../../reports/bugs/[M][D]-BUG-021-user-edit-error-schemas.md.
 test('401 - reject an anonymous profile edit', async ({ loggedInUser }) => {
   // given
   const token = undefined;
@@ -65,7 +65,7 @@ test('401 - reject an anonymous profile edit', async ({ loggedInUser }) => {
   expect(await expectAccount(await client.getUser(loggedInUser.user.username, loggedInUser.token))).toMatchObject({ email: loggedInUser.user.email, firstName: loggedInUser.user.firstName, lastName: loggedInUser.user.lastName });
 });
 
-// BUG-021: ../../../reports/bugs/BUG-021-user-edit-error-schemas.md.
+// BUG-021: ../../../reports/bugs/[M][D]-BUG-021-user-edit-error-schemas.md.
 test('403 - reject a customer editing another account', async ({ accountFactory, loggedInUser }) => {
   // given
   const target = await accountFactory.create();
@@ -79,7 +79,7 @@ test('403 - reject a customer editing another account', async ({ accountFactory,
   expect(await expectAccount(await client.getUser(target.user.username, target.token))).toMatchObject({ email: target.user.email, firstName: target.user.firstName, lastName: target.user.lastName });
 });
 
-// BUG-021: ../../../reports/bugs/BUG-021-user-edit-error-schemas.md.
+// BUG-021: ../../../reports/bugs/[M][D]-BUG-021-user-edit-error-schemas.md.
 test('404 - report a missing account edit', async ({ adminToken }) => {
   // given
   const username = `missing-edit-${Date.now()}`;

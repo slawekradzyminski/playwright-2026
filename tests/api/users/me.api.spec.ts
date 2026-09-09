@@ -19,7 +19,7 @@ test('200 - resolve the signed-in customer identity without exposing secrets', a
   expect(body.id).toBeGreaterThan(0);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous identity lookup', async () => {
   // given
   const token = undefined;

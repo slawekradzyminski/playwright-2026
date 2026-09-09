@@ -20,7 +20,7 @@ for (const role of ['owner', 'admin'] as const) {
   });
 }
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('400 - reject a malformed order ID', async ({ loggedInUser }) => {
   // given
   const id = 'bad-id';
@@ -32,7 +32,7 @@ test('400 - reject a malformed order ID', async ({ loggedInUser }) => {
   expect(await expectJson(response, 400)).toEqual({ error: 'For input string: "bad-id"' });
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous order read', async () => {
   // given
   const id = missingOrderId;
@@ -44,7 +44,7 @@ test('401 - reject anonymous order read', async () => {
   await expectError(response, 401, 'Unauthorized');
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 for (const scenario of ['missing', 'another customer’s'] as const) {
   test(`404 - conceal ${scenario} order`, async ({ orderSetup }) => {
     // given

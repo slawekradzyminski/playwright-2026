@@ -336,3 +336,7 @@ and follow the plan's maintenance checklist, then run:
 npm run coverage:api
 npm run coverage:api:check
 ```
+
+## UI testing workflow
+
+Follow the [UI testing skill](.agents/skills/ui-testing/SKILL.md) for exploration before automation, page objects, API fixtures and UI suite verification. Its references cover responsive and visual review, accessibility, UX, performance, and evidence/bug reporting. The skill is mirrored under `.claude/skills/ui-testing`.

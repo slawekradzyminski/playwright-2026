@@ -1,5 +1,5 @@
 {
-  "reviewedOn": "2026-09-08",
+  "reviewedOn": "2026-09-09",
   "operations": {
     "POST /api/v1/users/signin": {
       "spec": "tests/api/login.api.spec.ts",
@@ -83,7 +83,7 @@
         200,
         401
       ],
-      "reviewedSha256": "311b683df891893a44320630975de133cda78734b0501fb6080249ce4d990a9e"
+      "reviewedSha256": "18904821f5d6d5d5e59a6d83974e0bbf7d6ac34c58b8d1612f657b9f9a213c94"
     },
     "DELETE /api/v1/cart": {
       "spec": "tests/api/cart/cart-delete.api.spec.ts",
@@ -102,7 +102,7 @@
         404,
         409
       ],
-      "reviewedSha256": "3ae37bbebc135f864bbc324b8e2e9ac3b0eaa2c7528aad3d0ecc08b47418ab28"
+      "reviewedSha256": "989e1171ba4e22c1d29b20653b620cc6c6fe6830dfbc167f7f7c7e6233acbd76"
     },
     "PUT /api/v1/cart/items/{productId}": {
       "spec": "tests/api/cart/cart-items-put.api.spec.ts",
@@ -113,7 +113,7 @@
         404,
         409
       ],
-      "reviewedSha256": "ba48f2107f6fc9d275b62071184851dcec2541b5d6c9dc5fe0f4cf2ca22e30df"
+      "reviewedSha256": "65763f24944d07765e0bb9bd5f6b6353c7566c17579a1ad8c8c84fc6c3bfbd74"
     },
     "DELETE /api/v1/cart/items/{productId}": {
       "spec": "tests/api/cart/cart-items-delete.api.spec.ts",
@@ -123,7 +123,7 @@
         401,
         404
       ],
-      "reviewedSha256": "25ffb5c1857cf58542d4791f5e38d8d3c866c4d6940645a575625da561f6cde8"
+      "reviewedSha256": "81c177733b73d245a63c4391e13998a3160bef0bbd95730d4b15039e575e3856"
     },
     "POST /api/v1/users/refresh": {
       "spec": "tests/api/users/refresh.api.spec.ts",
@@ -132,7 +132,7 @@
         400,
         401
       ],
-      "reviewedSha256": "d35882d5555e7712c07b879c51e43ce853a73efd9b2d19f70745885017182343"
+      "reviewedSha256": "b2b508e03c9cf079cc4324ff0058c8c42c6c49679deb94cd55d5dbeaf489066d"
     },
     "POST /api/v1/users/logout": {
       "spec": "tests/api/users/logout.api.spec.ts",
@@ -148,7 +148,7 @@
         200,
         401
       ],
-      "reviewedSha256": "e2d3d7909634c84efe56e4d5ba920c9e096ceed5e44676c964dfe13713dc25c0"
+      "reviewedSha256": "04857bc13c838ff7dff58b0bf1a73726f541bdc71fcb293774b0c7047ad18d85"
     },
     "POST /api/v1/orders": {
       "spec": "tests/api/orders/orders-post.api.spec.ts",
@@ -158,7 +158,7 @@
         401,
         409
       ],
-      "reviewedSha256": "96c9482910ad4998f4a4b3019c745026a1fd07ae15d3b13f4a06e308718de84c"
+      "reviewedSha256": "1ea292dfb000eb5de666d2972ba1141d8c440a86ef740ba9da6bcb757aeac96a"
     },
     "GET /api/v1/orders": {
       "spec": "tests/api/orders/orders-get.api.spec.ts",
@@ -167,7 +167,7 @@
         400,
         401
       ],
-      "reviewedSha256": "e922a9f7499776d7461ed8d7012532f6d7126965ac7fa7d6097f2e39fb9dc59c"
+      "reviewedSha256": "d25bcf7c7e08f2a07f3ba568a1fb49e88d7b3686d3739307a2a16051c1cf1392"
     },
     "GET /api/v1/orders/{id}": {
       "spec": "tests/api/orders/orders-id.api.spec.ts",
@@ -177,7 +177,7 @@
         401,
         404
       ],
-      "reviewedSha256": "89ace36db466415b83cf30e5b3412768863fbb6f177838af95c7080a934ecdea"
+      "reviewedSha256": "0a7b1a052a9a6e5c8d47254aab0e72afad1f5bb9076ee70b35bf67930c00b866"
     },
     "GET /api/v1/orders/admin": {
       "spec": "tests/api/orders/orders-admin.api.spec.ts",
@@ -187,7 +187,7 @@
         401,
         403
       ],
-      "reviewedSha256": "1969a88f667b813eee3d95998830cb2bf6b37b015df234270a027fe0b010fc23"
+      "reviewedSha256": "41dd12de348f5d6d55ec649000a80bc7c9e2a2c464efcd542bdcd39983436c95"
     },
     "POST /api/v1/orders/{id}/cancel": {
       "spec": "tests/api/orders/orders-cancel.api.spec.ts",
@@ -198,7 +198,7 @@
         403,
         404
       ],
-      "reviewedSha256": "9e165384d488dc8e877d0fe096f22d3b8fda88b5e4c78cb5eae28df9730f16a2"
+      "reviewedSha256": "17cab87526515bef5a411acf061e4095fd3e8bea89329ae6623a879f5f06729b"
     },
     "PUT /api/v1/orders/{id}/status": {
       "spec": "tests/api/orders/orders-status.api.spec.ts",
@@ -209,7 +209,7 @@
         403,
         404
       ],
-      "reviewedSha256": "7376aa6c9d772d776ccac4ab01508e40d9dbf889bf81756e0fa0d91fa49ef69d"
+      "reviewedSha256": "a7de61a713193836ac683d7578ee05da0da8ee74c7ad73196351fe0f8445cae4"
     },
     "GET /api/v1/admin/inventory": {
       "spec": "tests/api/inventory/inventory-list.api.spec.ts",
@@ -219,7 +219,7 @@
         401,
         403
       ],
-      "reviewedSha256": "ce2815c20dac72778c1c0441dfd40bb1c7e3f9af34790f4aac62ff285c06d71a"
+      "reviewedSha256": "c4210898a65b68065e407c74507c78fd29e64602a286bb39178ce57abfd49204"
     },
     "GET /api/v1/admin/inventory/{productId}": {
       "spec": "tests/api/inventory/inventory-detail.api.spec.ts",
@@ -229,7 +229,7 @@
         401,
         403
       ],
-      "reviewedSha256": "3f565500ee48fede939b4fbbc564ba21eb941759ec139b68ca338ebdc8dbb7d5"
+      "reviewedSha256": "fec42c50c02771e7a2ac4318eed7d147a9b69d073986c293f9d8d927b5887781"
     },
     "GET /api/v1/admin/inventory/{productId}/movements": {
       "spec": "tests/api/inventory/inventory-movements.api.spec.ts",
@@ -239,7 +239,7 @@
         401,
         403
       ],
-      "reviewedSha256": "adb3dd1dc7242cd7448901ae30ba27dc3caad8821f9d49ec2f5292fb72c61613"
+      "reviewedSha256": "e55027d9a6bb58337ad37c26658b803c74bfb1976ce4bceb1dbd208c9ea4a617"
     },
     "POST /api/v1/admin/inventory/{productId}/adjustments": {
       "spec": "tests/api/inventory/inventory-adjustments.api.spec.ts",
@@ -250,7 +250,7 @@
         403,
         409
       ],
-      "reviewedSha256": "e8d5bf036c0a9a0d664559f2ab29bc6612a384c6a474d5f71b4a2995c5d19a7b"
+      "reviewedSha256": "5fa7e8d600f5607ab031be8348d2e26d86bccb0cc4b494e253182d58c70854dd"
     },
     "GET /api/v1/users": {
       "spec": "tests/api/accounts/users-get.api.spec.ts",
@@ -258,7 +258,7 @@
         200,
         401
       ],
-      "reviewedSha256": "99d17cf988b0969a4be8df888c1dea1cd22fe84e41fd3e68671a065e00f2cea5"
+      "reviewedSha256": "56749dc7e69330bcc7dae39efa9bc430488f53684443ac39b927dd2cce5ad915"
     },
     "GET /api/v1/users/{username}": {
       "spec": "tests/api/accounts/user-get.api.spec.ts",
@@ -267,7 +267,7 @@
         401,
         404
       ],
-      "reviewedSha256": "deaf6284eb6f2ddba587b669d1a42b432e191b4ef0d7e77522b5f098e7bef884"
+      "reviewedSha256": "d6bd92df202c01914ff57d08c17a25ce19f0f03ad6967ecb0aa60296aec71ba4"
     },
     "PUT /api/v1/users/{username}": {
       "spec": "tests/api/accounts/user-put.api.spec.ts",
@@ -278,7 +278,7 @@
         403,
         404
       ],
-      "reviewedSha256": "7467555b90985f5363275eb56a6c74e5441d8d1fb7b98e5266f7153f738ae8a5"
+      "reviewedSha256": "cad311e6320fe8d0d2632231964d2b4839bad64bd7ab3b83103c5f13cf9e9ef7"
     },
     "DELETE /api/v1/users/{username}": {
       "spec": "tests/api/accounts/user-delete.api.spec.ts",
@@ -288,7 +288,7 @@
         403,
         404
       ],
-      "reviewedSha256": "2e268a89e0a62b4a0a4a32466c830c1f381019b56ccafa309bb631bdeeb9b190"
+      "reviewedSha256": "342e9f1c5c07b91a7ece8fdaaa7df7fbd712ab90d4e025392d983dcaaac62601"
     },
     "DELETE /api/v1/users/{username}/right-to-be-forgotten": {
       "spec": "tests/api/accounts/user-forget.api.spec.ts",
@@ -298,7 +298,7 @@
         403,
         404
       ],
-      "reviewedSha256": "f1c8b36b2e71c086739a0353cc87aa9d2a6c45acb2c6cc2b45df3d67d205130d"
+      "reviewedSha256": "f7f20c05050ec7ed2f27894c1d75488265c8bac3956eefefd094c890670b9550"
     },
     "GET /api/v1/users/chat-system-prompt": {
       "spec": "tests/api/prompts/chat-system-prompt-get.api.spec.ts",
@@ -306,7 +306,7 @@
         200,
         401
       ],
-      "reviewedSha256": "a046594367f08288d51294701b910b9981d66a544eb5077c82475a53bee1ca6c"
+      "reviewedSha256": "6b680fce9488214745b4f840da54f0bccea7fb80e076fd2934872d470b191cb2"
     },
     "PUT /api/v1/users/chat-system-prompt": {
       "spec": "tests/api/prompts/chat-system-prompt-put.api.spec.ts",
@@ -315,7 +315,7 @@
         400,
         401
       ],
-      "reviewedSha256": "ab898465008b8ed49f028644659effac9af2e3a7dc5ef639c66ced9151fac118"
+      "reviewedSha256": "c1045cc5d44c5d9f7e075c6205898ff090b6a35ecbc6d467cb5758c8f1afcf9b"
     },
     "GET /api/v1/users/tool-system-prompt": {
       "spec": "tests/api/prompts/tool-system-prompt-get.api.spec.ts",
@@ -323,7 +323,7 @@
         200,
         401
       ],
-      "reviewedSha256": "6d9bb066546debb703dfa0590ae1e2bf1df054a5da882bdcad977a0d03e2e701"
+      "reviewedSha256": "e1f3387d1d49ffc77ece2b42873f5145f4d34c24b97c142d713470922102504e"
     },
     "PUT /api/v1/users/tool-system-prompt": {
       "spec": "tests/api/prompts/tool-system-prompt-put.api.spec.ts",
@@ -332,7 +332,7 @@
         400,
         401
       ],
-      "reviewedSha256": "9198402646c16e7dc8240c05e50011f9f07265c2d22c9c12fbc9ee7f65fec06a"
+      "reviewedSha256": "784482d52321f37946839c6836c2fd0f843e2dcc2084cb30691596b6b4e7b19b"
     }
   }
 }

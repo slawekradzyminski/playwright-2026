@@ -12,7 +12,7 @@ test.beforeEach(({ request }) => {
   catalog = new ProductClient(request);
 });
 
-// BUG-013: updatedAt equality excluded; ../../../reports/bugs/BUG-013-order-mutation-stale-updated-at.md.
+// BUG-013: updatedAt equality excluded; ../../../reports/bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md.
 for (const scenario of [
   { role: 'owner', status: 'PENDING' },
   { role: 'owner', status: 'PAID' },
@@ -36,7 +36,7 @@ for (const scenario of [
   });
 }
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 for (const status of ['CANCELLED', 'SHIPPED', 'DELIVERED'] as const) {
   test(`400 - cannot cancel ${status} order or restore stock again`, async ({ orderSetup, adminToken }) => {
     // given
@@ -54,7 +54,7 @@ for (const status of ['CANCELLED', 'SHIPPED', 'DELIVERED'] as const) {
   });
 }
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous cancellation', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -68,7 +68,7 @@ test('401 - reject anonymous cancellation', async ({ orderSetup, adminToken }) =
   await expectStocks(catalog, orderSetup.products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('403 - customer B cannot cancel customer A’s order or restore stock', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -82,7 +82,7 @@ test('403 - customer B cannot cancel customer A’s order or restore stock', asy
   await expectStocks(catalog, orderSetup.products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('404 - reject cancellation of missing order', async ({ loggedInUser }) => {
   // given
   const id = missingOrderId;

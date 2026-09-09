@@ -37,7 +37,7 @@ export async function expectOrderPage(response: APIResponse, page: number, size:
   return body;
 }
 
-// BUG-013: mutation updatedAt equality is unresolved; ../reports/bugs/BUG-013-order-mutation-stale-updated-at.md.
+// BUG-013: mutation updatedAt equality is unresolved; ../reports/bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md.
 // Compare every business field and createdAt; expectOrder still validates both timestamps' formats.
 export function expectPersistedOrder(actual: OrderDto, mutation: OrderDto) {
   const { updatedAt: actualUpdatedAt, ...actualFields } = actual;

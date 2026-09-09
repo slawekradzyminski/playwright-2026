@@ -1,10 +1,18 @@
 # BUG-NNN: <specific observed problem>
 
+Filename: `[S][T]-BUG-NNN-short-description.md`; follow [the classification guide](README.md).
+
+## Severity rationale
+
+<Before selecting a level: describe affected users/journey, observed consequence, scope/trigger, persistence and recovery. Distinguish untested consequences and missing evidence. Explain the practical impact without naming a severity.>
+
 ## Classification
 
 - Type: Functional | Documentation/contract
+- Category: accessibility | performance | ui | ux | functional | contract
+- Tags: <primary category, optional additional categories, api/ui surface>
 - Status: Suspected | Open | Fixed (awaiting verification) | Closed | Not reproduced
-- Severity (proposed): <level and concrete impact rationale>
+- Severity (proposed): <Critical/High/Medium/Low — select only after the rationale above>
 
 ## Endpoint
 

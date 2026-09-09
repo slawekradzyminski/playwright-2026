@@ -26,7 +26,7 @@ for (const quantity of [4, 0]) {
 }
 
 // Documentation bug BUG-006: OpenAPI advertises CartDto for 400; runtime correctly returns an error.
-// See ../../../reports/bugs/BUG-006-cart-error-response-contract.md.
+// See ../../../reports/bugs/[M][D]-BUG-006-cart-error-response-contract.md.
 for (const scenario of [
   { label: 'negative quantity', malformedId: false, quantity: -1, error: { quantity: 'Quantity cannot be negative' } },
   { label: 'malformed product ID', malformedId: true, quantity: 1, error: { error: 'For input string: "not-a-number"' } }
@@ -49,7 +49,7 @@ for (const scenario of [
 }
 
 // Documentation bug BUG-006: OpenAPI advertises CartDto for 401; runtime correctly returns an error.
-// See ../../../reports/bugs/BUG-006-cart-error-response-contract.md.
+// See ../../../reports/bugs/[M][D]-BUG-006-cart-error-response-contract.md.
 for (const { label, token, message } of cartUnauthorizedCases) {
   test(`401 - reject ${label} without changing customer carts`, async ({ cartSetup }) => {
     // given
@@ -83,7 +83,7 @@ test('404 - customer cannot update a line present only in another cart', async (
 });
 
 // Documentation bug BUG-007: OpenAPI omits the valid stock-conflict response.
-// See ../../../reports/bugs/BUG-007-cart-stock-conflict-undocumented.md.
+// See ../../../reports/bugs/[M][D]-BUG-007-cart-stock-conflict-undocumented.md.
 test('409 - reject insufficient stock and roll back the cart mutation', async ({ cartSetup }) => {
   // given
   const { owner, other, products: [first] } = cartSetup;

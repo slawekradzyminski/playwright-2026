@@ -24,7 +24,7 @@ test('200 - rotate refresh token and accept the new access token at me', async (
   });
 });
 
-// BUG-010: error schema differs from success DTO; ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: error schema differs from success DTO; ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('400 - reject a blank refresh token', async () => {
   // given
   const payload = { refreshToken: '' };
@@ -36,7 +36,7 @@ test('400 - reject a blank refresh token', async () => {
   expect(await expectJson(response, 400)).toEqual({ refreshToken: 'must not be blank' });
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 for (const scenario of ['replayed', 'unknown'] as const) {
   test(`401 - reject ${scenario} refresh token`, async ({ loggedInUser }) => {
     // given

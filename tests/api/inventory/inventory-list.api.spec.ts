@@ -26,7 +26,7 @@ test.describe('GET /api/v1/admin/inventory', () => {
     expectStockStatus(page.content[0].stockStatus, 'LOW_STOCK');
   });
 
-  // BUG-015 (../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md): the runtime exposes this undocumented 400 as {error: ...}; retain the verified validation status only.
+  // BUG-015 (../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md): the runtime exposes this undocumented 400 as {error: ...}; retain the verified validation status only.
   test('rejects an invalid low-stock threshold - 400', async ({ adminToken }) => {
     // given
 
@@ -38,7 +38,7 @@ test.describe('GET /api/v1/admin/inventory', () => {
     expect(body.error).toContain('lowStockThreshold');
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a request without a JWT token - 401', async () => {
     // given
 
@@ -49,7 +49,7 @@ test.describe('GET /api/v1/admin/inventory', () => {
     await expectError(response, 401, 'Unauthorized');
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a customer token - 403', async ({ loggedInUser }) => {
     // given
 

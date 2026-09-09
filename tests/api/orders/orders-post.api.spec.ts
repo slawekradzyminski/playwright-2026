@@ -34,7 +34,7 @@ test('201 - checkout snapshots two lines, clears only owner cart and deducts inv
   await expectStocks(catalog, products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 for (const scenario of ['invalid address', 'empty cart'] as const) {
   test(`400 - reject ${scenario} without creating an order or changing stock`, async ({ orderSetup, adminToken }) => {
     // given
@@ -54,7 +54,7 @@ for (const scenario of ['invalid address', 'empty cart'] as const) {
   });
 }
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous checkout', async () => {
   // given
   const address = shippingAddress;
@@ -66,7 +66,7 @@ test('401 - reject anonymous checkout', async () => {
   await expectError(response, 401, 'Unauthorized');
 });
 
-// BUG-012: 409 is intended but undocumented; ../../../reports/bugs/BUG-012-checkout-stock-conflict-undocumented.md.
+// BUG-012: 409 is intended but undocumented; ../../../reports/bugs/[M][D]-BUG-012-checkout-stock-conflict-undocumented.md.
 test('409 - unavailable second line preserves cart, both stocks and order count', async ({ orderSetup, adminToken }) => {
   // given
   const { owner, products, fillCart } = orderSetup;

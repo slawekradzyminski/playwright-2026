@@ -19,7 +19,7 @@ test('200 - list public account details for an authenticated admin', async ({ ad
   expect(body.every(account => !('password' in account))).toBe(true);
 });
 
-// BUG-020: ../../../reports/bugs/BUG-020-user-read-error-schemas.md.
+// BUG-020: ../../../reports/bugs/[M][D]-BUG-020-user-read-error-schemas.md.
 test('401 - reject anonymous account listing', async () => {
   // given
   const token = undefined;

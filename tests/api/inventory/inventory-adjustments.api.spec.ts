@@ -35,7 +35,7 @@ test.describe('POST /api/v1/admin/inventory/{productId}/adjustments', () => {
     expect(detail.availableQuantity).toBe(5);
   });
 
-  // BUG-015 (../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md): DTO validation returns a documented-by-runtime 400 field error rather than the general ErrorDto message shape.
+  // BUG-015 (../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md): DTO validation returns a documented-by-runtime 400 field error rather than the general ErrorDto message shape.
   test('rejects a zero adjustment without changing inventory - 400', async ({ inventoryProduct, adminToken }) => {
     // given
 
@@ -54,7 +54,7 @@ test.describe('POST /api/v1/admin/inventory/{productId}/adjustments', () => {
     expect((await expectJson(await inventoryClient.movements(inventoryProduct.id, '', adminToken), 200)).totalElements).toBe(1);
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a request without a JWT token - 401', async ({ inventoryProduct, adminToken }) => {
     // given
 
@@ -71,7 +71,7 @@ test.describe('POST /api/v1/admin/inventory/{productId}/adjustments', () => {
     expect((await expectJson(await inventoryClient.movements(inventoryProduct.id, '', adminToken), 200)).totalElements).toBe(1);
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a customer token - 403', async ({ inventoryProduct, loggedInUser, adminToken }) => {
     // given
 
@@ -87,7 +87,7 @@ test.describe('POST /api/v1/admin/inventory/{productId}/adjustments', () => {
     expect((await expectInventoryItem(await inventoryClient.get(inventoryProduct.id, '', adminToken), 200)).availableQuantity).toBe(2);
     expect((await expectJson(await inventoryClient.movements(inventoryProduct.id, '', adminToken), 200)).totalElements).toBe(1);
   });
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   for (const scenario of ['conflicting replay', 'insufficient stock'] as const) {
     test(`rejects ${scenario} without changing stock or history - 409`, async ({ inventoryProduct, adminToken }) => {
       // given

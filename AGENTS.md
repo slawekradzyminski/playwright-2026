@@ -2,7 +2,7 @@
 - always use English
 - use given (test setup), when (tested action) and then (assertion)
 - separate the given, when and then sections with one blank line
-- report bugs in reports/bugs if you see any
+- report bugs in reports/bugs if you see any; follow its README for `[S][T]-BUG-NNN-description.md` filenames, impact rationale before severity selection, categories and tags
 
 ## API test rules
 - order api tests via response code ascending (200 -> 400 -> ...)
@@ -18,9 +18,9 @@
 - run only api tests as verification - `npm run test:api`
 
 ## UI test rules
+- for UI test work, follow `.agents/skills/ui-testing/SKILL.md` (mirrored in `.claude/skills/ui-testing`)
 - run functional UI tests once on the configured desktop viewport; keep mobile/tablet and breakpoint coverage in exploration, not a viewport matrix in the automated suite
 - before automating tests do exploratory tests first using playwright-cli, use dedicated skill
-- follow [the UI exploration workflow](docs/ui-exploration.md) for viewport coverage, screenshot review, mandatory accessibility, UX and performance checks, and selective human review
 - use page object model
 - always initialise the page object under test in `test.beforeEach`
 - use data-testid selectors when possible

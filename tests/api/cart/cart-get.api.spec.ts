@@ -48,7 +48,7 @@ test('200 - admin can read its own cart', async ({ adminToken }) => {
 });
 
 // Documentation bug BUG-006: OpenAPI advertises CartDto for 401; runtime correctly returns an error.
-// See ../../../reports/bugs/BUG-006-cart-error-response-contract.md.
+// See ../../../reports/bugs/[M][D]-BUG-006-cart-error-response-contract.md.
 for (const { label, token, message } of cartUnauthorizedCases) {
   test(`401 - reject ${label} without changing customer carts`, async ({ cartSetup }) => {
     // given

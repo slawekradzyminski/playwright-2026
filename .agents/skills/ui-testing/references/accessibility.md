@@ -1,0 +1,15 @@
+## Required accessibility checks
+
+Include accessibility in every UI exploration, before automating the verified scenarios. Check each distinct page and relevant interactive state, including open menus/dialogs, validation feedback, loading, errors and empty results. Apply checks to the controls present; record a reason when a check is not applicable. A successful mouse interaction or accessibility snapshot alone does not establish accessibility.
+
+| Area | Required exploration |
+| --- | --- |
+| Keyboard operation | Complete the primary journey using the keyboard. Check Tab/Shift+Tab order and access to every action, including clickable cards, images and custom controls. Exercise Enter/Space and arrow keys where appropriate. Check for unreachable actions and keyboard traps. |
+| Focus | Inspect visible focus and whether sticky elements or overlays obscure it. Check focus placement when opening a dialog/menu and restoration when closing it, including Escape where applicable. |
+| Names and structure | Inspect rendered roles, accessible names, form labels, headings, landmarks and image alternatives. Icon-only controls need meaningful names; related controls must be distinguishable. Check that selected, expanded, required and invalid states are exposed where relevant. |
+| Feedback | Check that validation identifies the affected field and explains recovery. Inspect how loading, errors and success feedback are exposed to assistive technology; do not infer screen-reader announcements from visible text alone. Record whether actual screen-reader testing was performed. |
+| Readability and reflow | Check text at 200% browser zoom and at the narrow exploration viewport for lost content or unusable controls. Inspect text/control contrast with tooling; record measured evidence for suspected failures. Resizing alone does not establish zoom coverage. |
+
+Run an axe scan on each distinct page and materially different state in scope, using an existing integration or an exploration-only axe setup when none is installed. Missing integration is a setup task, not a reason to silently skip accessibility. Record the tool/version, rules or tags used, scanned state, violations and incomplete checks; save sanitized results in the ignored run directory. If installation or execution is blocked, record the exact limitation and mark automated accessibility review incomplete, continue the manual checks and independent work, and disclose the gap in the task result. Do not report an unavailable or skipped scan as passed.
+
+Investigate scan findings in the rendered UI, triage confirmed and suspected issues using the same bug workflow, and manually review applicable incomplete checks. A clean scan does not establish complete accessibility or WCAG compliance. [Playwright's accessibility guidance](https://playwright.dev/docs/accessibility-testing) describes axe integration and the limits of automated checks. Exploration tooling does not automatically require adding axe assertions to the regression suite; automate verified behavior according to repository test conventions.

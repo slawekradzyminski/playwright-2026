@@ -39,7 +39,7 @@ test('400 - reject an overlong chat prompt without changing an existing override
   expect((await expectChatSystemPrompt(await client.getChatSystemPrompt(loggedInUser.token), 200)).chatSystemPrompt).toBe(initial.chatSystemPrompt);
 });
 
-// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/BUG-027-prompt-error-schema-mismatch.md.
+// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/[M][D]-BUG-027-prompt-error-schema-mismatch.md.
 for (const scenario of ['anonymous', 'invalid bearer'] as const) {
   test(`401 - reject ${scenario} chat prompt update`, async () => {
     // given

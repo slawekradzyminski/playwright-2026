@@ -18,7 +18,7 @@ These are local adaptations. The guide's sample delegation prompt is optional an
 
 ## Maintenance boundaries
 
-`AGENTS.md` holds project conventions. `.agents/skills/api-testing` holds the reusable workflow; keep its skill and references synchronized with `.claude/skills/api-testing`. Load detailed references for the applicable phase.
+`AGENTS.md` holds project conventions. `.agents/skills/api-testing` holds the reusable workflow; keep its skill and references synchronized with `.claude/skills/api-testing`. The [UI testing skill](../.agents/skills/ui-testing/SKILL.md) owns UI exploration and automation rules, with separate references for visual review, accessibility, UX, performance, and evidence/triage. Keep its Codex and Claude copies synchronized too. Load detailed references for the applicable phase.
 
 `docs/openapi.json` describes the training backend, including Ollama routes. OpenAI model guidance is not evidence for changing that contract, endpoint expectations or coverage inventory. This update introduces no OpenAI API integration or model-setting changes. API-specific migration parameters and async orchestration require a separate implementation scope and current compatibility checks.
 

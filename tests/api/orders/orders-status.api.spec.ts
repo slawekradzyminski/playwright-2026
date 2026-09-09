@@ -12,7 +12,7 @@ test.beforeEach(({ request }) => {
   catalog = new ProductClient(request);
 });
 
-// BUG-013: updatedAt equality excluded; ../../../reports/bugs/BUG-013-order-mutation-stale-updated-at.md.
+// BUG-013: updatedAt equality excluded; ../../../reports/bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md.
 test('200 - admin progresses PAID to SHIPPED to DELIVERED without further stock changes', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -29,7 +29,7 @@ test('200 - admin progresses PAID to SHIPPED to DELIVERED without further stock 
   }
 });
 
-// BUG-013: updatedAt equality excluded; ../../../reports/bugs/BUG-013-order-mutation-stale-updated-at.md.
+// BUG-013: updatedAt equality excluded; ../../../reports/bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md.
 test('200 - admin status cancellation persists and restores inventory', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -45,7 +45,7 @@ test('200 - admin status cancellation persists and restores inventory', async ({
   await expectStocks(catalog, orderSetup.products, adminToken, [20, 20]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('400 - admin cannot cancel a delivered order through status update', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -61,7 +61,7 @@ test('400 - admin cannot cancel a delivered order through status update', async 
   await expectStocks(catalog, orderSetup.products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous status change', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -75,7 +75,7 @@ test('401 - reject anonymous status change', async ({ orderSetup, adminToken }) 
   await expectStocks(catalog, orderSetup.products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('403 - owner cannot grant its own order a paid status', async ({ orderSetup, adminToken }) => {
   // given
   const order = await orderSetup.createOrder();
@@ -89,7 +89,7 @@ test('403 - owner cannot grant its own order a paid status', async ({ orderSetup
   await expectStocks(catalog, orderSetup.products, adminToken, [18, 17]);
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('404 - reject admin status update for missing order', async ({ adminToken }) => {
   // given
   const id = missingOrderId;

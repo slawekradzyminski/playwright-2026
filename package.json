@@ -25,6 +25,7 @@
     "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.63.0",
     "@types/node": "^24.13.3",
+    "jsqr": "^1.4.0",
     "typescript": "^7.0.2"
   }
 }

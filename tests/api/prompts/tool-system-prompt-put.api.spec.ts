@@ -39,7 +39,7 @@ test('400 - reject an overlong tool prompt without changing an existing override
   expect((await expectToolSystemPrompt(await client.getToolSystemPrompt(loggedInUser.token), 200)).toolSystemPrompt).toBe(initial.toolSystemPrompt);
 });
 
-// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/BUG-027-prompt-error-schema-mismatch.md.
+// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/[M][D]-BUG-027-prompt-error-schema-mismatch.md.
 for (const scenario of ['anonymous', 'invalid bearer'] as const) {
   test(`401 - reject ${scenario} tool prompt update`, async () => {
     // given

@@ -44,7 +44,7 @@ test.describe('GET /api/v1/admin/inventory/{productId}/movements', () => {
     expect(secondPage.content[0].createdAt <= firstPage.content[0].createdAt).toBe(true);
   });
 
-  // BUG-015 (../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md): the runtime exposes this undocumented binding 400 as {error: ...}; retain the verified validation status only.
+  // BUG-015 (../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md): the runtime exposes this undocumented binding 400 as {error: ...}; retain the verified validation status only.
   test('rejects a non-numeric product ID - 400', async ({ adminToken }) => {
     // given
 
@@ -56,7 +56,7 @@ test.describe('GET /api/v1/admin/inventory/{productId}/movements', () => {
     expect(body.error).toContain('not-a-number');
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a request without a JWT token - 401', async ({ inventoryProduct }) => {
     // given
 
@@ -67,7 +67,7 @@ test.describe('GET /api/v1/admin/inventory/{productId}/movements', () => {
     await expectError(response, 401, 'Unauthorized');
   });
 
-  // BUG-015: ../../../reports/bugs/BUG-015-inventory-invalid-query-and-path-error-schema.md.
+  // BUG-015: ../../../reports/bugs/[M][D]-BUG-015-inventory-invalid-query-and-path-error-schema.md.
   test('rejects a customer token - 403', async ({ inventoryProduct, loggedInUser }) => {
     // given
 

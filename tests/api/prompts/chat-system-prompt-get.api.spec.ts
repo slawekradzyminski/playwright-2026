@@ -17,7 +17,7 @@ test('200 - customer receives the chat default', async ({ loggedInUser }) => {
   expect(first.chatSystemPrompt).toBeTruthy();
 });
 
-// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/BUG-027-prompt-error-schema-mismatch.md.
+// BUG-027: 401 bodies are error objects although the OpenAPI response schema references the prompt DTO; see ../../../reports/bugs/[M][D]-BUG-027-prompt-error-schema-mismatch.md.
 for (const scenario of ['anonymous', 'invalid bearer'] as const) {
   test(`401 - reject ${scenario} chat prompt lookup`, async () => {
     // given

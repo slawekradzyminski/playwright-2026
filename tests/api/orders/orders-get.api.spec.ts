@@ -31,7 +31,7 @@ test('200 - list only owner orders with pagination and status filtering', async 
   await expectOrderPageContents(other, { page: 0, size: 10, orders: [foreign], exact: true });
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('400 - reject invalid status filter', async ({ loggedInUser }) => {
   // given
   const query = { status: 'BOGUS' };
@@ -43,7 +43,7 @@ test('400 - reject invalid status filter', async ({ loggedInUser }) => {
   expect(await expectJson(response, 400)).toEqual({ error: 'No enum constant com.awesome.testing.dto.order.OrderStatus.BOGUS' });
 });
 
-// BUG-010: ../../../reports/bugs/BUG-010-auth-orders-error-contract.md.
+// BUG-010: ../../../reports/bugs/[M][D]-BUG-010-auth-orders-error-contract.md.
 test('401 - reject anonymous order listing', async () => {
   // given
   const query = {};

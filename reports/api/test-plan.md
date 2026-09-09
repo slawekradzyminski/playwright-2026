@@ -58,11 +58,11 @@ For each package: assess → explore → automate → verify. Include applicable
 
 | Area | Remaining work | Reports |
 | --- | --- | --- |
-| Signup | Verify immediate signin; clean up created users; fix username validation message | [BUG-001](../bugs/BUG-001-signup-overlong-username-validation.md) |
-| Products | Clarify blank fields/description; referenced-product deletion; missing collection/create 404 cases | [BUG-002](../bugs/BUG-002-product-update-blank-fields.md), [BUG-004](../bugs/BUG-004-product-description-contract.md), [BUG-008](../bugs/BUG-008-product-delete-referenced-by-cart.md) |
-| Orders | Reopening and inventory consistency; invalid status returns 401; mutation timestamp discrepancy | [BUG-009](../bugs/BUG-009-order-reopening-inventory.md), [BUG-011](../bugs/BUG-011-order-invalid-status-unauthorized.md), [BUG-013](../bugs/BUG-013-order-mutation-stale-updated-at.md) |
-| Inventory | Malformed adjustment UUID returns 401; missing-product regressions and concurrent adjustment idempotency remain gaps | [BUG-014](../bugs/BUG-014-inventory-malformed-request-id-401.md) |
-| Accounts | Stale deleted-user token causes cart 500; email-event cascade remains covered at backend level | [BUG-022](../bugs/BUG-022-cart-read-after-account-deletion-500.md) |
+| Signup | Verify immediate signin; clean up created users; fix username validation message | [BUG-001](../bugs/[L][F]-BUG-001-signup-overlong-username-validation.md) |
+| Products | Clarify blank fields/description; referenced-product deletion; missing collection/create 404 cases | [BUG-002](../bugs/[M][F]-BUG-002-product-update-blank-fields.md), [BUG-004](../bugs/[M][D]-BUG-004-product-description-contract.md), [BUG-008](../bugs/[M][F]-BUG-008-product-delete-referenced-by-cart.md) |
+| Orders | Reopening and inventory consistency; invalid status returns 401; mutation timestamp discrepancy | [BUG-009](../bugs/[H][F]-BUG-009-order-reopening-inventory.md), [BUG-011](../bugs/[M][F]-BUG-011-order-invalid-status-unauthorized.md), [BUG-013](../bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md) |
+| Inventory | Malformed adjustment UUID returns 401; missing-product regressions and concurrent adjustment idempotency remain gaps | [BUG-014](../bugs/[M][F]-BUG-014-inventory-malformed-request-id-401.md) |
+| Accounts | Stale deleted-user token causes cart 500; email-event cascade remains covered at backend level | [BUG-022](../bugs/[L][F]-BUG-022-cart-read-after-account-deletion-500.md) |
 | Contracts | Error schemas/media types and undocumented conflicts; QR error media checks deferred | [Bug index](../bugs/README.md): BUG-003, 005–007, 010, 012 |
 
 Functional regressions wait for a fix and fresh exploration. Documentation-only issues do not block tests of verified intended behavior.
@@ -72,7 +72,7 @@ Functional regressions wait for a fix and fresh exploration. Documentation-only 
 | Item | Impact on progress | Next action |
 | --- | --- | --- |
 | Current suite result missing | Implemented coverage cannot yet be reported as verified. | Run the expanded API suite and publish its actual result, including failures and cleanup issues. |
-| [Referenced-product deletion](../bugs/BUG-008-product-delete-referenced-by-cart.md) and [order reopening](../bugs/BUG-009-order-reopening-inventory.md) | Known 500 response and stock-consistency defect remain unresolved in the bug index. | Fix, explore the corrected behavior and add passing regressions. |
+| [Referenced-product deletion](../bugs/[M][F]-BUG-008-product-delete-referenced-by-cart.md) and [order reopening](../bugs/[H][F]-BUG-009-order-reopening-inventory.md) | Known 500 response and stock-consistency defect remain unresolved in the bug index. | Fix, explore the corrected behavior and add passing regressions. |
 | Suspected findings and unclear requirements | Some expected behaviors still need confirmation; affected gaps remain open. | Clarify and reproduce the findings linked above; update their bug reports. |
 | Mail sink/outbox, OIDC issuer and model/mock availability | Prerequisites for F, I and J are not yet confirmed; these are dependencies, not established blockers. | Verify isolation and availability during package assessment. |
 
@@ -89,3 +89,11 @@ Functional regressions wait for a fix and fresh exploration. Documentation-only 
 - Review target assertions and helpers; refresh [coverage mapping](coverage-map.json) statuses, spec hashes and review date.
 - Run `npm run coverage:api`, `npm run coverage:api:check`, affected tests and the API suite after test changes. Record actual results separately from coverage.
 - Follow [API testing workflow](../../.agents/skills/api-testing/SKILL.md) for assessment, exploration and safe cleanup.
+
+## Bug tagging migration — 2026-09-09
+
+Bug filenames now include severity and primary category; IDs and existing severity rationales are preserved. Updated report links in 23 API spec comments and verified the affected specs differ only in those paths. Refreshed their reviewed hashes without changing target assertions, statuses or endpoint breadth. Five hashes were already stale before migration (user-get, user-delete, user-forget and both prompt PUT specs); reviewed their target assertions and relevant validators before refreshing them. Coverage generation and consistency checks passed. This documentation migration involved no fresh exploratory or suite execution; the execution status above is unchanged.
+
+## Severity reassessment — 2026-09-09
+
+Reassessed all bug reports from recorded impact; see [the severity review](../bugs/severity-review-2026-09-09.md). Three account API specs changed only in bug-link comments; reviewed those path-only differences and refreshed their hashes. Endpoint/status breadth and executable assertions are unchanged. No live requests or API suite were run for this documentation task. `npm run coverage:api` and `npm run coverage:api:check` passed: 35/55 operations, unchanged.
