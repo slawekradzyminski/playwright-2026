@@ -1,5 +1,5 @@
-import { test, expect } from '../../fixtures/ui/productsUi.fixture';
-import { ProductsPage } from '../../pages/ProductsPage';
+import { test, expect } from '../../../fixtures/ui/productsUi.fixture';
+import { ProductsPage } from '../../../pages/ProductsPage';
 
 test.describe('Product catalog browsing', () => {
   let productsPage: ProductsPage;

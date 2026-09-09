@@ -1,0 +1,312 @@
+{
+  "reviewedOn": "2026-09-09",
+  "purpose": "Agent-maintained screen inventory supporting the concise human report in test-plan.md. Update affected entries when routes or meaningful coverage change; no per-edit hash maintenance.",
+  "frontendRevision": "41e177a6e4b4f53ffb75d0e37b0666dcb9508277",
+  "browserVerification": {
+    "date": "2026-09-09",
+    "baseUrl": "http://localhost:8081",
+    "tool": "Playwright CLI",
+    "deployedRevision": null,
+    "scope": "28 routed screen variants and /orders redirect observed; not all states, roles or primary workflows verified."
+  },
+  "countingRule": "Count routed screen variants, including create/edit and inventory list/inspector separately. Exclude redirects and embedded sections from the screen denominator.",
+  "coverageLevels": {
+    "partial": "Meaningful screen assertions exist; functional coverage remains incomplete.",
+    "navigation": "Arrival, root or heading assertions only.",
+    "none": "No target-screen assertions."
+  },
+  "screens": {
+    "/login": {
+      "id": "UI-01",
+      "name": "Login",
+      "source": "src/pages/auth/loginPage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/login.ui.spec.ts"
+      ],
+      "browserObserved": "Sign-in form and SSO buttons",
+      "remainingWork": "MFA challenge, SSO return, expired session, pending/error recovery"
+    },
+    "/register": {
+      "id": "UI-02",
+      "name": "Registration",
+      "source": "src/pages/auth/registerPage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/register.ui.spec.ts"
+      ],
+      "browserObserved": "Create your account form",
+      "remainingWork": "Valid-filled-form Sign in regression after BUG-028 fix; recovery after server error"
+    },
+    "/forgot-password": {
+      "id": "UI-03",
+      "name": "Forgot password",
+      "source": "src/pages/auth/forgotPasswordPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Opened from Forgot password?; username/email form",
+      "remainingWork": "Request, neutral success, validation, retry; disposable mailbox only"
+    },
+    "/reset": {
+      "id": "UI-04",
+      "name": "Reset password",
+      "source": "src/pages/auth/resetPasswordPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Reset token and matching-password form",
+      "remainingWork": "Valid/expired token, confirmation, persistence and subsequent login"
+    },
+    "/auth/sso/callback": {
+      "id": "UI-05",
+      "name": "SSO callback",
+      "source": "src/pages/auth/ssoCallbackPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Missing-code error and Back to login",
+      "remainingWork": "Provider return, state/PKCE failure, successful session and safe return URL"
+    },
+    "/": {
+      "id": "UI-06",
+      "name": "Home",
+      "source": "src/pages/home/homePage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/home.ui.spec.ts",
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+      ],
+      "browserObserved": "Client welcome and shortcuts",
+      "remainingWork": "Session expiry; responsive findings BUG-030\u2013032; footer links"
+    },
+    "/products": {
+      "id": "UI-07",
+      "name": "Product catalog",
+      "source": "src/pages/products/productsPage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/product/productsBrowsing.ui.spec.ts",
+        "tests/ui/product/productCards.ui.spec.ts",
+        "tests/ui/product/productsStates.ui.spec.ts"
+      ],
+      "browserObserved": "Products, categories and cards via header",
+      "remainingWork": "Whitespace search BUG-035; category/count BUG-033/037; keyboard BUG-034"
+    },
+    "/products/:id": {
+      "id": "UI-08",
+      "name": "Product details",
+      "source": "src/pages/products/productDetailsPage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/product/productDetails.ui.spec.ts",
+        "tests/ui/product/productsStates.ui.spec.ts"
+      ],
+      "browserObserved": "Existing product 1, price/stock/quantity controls",
+      "remainingWork": "Detail quantity/add/update outcome, missing/deleted item and stock conflict"
+    },
+    "/users": {
+      "id": "UI-09",
+      "name": "Users",
+      "source": "src/pages/users/usersPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/home.ui.spec.ts"
+      ],
+      "browserObserved": "Client list; admin Edit/Delete controls",
+      "remainingWork": "Admin deletion/cancel, list refresh, role-specific actions, load failure"
+    },
+    "/users/:username/edit": {
+      "id": "UI-10",
+      "name": "Edit user",
+      "source": "src/pages/users/editUserPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Admin opened disposable user via Edit; client Access denied",
+      "remainingWork": "Persist edit, cancel, malformed input, missing user and denied access"
+    },
+    "/email": {
+      "id": "UI-11",
+      "name": "Send email",
+      "source": "src/pages/email/emailPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/home.ui.spec.ts",
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+      ],
+      "browserObserved": "Send Email form via header",
+      "remainingWork": "Validation and failure recovery; live sending requires authorized test recipient"
+    },
+    "/qr": {
+      "id": "UI-12",
+      "name": "QR generator",
+      "source": "src/pages/qr/qrPage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/qr.ui.spec.ts"
+      ],
+      "browserObserved": "QR Code Generator via header",
+      "remainingWork": "Pending state, long input, QR aspect ratio BUG-038"
+    },
+    "/llm": {
+      "id": "UI-13",
+      "name": "LLM overview",
+      "source": "src/pages/llm/llmPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/home.ui.spec.ts",
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+      ],
+      "browserObserved": "Generate, Chat and Chat + Tools cards",
+      "remainingWork": "All three card destinations and Back to overview"
+    },
+    "/llm/chat": {
+      "id": "UI-14",
+      "name": "LLM chat",
+      "source": "src/pages/llm/llmModePages.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Conversational assistant via overview card",
+      "remainingWork": "Live stream, history, stop/retry, prompt settings and errors"
+    },
+    "/llm/generate": {
+      "id": "UI-15",
+      "name": "LLM generation",
+      "source": "src/pages/llm/llmModePages.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Single prompt generation via overview card",
+      "remainingWork": "Live generated output, parameters, cancellation and recovery"
+    },
+    "/llm/tools": {
+      "id": "UI-16",
+      "name": "LLM tools",
+      "source": "src/pages/llm/llmModePages.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Catalog-grounded assistant via overview card",
+      "remainingWork": "Tool events/results, no-result/error states and safe retry"
+    },
+    "/profile": {
+      "id": "UI-17",
+      "name": "Profile, security and orders",
+      "source": "src/pages/profile/profilePage.tsx",
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/profile.ui.spec.ts"
+      ],
+      "browserObserved": "Personal Information, System Prompts, Two-factor authentication, Your Orders",
+      "remainingWork": "MFA enrollment/recovery/disable; order list/filter/pagination/cancel; BUG-040"
+    },
+    "/cart": {
+      "id": "UI-18",
+      "name": "Cart",
+      "source": "src/pages/cart/cartPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+      ],
+      "browserObserved": "Empty and populated cart; Proceed to Checkout",
+      "remainingWork": "Quantity/remove/clear, totals persistence, stock conflict, empty/error recovery"
+    },
+    "/checkout": {
+      "id": "UI-19",
+      "name": "Checkout",
+      "source": "src/pages/checkout/checkoutPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Populated disposable cart \u2192 shipping form and order summary; empty \u2192 /cart",
+      "remainingWork": "Place disposable order, address validation, summary, cart clearing, duplicate-submit and stock conflict"
+    },
+    "/orders/:id": {
+      "id": "UI-20",
+      "name": "Order details",
+      "source": "src/pages/orders/orderDetailsPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Existing order 1 opened as admin, items/address/status controls",
+      "remainingWork": "Owner/non-owner/admin access; cancellation, persistence and status changes"
+    },
+    "/admin": {
+      "id": "UI-21",
+      "name": "Admin dashboard",
+      "source": "src/pages/admin/dashboardPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/navigation/adminNavigation.ui.spec.ts"
+      ],
+      "browserObserved": "Metrics, recent orders, low stock; client redirected home",
+      "remainingWork": "Metric accuracy, section links, empty/error states, direct-role guard"
+    },
+    "/admin/products": {
+      "id": "UI-22",
+      "name": "Admin products",
+      "source": "src/pages/admin/productsPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Manage Products table via admin section navigation",
+      "remainingWork": "Create/edit links, deletion confirmation, refresh, referenced-product BUG-008"
+    },
+    "/admin/products/new": {
+      "id": "UI-23",
+      "name": "Create product",
+      "source": "src/pages/admin/productFormPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Add New Product form",
+      "remainingWork": "Create and visible persisted product, validation, pending/failure recovery"
+    },
+    "/admin/products/edit/:id": {
+      "id": "UI-24",
+      "name": "Edit product",
+      "source": "src/pages/admin/productFormPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Edit Product form for product 1",
+      "remainingWork": "Prefill, update persistence, validation, missing/deleted product"
+    },
+    "/admin/orders": {
+      "id": "UI-25",
+      "name": "Admin orders",
+      "source": "src/pages/admin/ordersPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Manage Orders table, status filter, View Details",
+      "remainingWork": "Filter/pagination/detail navigation and status workflow; BUG-009/011/013"
+    },
+    "/admin/inventory": {
+      "id": "UI-26",
+      "name": "Inventory list",
+      "source": "src/pages/admin/inventoryPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Inventory table, filters and Select a product inspector",
+      "remainingWork": "Search/category/status/threshold, pagination, empty/error, row keyboard access"
+    },
+    "/admin/inventory/:productId": {
+      "id": "UI-27",
+      "name": "Inventory inspector",
+      "source": "src/pages/admin/inventoryPage.tsx",
+      "coverage": "none",
+      "specs": [],
+      "browserObserved": "Row 1 \u2192 selected product, Adjust stock, Movement history",
+      "remainingWork": "Adjustment and movement persistence, invalid ID, validation, retry/idempotency"
+    },
+    "/traffic": {
+      "id": "UI-28",
+      "name": "Traffic monitor",
+      "source": "src/pages/traffic/trafficPage.tsx",
+      "coverage": "navigation",
+      "specs": [
+        "tests/ui/home.ui.spec.ts",
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+      ],
+      "browserObserved": "Traffic Monitor and Recent Traffic Events via header",
+      "remainingWork": "Connection/reconnect, incoming event, filtering/details and pause/clear if exposed"
+    }
+  },
+  "redirects": {
+    "/orders": {
+      "destination": "/profile",
+      "browserVerified": true,
+      "automated": false
+    }
+  }
+}

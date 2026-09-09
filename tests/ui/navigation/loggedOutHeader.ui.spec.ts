@@ -1,6 +1,6 @@
 import { test } from '@playwright/test';
-import { LoginPage } from '../../pages/LoginPage';
-import { RegisterPage } from '../../pages/RegisterPage';
+import { LoginPage } from '../../../pages/LoginPage';
+import { RegisterPage } from '../../../pages/RegisterPage';
 
 test.describe('Logged-out header navigation', () => {
   let loginPage: LoginPage;

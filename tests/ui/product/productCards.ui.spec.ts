@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/ui/productsUi.fixture';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { CartClient } from '../../http/cartClient';
+import { test, expect } from '../../../fixtures/ui/productsUi.fixture';
+import { ProductsPage } from '../../../pages/ProductsPage';
+import { CartClient } from '../../../http/cartClient';
 
 test.describe('Product card actions', () => {
   let productsPage: ProductsPage;

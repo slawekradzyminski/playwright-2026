@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/ui/loggedInAdminUi.fixture';
-import { HomePage } from '../../pages/HomePage';
-import { AdminDashboardPage } from '../../pages/AdminDashboardPage';
+import { test, expect } from '../../../fixtures/ui/loggedInAdminUi.fixture';
+import { HomePage } from '../../../pages/HomePage';
+import { AdminDashboardPage } from '../../../pages/AdminDashboardPage';
 
 test.describe('Admin header navigation', () => {
   let homePage: HomePage;

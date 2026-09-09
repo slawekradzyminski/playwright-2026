@@ -175,6 +175,12 @@ Authentication failures (422) remain in the same signin API suite as the 200 and
 ### UI Tests
 
 Browser tests live in [`tests/ui`](tests/ui). Run them with `npm run test:ui`.
+
+- [`product/`](tests/ui/product): product cards, details, browsing and page states, matching the API `product/` folder.
+- [`navigation/`](tests/ui/navigation): logged-in and logged-out headers and admin navigation.
+- Standalone page specs remain at the root, as in the API suite.
+
+Run a feature folder with `npm run test:ui -- tests/ui/product/`.
 See [`AGENTS.md`](AGENTS.md) for contribution and testing conventions.
 
 ### Application source references
@@ -340,3 +346,7 @@ npm run coverage:api:check
 ## UI testing workflow
 
 Follow the [UI testing skill](.agents/skills/ui-testing/SKILL.md) for exploration before automation, page objects, API fixtures and UI suite verification. Its references cover responsive and visual review, accessibility, UX, performance, and evidence/bug reporting. The skill is mirrored under `.claude/skills/ui-testing`.
+
+## UI test plan and screen coverage
+
+The [UI test plan and status](reports/ui/test-plan.md) is the single report for screen coverage, verified results, gaps and next actions, including admin screens. The agent-facing [JSON inventory](reports/ui/coverage-map.json) holds per-screen source references, browser observations, coverage and gaps. Update affected entries after meaningful changes; detailed scenarios are prepared when starting the work.

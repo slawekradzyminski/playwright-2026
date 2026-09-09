@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/ui/productsUi.fixture';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
+import { test, expect } from '../../../fixtures/ui/productsUi.fixture';
+import { ProductsPage } from '../../../pages/ProductsPage';
+import { ProductDetailsPage } from '../../../pages/ProductDetailsPage';
 
 test.describe('Product details', () => {
   let productsPage: ProductsPage;

@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/ui/loggedInUi.fixture';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
+import { test, expect } from '../../../fixtures/ui/loggedInUi.fixture';
+import { ProductsPage } from '../../../pages/ProductsPage';
+import { ProductDetailsPage } from '../../../pages/ProductDetailsPage';
 
 test.describe('Product UI response states (simulated catalog responses)', () => {
   let productsPage: ProductsPage;

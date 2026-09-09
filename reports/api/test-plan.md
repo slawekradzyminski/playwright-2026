@@ -1,5 +1,7 @@
 # API test plan and status
 
+Scope: HTTP API operations and response contracts. Screen and browser-journey coverage is maintained in the separate [UI test plan](../ui/test-plan.md).
+
 ## Status at a glance
 
 **Updated: 2026-09-09 · Overall: In progress — current suite verification pending.**
@@ -96,4 +98,4 @@ Bug filenames now include severity and primary category; IDs and existing severi
 
 ## Severity reassessment — 2026-09-09
 
-Reassessed all bug reports from recorded impact; see [the severity review](../bugs/severity-review-2026-09-09.md). Three account API specs changed only in bug-link comments; reviewed those path-only differences and refreshed their hashes. Endpoint/status breadth and executable assertions are unchanged. No live requests or API suite were run for this documentation task. `npm run coverage:api` and `npm run coverage:api:check` passed: 35/55 operations, unchanged.
+Reassessed all bug reports from recorded impact; see [the bug index](../bugs/README.md). Three account API specs changed only in bug-link comments; reviewed those path-only differences and refreshed their hashes. Endpoint/status breadth and executable assertions are unchanged. No live requests or API suite were run for this documentation task. `npm run coverage:api` and `npm run coverage:api:check` passed: 35/55 operations, unchanged.

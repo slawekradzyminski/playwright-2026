@@ -1,12 +1,12 @@
-import { test, expect } from '../../fixtures/ui/loggedInUi.fixture';
-import { HomePage } from '../../pages/HomePage';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { EmailPage } from '../../pages/EmailPage';
-import { QrPage } from '../../pages/QrPage';
-import { LlmPage } from '../../pages/LlmPage';
-import { TrafficPage } from '../../pages/TrafficPage';
-import { CartPage } from '../../pages/CartPage';
-import { ProfilePage } from '../../pages/ProfilePage';
+import { test, expect } from '../../../fixtures/ui/loggedInUi.fixture';
+import { HomePage } from '../../../pages/HomePage';
+import { ProductsPage } from '../../../pages/ProductsPage';
+import { EmailPage } from '../../../pages/EmailPage';
+import { QrPage } from '../../../pages/QrPage';
+import { LlmPage } from '../../../pages/LlmPage';
+import { TrafficPage } from '../../../pages/TrafficPage';
+import { CartPage } from '../../../pages/CartPage';
+import { ProfilePage } from '../../../pages/ProfilePage';
 
 test.describe('Logged-in header navigation', () => {
   let homePage: HomePage;
