@@ -7,7 +7,7 @@
     "baseUrl": "http://localhost:8081",
     "tool": "Playwright CLI",
     "deployedRevision": null,
-    "scope": "28 routed screen variants and /orders redirect observed; not all states, roles or primary workflows verified."
+    "scope": "Original 28-screen inventory retained; UI-T01\u2013T04 workflows explored with disposable fixtures, responsive/keyboard/axe/performance checks. Actual 200% zoom metrics verified; scrolled zoom captures had tooling artifacts, so full zoom visual sign-off remains incomplete."
   },
   "countingRule": "Count routed screen variants, including create/edit and inventory list/inspector separately. Exclude redirects and embedded sections from the screen denominator.",
   "coverageLevels": {
@@ -22,7 +22,8 @@
       "source": "src/pages/auth/loginPage.tsx",
       "coverage": "partial",
       "specs": [
-        "tests/ui/login.ui.spec.ts"
+        "tests/ui/login.ui.spec.ts",
+        "tests/ui/navigation/anonymousRoutes.ui.spec.ts"
       ],
       "browserObserved": "Sign-in form and SSO buttons",
       "remainingWork": "MFA challenge, SSO return, expired session, pending/error recovery"
@@ -72,7 +73,8 @@
       "coverage": "partial",
       "specs": [
         "tests/ui/home.ui.spec.ts",
-        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts",
+        "tests/ui/navigation/clientAdminRoutes.ui.spec.ts"
       ],
       "browserObserved": "Client welcome and shortcuts",
       "remainingWork": "Session expiry; responsive findings BUG-030\u2013032; footer links"
@@ -190,104 +192,129 @@
       "source": "src/pages/profile/profilePage.tsx",
       "coverage": "partial",
       "specs": [
-        "tests/ui/profile.ui.spec.ts"
+        "tests/ui/profile.ui.spec.ts",
+        "tests/ui/orders/orders-owner.ui.spec.ts",
+        "tests/ui/navigation/ordersRedirect.ui.spec.ts"
       ],
-      "browserObserved": "Personal Information, System Prompts, Two-factor authentication, Your Orders",
-      "remainingWork": "MFA enrollment/recovery/disable; order list/filter/pagination/cancel; BUG-040"
+      "browserObserved": "Personal Information, System Prompts, Two-factor authentication, Your Orders; owned orders/detail navigation, cancellation and status filters",
+      "remainingWork": "MFA lifecycle, order pagination growth; BUG-040"
     },
     "/cart": {
       "id": "UI-18",
       "name": "Cart",
       "source": "src/pages/cart/cartPage.tsx",
-      "coverage": "navigation",
+      "coverage": "partial",
       "specs": [
-        "tests/ui/navigation/loggedInHeader.ui.spec.ts"
+        "tests/ui/navigation/loggedInHeader.ui.spec.ts",
+        "tests/ui/cart/cart.ui.spec.ts",
+        "tests/ui/checkout/checkout.ui.spec.ts"
       ],
-      "browserObserved": "Empty and populated cart; Proceed to Checkout",
-      "remainingWork": "Quantity/remove/clear, totals persistence, stock conflict, empty/error recovery"
+      "browserObserved": "Quantity/update/remove/clear confirmation, exact totals, reload, empty and simulated error/retry",
+      "remainingWork": "Maximum quantity and concurrent cart mutation; BUG-039"
     },
     "/checkout": {
       "id": "UI-19",
       "name": "Checkout",
       "source": "src/pages/checkout/checkoutPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Populated disposable cart \u2192 shipping form and order summary; empty \u2192 /cart",
-      "remainingWork": "Place disposable order, address validation, summary, cart clearing, duplicate-submit and stock conflict"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/checkout/checkout.ui.spec.ts"
+      ],
+      "browserObserved": "Shipping validation, exact summary/order/address, clearing, live stock-conflict preservation and successful retry",
+      "remainingWork": "Rapid double-submit, session expiry and generic submission failures; BUG-042"
     },
     "/orders/:id": {
       "id": "UI-20",
       "name": "Order details",
       "source": "src/pages/orders/orderDetailsPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Existing order 1 opened as admin, items/address/status controls",
-      "remainingWork": "Owner/non-owner/admin access; cancellation, persistence and status changes"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/orders/orders-owner.ui.spec.ts",
+        "tests/ui/orders/orders-admin.ui.spec.ts",
+        "tests/ui/orders/orders-access.ui.spec.ts",
+        "tests/ui/checkout/checkout.ui.spec.ts",
+        "tests/ui/admin/adminOrders.ui.spec.ts"
+      ],
+      "browserObserved": "Owner detail/cancel persistence; non-owner/missing denial; admin status persistence; anonymous guard",
+      "remainingWork": "Full transition matrix, concurrent updates and error recovery; BUG-009/041"
     },
     "/admin": {
       "id": "UI-21",
       "name": "Admin dashboard",
       "source": "src/pages/admin/dashboardPage.tsx",
-      "coverage": "navigation",
+      "coverage": "partial",
       "specs": [
-        "tests/ui/navigation/adminNavigation.ui.spec.ts"
+        "tests/ui/navigation/adminNavigation.ui.spec.ts",
+        "tests/ui/admin/dashboard.ui.spec.ts"
       ],
-      "browserObserved": "Metrics, recent orders, low stock; client redirected home",
-      "remainingWork": "Metric accuracy, section links, empty/error states, direct-role guard"
+      "browserObserved": "Live catalog totals/low stock; controlled complete-page metrics/recent ordering and empty panels; client guard",
+      "remainingWork": "Multi-page aggregate BUG-046; server errors and recent-order growth"
     },
     "/admin/products": {
       "id": "UI-22",
       "name": "Admin products",
       "source": "src/pages/admin/productsPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Manage Products table via admin section navigation",
-      "remainingWork": "Create/edit links, deletion confirmation, refresh, referenced-product BUG-008"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/adminProducts.ui.spec.ts"
+      ],
+      "browserObserved": "Create/edit/delete with dismiss/confirm and reload persistence",
+      "remainingWork": "Referenced deletion BUG-008; responsive clipping BUG-044; service-error recovery"
     },
     "/admin/products/new": {
       "id": "UI-23",
       "name": "Create product",
       "source": "src/pages/admin/productFormPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Add New Product form",
-      "remainingWork": "Create and visible persisted product, validation, pending/failure recovery"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/adminProducts.ui.spec.ts"
+      ],
+      "browserObserved": "Required validation, corrected creation and edit prefill",
+      "remainingWork": "Silent blank-description rejection BUG-043; image URL and server-error recovery"
     },
     "/admin/products/edit/:id": {
       "id": "UI-24",
       "name": "Edit product",
       "source": "src/pages/admin/productFormPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Edit Product form for product 1",
-      "remainingWork": "Prefill, update persistence, validation, missing/deleted product"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/adminProducts.ui.spec.ts"
+      ],
+      "browserObserved": "Persist name, description, price, stock and category through reload",
+      "remainingWork": "Missing/deleted product, image URL and failed save recovery"
     },
     "/admin/orders": {
       "id": "UI-25",
       "name": "Admin orders",
       "source": "src/pages/admin/ordersPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Manage Orders table, status filter, View Details",
-      "remainingWork": "Filter/pagination/detail navigation and status workflow; BUG-009/011/013"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/adminOrders.ui.spec.ts"
+      ],
+      "browserObserved": "Paid filter, owned row data and detail navigation; page traversal helper",
+      "remainingWork": "Deterministic multi-page boundary/previous/reset cases, error recovery; BUG-044"
     },
     "/admin/inventory": {
       "id": "UI-26",
       "name": "Inventory list",
       "source": "src/pages/admin/inventoryPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Inventory table, filters and Select a product inspector",
-      "remainingWork": "Search/category/status/threshold, pagination, empty/error, row keyboard access"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/inventory.ui.spec.ts"
+      ],
+      "browserObserved": "Combined search/category/status/threshold and empty filter result",
+      "remainingWork": "Pagination growth, service-error retry and keyboard row selection BUG-045"
     },
     "/admin/inventory/:productId": {
       "id": "UI-27",
       "name": "Inventory inspector",
       "source": "src/pages/admin/inventoryPage.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Row 1 \u2192 selected product, Adjust stock, Movement history",
-      "remainingWork": "Adjustment and movement persistence, invalid ID, validation, retry/idempotency"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/admin/inventory.ui.spec.ts"
+      ],
+      "browserObserved": "Positive/negative stock and movements, reload, disabled invalid values, live conflict recovery",
+      "remainingWork": "Invalid/deleted product, concurrent/idempotent submission and movement pagination"
     },
     "/traffic": {
       "id": "UI-28",
@@ -306,7 +333,10 @@
     "/orders": {
       "destination": "/profile",
       "browserVerified": true,
-      "automated": false
+      "automated": true,
+      "specs": [
+        "tests/ui/navigation/ordersRedirect.ui.spec.ts"
+      ]
     }
   }
 }

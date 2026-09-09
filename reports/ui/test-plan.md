@@ -1,64 +1,66 @@
 # UI test plan and status
 
-## Status at a glance
+**Updated: 2026-09-09 · UI-T01–T04 implemented and verified; broader UI coverage remains in progress.**
 
-**Updated: 2026-09-09 · Overall: In progress — inventory verified; functional coverage incomplete.**
-
-This is a manually maintained report, like the [API test plan](../api/test-plan.md). Screen coverage measures implemented assertions, not complete behavior or live pipeline health.
+Screen coverage measures target-screen assertions, separately from execution health. The route inventory remains **28 screen variants + 1 redirect**; no routes changed.
 
 | Question | Current status |
 | --- | --- |
-| What did we do? | Matched frontend routes to live Playwright CLI navigation, including admin screens: **28 screen variants + 1 redirect**, with no inventory discrepancy. |
-| What is implemented? | **7/28 screens (25%)** have partial functional tests; **6** have navigation checks only; **15** have no screen assertions. |
-| What was verified? | Existing UI suite: **72 passed, 0 failed, 0 skipped** on 2026-09-09. No new tests were added in this planning task. |
-| What is missing? | **21/28 screens lack functional coverage beyond navigation.** Major gaps: checkout/orders, admin operations, recovery/MFA/SSO and LLM. |
-| What happens next? | Start **UI-T01 — cart and checkout**, then orders and direct route-access checks. |
+| What changed? | Reviewed the pending UI diff; separated cart, checkout and route-navigation specs, clarified scenario names and page-object responsibilities, and tightened table-cell assertions/save synchronization. **43 tests** now cover T01–T04, up from 41 by splitting two mixed scenarios. |
+| What is implemented? | **17/28 screens (61%)** have partial functional coverage; **4** navigation only; **7** have no screen assertions. |
+| What passed? | `npm run test:ui`: **115 passed, 0 failed, 0 skipped**, Chromium desktop, 21.3s. |
+| What remains? | Open bugs, deeper state/pagination/concurrency coverage, and UI-T05–T08. Passing tests do not establish complete accessibility, visual quality or performance. |
+| Next action | Address BUG-041–046 and add their regressions after verification; then UI-T05 user management. |
 
 ## Execution evidence
 
 | Scope | Date / environment | Result | Evidence / limitation |
 | --- | --- | --- | --- |
-| Screen inventory | 2026-09-09 · local gateway · Playwright CLI | 28/28 screen variants observed; `/orders` → `/profile` confirmed | Frontend `AppRoutes.tsx` and page components at revision `41e177a` matched live navigation as anonymous/client/admin; deployed commit unknown. |
-| Current UI suite | 2026-09-09 · `http://localhost:8081` · Chromium desktop | `npm run test:ui`: **72 passed**, 0 failed/skipped, 16.2s | 12 specs, including reorganized product/navigation paths. [Local run log](../exploration/ui/2026-09-09-screen-inventory-01/ui-suite-current-paths.log); no CI link. |
+| Baseline inventory and suite | 2026-09-09 · local gateway | 28 variants + redirect; 72 tests passed | Frontend revision `41e177a`; deployed revision unknown. [Baseline log](../exploration/ui/2026-09-09-screen-inventory-01/ui-suite-current-paths.log). |
+| First expanded full run | 2026-09-09 · `http://localhost:8081` · Chromium desktop | 112 passed, 1 failed, 21.6s | Dashboard page-object method removed by mistake; restored before rerun. [Failed run](../exploration/ui/2026-09-09-orders-root-01/ui-suite-final.log). Earlier delegated run also exposed two corrected order-selector/wait issues. |
+| Final expanded full run | Same environment | **113 passed**, 0 failed/skipped, 21.3s | [Verified log](../exploration/ui/2026-09-09-orders-root-01/ui-suite-verified.log). No API suite run; API clients support UI fixtures. |
+| Readability refactor | 2026-09-09 · local gateway · Chromium desktop | **113 passed**, 0 failed/skipped, 21.7s | [Run log](../exploration/ui/2026-09-09-readability-review/ui-suite.log). Same 41 new scenarios and screen breadth; order checks now match product IDs and verify rendered item count. |
+| Home redirect simplification | 2026-09-09 · Chromium desktop | **7 passed**, 0 failed/skipped, 1.8s | Removed the synthetic AdminAccessPage; customer admin-route checks use HomePage.assertLoaded(), which checks the home URL, root and welcome heading. [Focused log](../exploration/ui/2026-09-09-readability-review/home-redirect.log). Full-suite result above predates this narrow change. |
+| Stock-conflict readability | 2026-09-09 · Chromium desktop | **4 cart/checkout tests passed**, 0 failed/skipped, 3.5s | API setup/readback moved into a dedicated checkout fixture; real CheckoutPage owns submit/response synchronization and retained-address checks. [Focused log](../exploration/ui/2026-09-09-readability-review/stock-conflict.log). Same scenario breadth; all five address fields now checked. |
+| Full diff review and spec organization | 2026-09-09 · local gateway · Chromium desktop | **115 passed**, 0 failed/skipped, 21.3s | [Verified log](../exploration/ui/2026-09-09-readability-review/suite-reorganized.log). Two mixed scenarios split; same screen breadth. Cart2, checkout3; route-access specs under navigation. |
+| Exploration | Playwright CLI; desktop/tablet/mobile and breakpoint sampling | Live primary journeys; selected controlled failures and dashboard pagination boundary | [Consolidated review](../exploration/ui/2026-09-09-orders-root-01/review.md). Evidence is workspace-only and Git-ignored. Actual 200% zoom confirmed by browser metrics; blank/clipped scrolled captures prevent full zoom visual sign-off. |
 
-Discovery cleanup completed: disposable cart cleared, user deleted and authentication files removed. Shared products/orders were read only. Detailed evidence is local and Git-ignored.
+Disposable fixtures were cleaned up. During delegated exploration, seeded order 3 was accidentally changed; the supervisor restored PENDING and verified unchanged stock. Its `updatedAt` changed. This is an exploration limitation, not a product defect.
 
 ## Implemented coverage
 
-| Level | Screens | What the assertions cover |
+| Level | Screens | Assertions |
 | --- | --- | --- |
-| Partial functional · **7** | Login, registration, home | Authentication/validation, registration, identity/reload/logout and shortcuts |
-| | Catalog, product details | Search/filter/sort, product-card cart actions, detail data/out-of-stock, simulated response states |
-| | Profile, QR | Personal information and prompt persistence; QR content/clear/validation; simulated failure → live retry |
-| Navigation only · **6** | Users, email, LLM overview, cart, admin dashboard, traffic | Arrival/root/title checks; no primary workflow coverage |
-| None · **15** | Forgot password, reset, SSO callback, user edit, LLM chat/generate/tools, checkout, order details, admin product list/create/edit, admin orders, inventory list/inspector | Not yet automated |
+| Partial functional · **17** | Login, registration, home, catalog, product details, profile, QR | Existing assertions; profile now also covers order navigation, filtering and cancellation |
+| | Cart, checkout, order details | Quantities/totals/persistence, address validation, creation/cart clearing, stock-conflict recovery, cancellation and owner/non-owner/admin access |
+| | Admin dashboard, product list/create/edit, admin orders, inventory list/inspector | CRUD/persistence, filters, signed stock/movements/conflict recovery, status workflow; live product metrics and controlled order metric/empty states |
+| Navigation only · **4** | Users, email, LLM overview, traffic | Arrival/root/title assertions |
+| None · **7** | Forgot password, reset, SSO callback, user edit, LLM chat/generate/tools | No target-screen assertions |
 
-No screen is declared fully covered. Profile's MFA and order list remain untested. Product-card cart actions do not count as cart-screen coverage.
+No screen is fully covered. See [coverage-map.json](coverage-map.json) for exact spec mapping and remaining work. Anonymous direct-route and client admin-route checks supplement the screen assertions.
 
-## To do
+## Work packages
 
-All packages are **not started**. Explore each feature before automation; write detailed scenarios when starting that package.
-
-| Priority | Package | Next deliverable / dependency |
+| Priority | Package | Status / remaining work |
 | --- | --- | --- |
-| P0 | UI-T01 — Cart and checkout | Quantity/totals, shipping validation, order creation and cart clearing; disposable cart/order fixtures |
-| P0 | UI-T02 — Orders and access | Profile orders → details/cancellation; owner/client/admin and anonymous direct-route checks |
-| P1 | UI-T03 — Admin products | Create/edit/delete and persistence; isolated products |
-| P1 | UI-T04 — Inventory/admin orders | Filters, stock adjustments/movements, order status and dashboard accuracy |
-| P1 | UI-T05 — User management | Edit/delete/cancel, persistence and client restrictions; disposable target user |
-| P1 | UI-T06 — Recovery/MFA/SSO | Reset and MFA lifecycle, callback success/errors; controlled tokens/provider |
-| P2 | UI-T07 — LLM | Mode navigation, streaming/results, stop/retry/settings; available model |
-| P2 | UI-T08 — Utilities/existing gaps | Email, traffic, detail cart actions and QR states; authorized test recipient for live email |
-| Each package | UI-T09 — Quality review | Responsive/visual, keyboard/axe, UX and performance exploration; desktop-only functional automation |
+| P0 | UI-T01 — Cart and checkout | Implemented: 5 tests: 2 cart and 3 checkout. Remaining: rapid duplicate submit, generic submission failure, concurrent carts; BUG-042. |
+| P0 | UI-T02 — Orders and access | Implemented: 25 tests; route checks live under navigation. Remaining: pagination growth, full transition/concurrency/error matrix; BUG-009/041. |
+| P1 | UI-T03 — Admin products | Implemented: 4 tests. Remaining: image URL, missing product, service failure and referenced deletion; BUG-008/043/044. |
+| P1 | UI-T04 — Inventory/admin orders | Implemented: 9 tests. Remaining: deterministic multi-page boundaries, idempotency, unavailable dashboard, BUG-045/046. |
+| P1 | UI-T05 — User management | Not started: edit/delete/cancel, persistence and client restrictions; disposable target user. |
+| P1 | UI-T06 — Recovery/MFA/SSO | Not started: lifecycle and callback states with controlled tokens/provider. |
+| P2 | UI-T07 — LLM | Not started: streaming/results, stop/retry/settings; available model. |
+| P2 | UI-T08 — Utilities/existing gaps | Not started: email, traffic, detail cart actions and QR gaps; authorized recipient for live email. |
+| Each package | UI-T09 — Quality review | Applied to T01–T04; responsive, keyboard/axe, UX and repeated local timing. Zoom capture limitation and remaining growth/error states are explicit in review. |
 
-## Risks and gaps
+## Risks and bugs
 
-- Known bugs remain open despite passing tests: registration Sign in creates an account (BUG-028), product keyboard access (BUG-034), cart accessible name (BUG-039), profile field semantics (BUG-040). See the [bug index](../bugs/README.md).
-- Discovery confirmed screen identity, not every state or role. SSO success, MFA challenge and customer-owned order details remain unexplored; new responsive, accessibility and performance reviews remain package prerequisites.
-- The denominator includes create/edit and inventory list/inspector separately. `/orders` is a redirect; embedded Profile sections are tracked without adding screens. Source/browser agreement does not establish an identical deployed revision.
+New confirmed reports: **BUG-041** unnamed order-status select; **BUG-042** checkout contrast; **BUG-043** silent blank-description create rejection; **BUG-044** clipped admin tables; **BUG-045** keyboard-inaccessible inventory rows; **BUG-046** first-50 dashboard aggregation. See the [bug index](../bugs/README.md). BUG-046 was reproduced with injected pagination data, not persisted bulk orders. Existing findings remain open despite passing tests.
+
+Controlled dashboard responses prove complete-page arithmetic and empty rendering, not live multi-page aggregate correctness. Local performance samples are small and have no SLA. Accessibility scans are supplemented by keyboard/manual review and are not a compliance certification.
 
 ## Keeping this plan current
 
-Update this file after a completed work package, a meaningful coverage change or a verification run—not after every small edit. Keep the summary, coverage table, latest result and next action current. Recheck the screen count against frontend routes and browser navigation when routes change. The agent maintains per-screen details in [coverage-map.json](coverage-map.json), updating affected entries when routes or meaningful coverage change. No separate Markdown inventory, backlog or spec-hash tracking is required.
+Always update this plan after a work package, meaningful coverage change or verification run, including failures. Keep the summary, package status, assertions, gaps, bugs and next action current. Update affected [screen inventory](coverage-map.json) entries, counting target-screen assertions rather than fixture calls. Recheck route counts only when routes change; keep execution results separate from breadth.
 
-For test changes, follow the [UI testing skill](../../.agents/skills/ui-testing/SKILL.md) and run `npm run test:ui`; keep execution results separate from coverage. Plan-only edits need link/count checks, not a live test run.
+Follow the [UI testing skill](../../.agents/skills/ui-testing/SKILL.md) and run `npm run test:ui` for test changes. Plan-only edits need link/count consistency checks, not live scenarios. No spec hashes or separate backlog are required.

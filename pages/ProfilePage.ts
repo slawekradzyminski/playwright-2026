@@ -15,6 +15,10 @@ export class ProfilePage extends LoggedInPage {
   readonly chatPromptSave: Locator;
   readonly toolPromptInput: Locator;
   readonly toolPromptSave: Locator;
+  readonly ordersSection: Locator;
+  readonly orderStatusFilter: Locator;
+  readonly orderList: Locator;
+  readonly orderEmpty: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -30,6 +34,10 @@ export class ProfilePage extends LoggedInPage {
     this.chatPromptSave = this.root.getByTestId('profile-prompt-submit');
     this.toolPromptInput = this.root.getByTestId('profile-tool-prompt-input');
     this.toolPromptSave = this.root.getByTestId('profile-tool-prompt-submit');
+    this.ordersSection = this.root.getByTestId('profile-orders-section');
+    this.orderStatusFilter = this.root.getByTestId('order-list-status-filter');
+    this.orderList = this.root.getByTestId('order-list-container');
+    this.orderEmpty = this.root.getByTestId('order-list-empty');
   }
 
   async goto() {
@@ -42,5 +50,17 @@ export class ProfilePage extends LoggedInPage {
     await expect(this.root).toBeVisible();
     await expect(this.title).toHaveText('Profile');
     await expect(this.title).toBeVisible();
+  }
+
+  orderLink(id: number | string) {
+    return this.root.getByTestId(`order-details-link-${id}`);
+  }
+
+  orderStatus(id: number | string) {
+    return this.root.getByTestId(`order-status-${id}`);
+  }
+
+  async openOrder(id: number | string) {
+    await this.orderLink(id).click();
   }
 }

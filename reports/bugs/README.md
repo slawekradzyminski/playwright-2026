@@ -92,3 +92,9 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-038]([L][UI]-BUG-038-qr-mobile-image-distortion.md) | low | ui | Functional | Open | QR image loses its square aspect ratio on narrow screens |
 | [BUG-039]([M][A]-BUG-039-cart-link-accessible-name.md) | medium | accessibility | Functional | Open | Shared header cart link has no accessible name |
 | [BUG-040]([M][A]-BUG-040-profile-invalid-field-semantics.md) | medium | accessibility | Functional | Open | Invalid profile email is not exposed as invalid or associated with its error |
+| [BUG-041]([M][A]-BUG-041-order-status-select-accessible-name.md) | medium | accessibility | Functional | Open | Admin order-status select has no accessible name |
+| [BUG-042]([M][A]-BUG-042-checkout-validation-error-contrast.md) | medium | accessibility | Functional | Open | Checkout validation text fails contrast |
+| [BUG-043]([M][UX]-BUG-043-product-create-silent-description-rejection.md) | medium | ux | Functional | Open | Product creation silently rejects an apparently optional description |
+| [BUG-044]([M][UI]-BUG-044-admin-tables-clip-columns-on-narrow-viewports.md) | medium | ui | Functional | Open | Admin product and order tables clip action columns on narrow viewports |
+| [BUG-045]([H][A]-BUG-045-inventory-rows-keyboard-inaccessible.md) | high | accessibility | Functional | Open | Inventory rows cannot be selected with the keyboard |
+| [BUG-046]([M][F]-BUG-046-admin-dashboard-aggregates-only-first-50-orders.md) | medium | functional | Functional | Open | Admin dashboard aggregates only the first 50 orders |
