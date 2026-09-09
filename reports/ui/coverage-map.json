@@ -7,7 +7,7 @@
     "baseUrl": "http://localhost:8081",
     "tool": "Playwright CLI",
     "deployedRevision": null,
-    "scope": "Original 28-screen inventory retained; UI-T01\u2013T04 workflows explored with disposable fixtures, responsive/keyboard/axe/performance checks. Actual 200% zoom metrics verified; scrolled zoom captures had tooling artifacts, so full zoom visual sign-off remains incomplete."
+    "scope": "Original 28-screen inventory retained; UI-T01\u2013T04 workflows explored with disposable fixtures, responsive/keyboard/axe/performance checks. Actual 200% zoom metrics verified; scrolled zoom captures had tooling artifacts, so full zoom visual sign-off remains incomplete. Ollama generate/chat/tools explored at desktop/tablet/mobile and breakpoints with live mock, keyboard, axe and repeated timings; 200% zoom not confirmed in this Ollama session."
   },
   "countingRule": "Count routed screen variants, including create/edit and inventory list/inspector separately. Exclude redirects and embedded sections from the screen denominator.",
   "coverageLevels": {
@@ -163,28 +163,51 @@
       "id": "UI-14",
       "name": "LLM chat",
       "source": "src/pages/llm/llmModePages.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Conversational assistant via overview card",
-      "remainingWork": "Live stream, history, stop/retry, prompt settings and errors"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/llm/chat.ui.spec.ts"
+      ],
+      "browserObserved": "Live deterministic streaming, settings, whitespace prevention and complete visible responses; controlled 503/retry explored.",
+      "remainingWork": "History and retry regressions after fixes; long history and interrupted streams.",
+      "bugs": [
+        "BUG-049",
+        "BUG-050",
+        "BUG-051",
+        "BUG-052",
+        "BUG-054"
+      ]
     },
     "/llm/generate": {
       "id": "UI-15",
       "name": "LLM generation",
       "source": "src/pages/llm/llmModePages.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Single prompt generation via overview card",
-      "remainingWork": "Live generated output, parameters, cancellation and recovery"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/llm/generate.ui.spec.ts"
+      ],
+      "browserObserved": "Live deterministic streaming, settings, whitespace prevention and complete visible responses; controlled 503/retry explored.",
+      "remainingWork": "Transport interruption and long-output variants; real-model quality excluded.",
+      "bugs": [
+        "BUG-050"
+      ]
     },
     "/llm/tools": {
       "id": "UI-16",
       "name": "LLM tools",
       "source": "src/pages/llm/llmModePages.tsx",
-      "coverage": "none",
-      "specs": [],
-      "browserObserved": "Catalog-grounded assistant via overview card",
-      "remainingWork": "Tool events/results, no-result/error states and safe retry"
+      "coverage": "partial",
+      "specs": [
+        "tests/ui/llm/tools.ui.spec.ts"
+      ],
+      "browserObserved": "Live deterministic streaming, settings, whitespace prevention and complete visible responses; tool definitions and catalog output; controlled 503/retry explored.",
+      "remainingWork": "Premature unlock regression after fix; owned snapshot/multi-step scenario, tool failures and interruption.",
+      "bugs": [
+        "BUG-050",
+        "BUG-051",
+        "BUG-052",
+        "BUG-053",
+        "BUG-055"
+      ]
     },
     "/profile": {
       "id": "UI-17",

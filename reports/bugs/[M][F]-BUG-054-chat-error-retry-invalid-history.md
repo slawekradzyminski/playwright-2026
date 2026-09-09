@@ -46,7 +46,7 @@ A transient failed chat request leaves an empty assistant entry in local history
 
 ## Cleanup
 
-One-shot route removed automatically; browser account scheduled for deletion. No shared prompts or products changed.
+One-shot route removed automatically; browser account deleted and saved authentication removed. No shared prompts or products changed.
 
 ## Follow-up and automation
 

@@ -1,5 +1,5 @@
 import { expect, type Page } from '@playwright/test';
-import { BasePage } from '../basePage';
+import { BasePage } from '../BasePage';
 import { LlmSettings } from './llmSettings';
 
 export class ChatPage extends BasePage {

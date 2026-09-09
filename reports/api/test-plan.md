@@ -6,13 +6,13 @@ Scope: HTTP API operations and response contracts. Screen and browser-journey co
 
 **Updated: 2026-09-09 · Overall: In progress — current suite verified; uncovered operations remain.**
 
-This is a manually maintained snapshot for GitLab readers. It reflects recorded evidence, not live pipeline status. Resource factories and affected target assertions were reviewed on 2026-09-09; endpoint/status breadth is unchanged.
+This is a manually maintained snapshot for GitLab readers. It reflects recorded evidence, not live pipeline status. Ollama target assertions and stream/schema validators were reviewed on 2026-09-09; four operations were added.
 
 | Question | Current status |
 | --- | --- |
-| What has been implemented? | Dedicated tests for **35/55 API operations (63.6%)**, across the nine areas below. This measures implemented coverage, not passing tests or complete behavior coverage. |
-| What has been verified? | The current full run recorded **182 passed, 0 failed, 0 skipped** on 2026-09-09 against the local gateway; see [execution evidence](#execution-evidence). |
-| What is not done? | **20 operations** still lack dedicated tests: password/email, MFA, SSO, Ollama and traffic. Existing areas also have [behavior gaps](#gaps-in-covered-areas). |
+| What has been implemented? | Dedicated tests for **39/55 API operations (70.9%)**, across the ten areas below. This measures implemented coverage, not passing tests or complete behavior coverage. |
+| What has been verified? | The current full run recorded **202 passed, 0 failed, 0 skipped** on 2026-09-09 against the local gateway; see [execution evidence](#execution-evidence). |
+| What is not done? | **16 operations** still lack dedicated tests: password/email, MFA, SSO and traffic. Existing areas also have [behavior gaps](#gaps-in-covered-areas). |
 | What needs attention? | Known functional findings include product deletion returning 500 and reopening orders without deducting stock. See [risks and dependencies](#risks-and-dependencies). |
 | What happens next? | Address P0 gaps, then start package F — password & email. |
 
@@ -24,6 +24,7 @@ Keep execution results separate from implemented coverage. A passing historical 
 | --- | --- | --- | --- | --- |
 | Previous full API suite, before expansion | 2026-09-08 | Local gateway | 130 passed, 0 failed, 0 skipped | Carried forward from the previous plan. Exact command, tested revision and run artifact were not linked; this result excludes the new packages. |
 | Resource factory refactor, full API suite | 2026-09-09 | http://localhost:8081 | **182 passed, 0 failed, 0 skipped**, 14.9s | `npm run test:api -- tests/api/product tests/api/orders tests/api/accounts tests/api/cart tests/api/inventory` selected the full suite because the script already includes `tests/api/`. [Local log](../exploration/resource-factories/api-focused.log), ignored/workspace-only; no CI job link. Deployed revision unknown. |
+| Ollama expansion, full API suite | 2026-09-09 | http://localhost:8081 | **202 passed, 0 failed, 0 skipped**, 16.6s | `npm run test:api`; tracked [verification record](../ollama-verification.md), local detailed logs; no CI job link. |
 
 ## Implemented coverage
 
@@ -40,10 +41,11 @@ Keep execution results separate from implemented coverage. A passing historical 
 | Inventory (D) | 4/4 | List/detail, adjustments, replay/conflict rollback, movements, validation, roles |
 | Accounts (E) | 5/5 | List/profile/edit/delete, ownership, validation; cascade checks under review |
 | Prompts (G) | 4/4 | Defaults, update/readback, validation, customer isolation |
+| Ollama (J) | 4/4 | Deterministic generate/chat streams, thinking, real catalog tool output, definitions, validation and authentication |
 
 ## To do
 
-**Immediate next action:** address the remaining P0 gaps. **Next new scope: F — password & email.** Address existing gaps (A) alongside new endpoint coverage. Packages F–K below are not yet automated; their prerequisites still need verification.
+**Immediate next action:** address the remaining P0 gaps. **Next new scope: F — password & email.** Address existing gaps (A) alongside new endpoint coverage. Packages F, H, I and K remain unautomated; package J is verified for the selected mock scenarios.
 
 | Priority | Package | Scope | Main checks / dependency |
 | --- | --- | --- | --- |
@@ -51,7 +53,7 @@ Keep execution results separate from implemented coverage. A passing historical 
 | P1 | F — password & email | 6 operations | Reset lifecycle, token revocation, delivery events, outbox; verify test mail sink and isolated outbox |
 | P1 | H — MFA | 6 operations | Enrollment, signin, recovery codes, disable; disposable user and TOTP |
 | P2 | I — SSO | 1 operation | Exchange, provisioning, invalid tokens; controlled OIDC issuer |
-| P2 | J — Ollama | 4 operations | Definitions, streaming, history/tools, errors; model or mock |
+| P2 | J — Ollama | Verified · 4/4 operations, 20 tests | Complete deterministic responses, thinking, catalog tool output, schemas and 400/401. History BUG-049 and fault/multi-step gaps remain; see [verification](../ollama-verification.md). |
 | P2 | K — traffic | 3 operations | Info, list/detail, filtering, correlation, redaction; verify access rules |
 
 For each package: assess → explore → automate → verify. Include applicable validation, authentication, permissions and state changes. Exact endpoints and missing statuses: [coverage inventory](coverage.md).
@@ -65,6 +67,7 @@ For each package: assess → explore → automate → verify. Include applicable
 | Orders | Reopening and inventory consistency; invalid status returns 401; mutation timestamp discrepancy | [BUG-009](../bugs/[H][F]-BUG-009-order-reopening-inventory.md), [BUG-011](../bugs/[M][F]-BUG-011-order-invalid-status-unauthorized.md), [BUG-013](../bugs/[L][F]-BUG-013-order-mutation-stale-updated-at.md) |
 | Inventory | Malformed adjustment UUID returns 401; missing-product regressions and concurrent adjustment idempotency remain gaps | [BUG-014](../bugs/[M][F]-BUG-014-inventory-malformed-request-id-401.md) |
 | Accounts | Stale deleted-user token causes cart 500; email-event cascade remains covered at backend level | [BUG-022](../bugs/[L][F]-BUG-022-cart-read-after-account-deletion-500.md) |
+| Ollama | Follow-up selection BUG-049; interrupted streams, upstream 404/500 and owned multi-step tools remain uncovered | [Verification record](../ollama-verification.md) |
 | Contracts | Error schemas/media types and undocumented conflicts; QR error media checks deferred | [Bug index](../bugs/README.md): BUG-003, 005–007, 010, 012 |
 
 Functional regressions wait for a fix and fresh exploration. Documentation-only issues do not block tests of verified intended behavior.
@@ -73,10 +76,10 @@ Functional regressions wait for a fix and fresh exploration. Documentation-only 
 
 | Item | Impact on progress | Next action |
 | --- | --- | --- |
-| Current suite result missing | Implemented coverage cannot yet be reported as verified. | Run the expanded API suite and publish its actual result, including failures and cleanup issues. |
+| Local verification only | Current full suite passed; no CI job link is available. | Publish a reproducible CI run when available; retain local execution limits. |
 | [Referenced-product deletion](../bugs/[M][F]-BUG-008-product-delete-referenced-by-cart.md) and [order reopening](../bugs/[H][F]-BUG-009-order-reopening-inventory.md) | Known 500 response and stock-consistency defect remain unresolved in the bug index. | Fix, explore the corrected behavior and add passing regressions. |
 | Suspected findings and unclear requirements | Some expected behaviors still need confirmation; affected gaps remain open. | Clarify and reproduce the findings linked above; update their bug reports. |
-| Mail sink/outbox, OIDC issuer and model/mock availability | Prerequisites for F, I and J are not yet confirmed; these are dependencies, not established blockers. | Verify isolation and availability during package assessment. |
+| Mail sink/outbox, OIDC issuer and model/mock availability | Prerequisites for F and I are not yet confirmed; J uses the verified deterministic mock; these are dependencies, not established blockers. | Verify isolation and availability during package assessment. |
 
 ## Reports
 

@@ -4,8 +4,8 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 
 - Reviewed: 2026-09-09. Contract version: 1.0.
 - Contract SHA-256: `3ee5c47bc7c13cb76cee3cabd334361dc95c05d7dcf1b245ce73c31293a55aa1`.
-- Endpoint breadth: **35/55 = 63.6%**. Remaining: **20**.
-- Documented operation/status pairs with assertions: **115/176 = 65.3%**.
+- Endpoint breadth: **39/55 = 70.9%**. Remaining: **16**.
+- Documented operation/status pairs with assertions: **126/176 = 71.6%**.
 - These are implementation inventory metrics, not pass rates, code coverage, schema completeness, or complete behavior coverage. Fixture/cleanup calls do not count. Undocumented asserted statuses appear below but do not inflate the documented-status numerator.
 - Current-run health: not measured by this generator. Record actual execution separately in [the plan](test-plan.md).
 
@@ -22,7 +22,7 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 | `GET /api/v1/admin/inventory/{productId}/movements` | [inventory/inventory-movements.api.spec.ts](../../tests/api/inventory/inventory-movements.api.spec.ts) | 200, 401, 403 | 200, 400, 401, 403 | — |
 | `GET /api/v1/cart` | [cart/cart-get.api.spec.ts](../../tests/api/cart/cart-get.api.spec.ts) | 200, 401 | 200, 401 | — |
 | `GET /api/v1/local/email/outbox` | Not automated | 200 | — | 200 |
-| `GET /api/v1/ollama/chat/tools/definitions` | Not automated | 200, 401 | — | 200, 401 |
+| `GET /api/v1/ollama/chat/tools/definitions` | [ollama/tool-definitions.api.spec.ts](../../tests/api/ollama/tool-definitions.api.spec.ts) | 200, 401 | 200, 401 | — |
 | `GET /api/v1/orders` | [orders/orders-get.api.spec.ts](../../tests/api/orders/orders-get.api.spec.ts) | 200, 400, 401 | 200, 400, 401 | — |
 | `GET /api/v1/orders/{id}` | [orders/orders-id.api.spec.ts](../../tests/api/orders/orders-id.api.spec.ts) | 200, 400, 401, 404 | 200, 400, 401, 404 | — |
 | `GET /api/v1/orders/admin` | [orders/orders-admin.api.spec.ts](../../tests/api/orders/orders-admin.api.spec.ts) | 200, 400, 401, 403 | 200, 400, 401, 403 | — |
@@ -41,9 +41,9 @@ Generated from OpenAPI and the reviewed [mapping](coverage-map.json). Run `npm r
 | `POST /api/v1/admin/inventory/{productId}/adjustments` | [inventory/inventory-adjustments.api.spec.ts](../../tests/api/inventory/inventory-adjustments.api.spec.ts) | 201, 401, 403 | 201, 400, 401, 403, 409 | — |
 | `POST /api/v1/cart/items` | [cart/cart-items-post.api.spec.ts](../../tests/api/cart/cart-items-post.api.spec.ts) | 200, 400, 401, 404 | 200, 400, 401, 404, 409 | — |
 | `POST /api/v1/email` | Not automated | 200, 400, 401 | — | 200, 400, 401 |
-| `POST /api/v1/ollama/chat` | Not automated | 200, 400, 401, 404, 500 | — | 200, 400, 401, 404, 500 |
-| `POST /api/v1/ollama/chat/tools` | Not automated | 200, 400, 401, 500 | — | 200, 400, 401, 500 |
-| `POST /api/v1/ollama/generate` | Not automated | 200, 400, 401, 404, 500 | — | 200, 400, 401, 404, 500 |
+| `POST /api/v1/ollama/chat` | [ollama/chat.api.spec.ts](../../tests/api/ollama/chat.api.spec.ts) | 200, 400, 401, 404, 500 | 200, 400, 401 | 404, 500 |
+| `POST /api/v1/ollama/chat/tools` | [ollama/chat-tools.api.spec.ts](../../tests/api/ollama/chat-tools.api.spec.ts) | 200, 400, 401, 500 | 200, 400, 401 | 500 |
+| `POST /api/v1/ollama/generate` | [ollama/generate.api.spec.ts](../../tests/api/ollama/generate.api.spec.ts) | 200, 400, 401, 404, 500 | 200, 400, 401 | 404, 500 |
 | `POST /api/v1/orders` | [orders/orders-post.api.spec.ts](../../tests/api/orders/orders-post.api.spec.ts) | 201, 400, 401 | 201, 400, 401, 409 | — |
 | `POST /api/v1/orders/{id}/cancel` | [orders/orders-cancel.api.spec.ts](../../tests/api/orders/orders-cancel.api.spec.ts) | 200, 400, 401, 403, 404 | 200, 400, 401, 403, 404 | — |
 | `POST /api/v1/products` | [product/products-post.api.spec.ts](../../tests/api/product/products-post.api.spec.ts) | 201, 400, 401, 403, 404 | 201, 400, 401, 403 | 404 |

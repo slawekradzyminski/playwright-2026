@@ -333,6 +333,41 @@
         401
       ],
       "reviewedSha256": "784482d52321f37946839c6836c2fd0f843e2dcc2084cb30691596b6b4e7b19b"
+    },
+    "POST /api/v1/ollama/generate": {
+      "spec": "tests/api/ollama/generate.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "f60acd55617e732b11efe9be65913f18f120acf2e3fc2d5c7bb2a19b278b9fcf"
+    },
+    "POST /api/v1/ollama/chat": {
+      "spec": "tests/api/ollama/chat.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "d5a38684e385a082094d36d72dc16bcd590907809e59221f78ad15fe830bf7fe"
+    },
+    "POST /api/v1/ollama/chat/tools": {
+      "spec": "tests/api/ollama/chat-tools.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        400,
+        401
+      ],
+      "reviewedSha256": "248c2052bc4951884b559188dad2c1168b95eb2df20078e9013b3b735f3687eb"
+    },
+    "GET /api/v1/ollama/chat/tools/definitions": {
+      "spec": "tests/api/ollama/tool-definitions.api.spec.ts",
+      "assertedStatuses": [
+        200,
+        401
+      ],
+      "reviewedSha256": "d97ca65cf092907c4d3bd4236ea6ce10a74245fddba13a200b2a92723d9fb65c"
     }
   }
 }

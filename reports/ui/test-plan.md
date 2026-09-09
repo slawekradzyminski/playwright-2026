@@ -1,15 +1,15 @@
 # UI test plan and status
 
-**Updated: 2026-09-09 · UI-T01–T04 implemented and verified; broader UI coverage remains in progress.**
+**Updated: 2026-09-09 · UI-T01–T04 and UI-T07 implemented and verified; broader UI coverage remains in progress.**
 
 Screen coverage measures target-screen assertions, separately from execution health. The route inventory remains **28 screen variants + 1 redirect**; no routes changed.
 
 | Question | Current status |
 | --- | --- |
-| What changed? | Reviewed the pending UI diff; separated cart, checkout and route-navigation specs, clarified scenario names and page-object responsibilities, and tightened table-cell assertions/save synchronization. **43 tests** now cover T01–T04, up from 41 by splitting two mixed scenarios. |
-| What is implemented? | **17/28 screens (61%)** have partial functional coverage; **4** navigation only; **7** have no screen assertions. |
-| What passed? | `npm run test:ui -- --trace on`: **115 passed, 0 failed, 0 skipped**, Chromium desktop, 24.7s. |
-| What remains? | Open bugs, deeper state/pagination/concurrency coverage, and UI-T05–T08. Passing tests do not establish complete accessibility, visual quality or performance. |
+| What changed? | Added **10 Ollama UI tests** across generate/chat/tools using page objects and disposable API fixtures. Live exploration includes responsive, keyboard, axe, streamed bodies and controlled 503 errors. |
+| What is implemented? | **20/28 screens (71%)** have partial functional coverage; **4** navigation only; **4** have no screen assertions. |
+| What passed? | `npm run test:ui`: **125 passed, 0 failed, 0 skipped**, Chromium desktop, 23.4s. |
+| What remains? | Open bugs, deeper state/pagination/concurrency coverage, and UI-T05, T06 and T08. Passing tests do not establish complete accessibility, visual quality or performance. |
 | Next action | Address BUG-041–046 and add their regressions after verification; then UI-T05 user management. |
 
 ## Execution evidence
@@ -27,15 +27,20 @@ Screen coverage measures target-screen assertions, separately from execution hea
 
 Disposable fixtures were cleaned up. During delegated exploration, seeded order 3 was accidentally changed; the supervisor restored PENDING and verified unchanged stock. Its `updatedAt` changed. This is an exploration limitation, not a product defect.
 
+## Ollama execution — 2026-09-09
+
+`npm run test:ui`: **125 passed**, 0 failed/skipped, 23.4s. Added 10 tests; focused run 10 passed. Initial full run 125 passed in 26.8s; final rerun after correcting two BasePage import casings passed in 23.4s. TypeScript check passed. [Tracked verification](../ollama-verification.md) records provenance, findings and limits; [local UI review](../exploration/ui/2026-09-09-ollama-01/review.md) indexes ignored evidence. No CI link is available.
+
 ## Implemented coverage
 
 | Level | Screens | Assertions |
 | --- | --- | --- |
-| Partial functional · **17** | Login, registration, home, catalog, product details, profile, QR | Existing assertions; profile now also covers order navigation, filtering and cancellation |
+| Partial functional · **20** | Login, registration, home, catalog, product details, profile, QR | Existing assertions; profile now also covers order navigation, filtering and cancellation |
 | | Cart, checkout, order details | Quantities/totals/persistence, address validation, creation/cart clearing, stock-conflict recovery, cancellation and owner/non-owner/admin access |
 | | Admin dashboard, product list/create/edit, admin orders, inventory list/inspector | CRUD/persistence, filters, signed stock/movements/conflict recovery, status workflow; live product metrics and controlled order metric/empty states |
+| | LLM generate, chat, tools | Complete responses, thinking/settings, whitespace prevention, tool schemas/output and selected error recovery |
 | Navigation only · **4** | Users, email, LLM overview, traffic | Arrival/root/title assertions |
-| None · **7** | Forgot password, reset, SSO callback, user edit, LLM chat/generate/tools | No target-screen assertions |
+| None · **4** | Forgot password, reset, SSO callback, user edit | No target-screen assertions |
 
 No screen is fully covered. See [coverage-map.json](coverage-map.json) for exact spec mapping and remaining work. Anonymous direct-route and client admin-route checks supplement the screen assertions.
 
@@ -49,11 +54,13 @@ No screen is fully covered. See [coverage-map.json](coverage-map.json) for exact
 | P1 | UI-T04 — Inventory/admin orders | Implemented: 9 tests. Remaining: deterministic multi-page boundaries, idempotency, unavailable dashboard, BUG-045/046. |
 | P1 | UI-T05 — User management | Not started: edit/delete/cancel, persistence and client restrictions; disposable target user. |
 | P1 | UI-T06 — Recovery/MFA/SSO | Not started: lifecycle and callback states with controlled tokens/provider. |
-| P2 | UI-T07 — LLM | Not started: streaming/results, stop/retry/settings; available model. |
+| P2 | UI-T07 — LLM | Verified: 10 tests across generate/chat/tools, settings/thinking, blank prevention, catalog output, generate/tools retry. Open BUG-049–055; multi-step, interruption and deeper history gaps remain. |
 | P2 | UI-T08 — Utilities/existing gaps | Not started: email, traffic, detail cart actions and QR gaps; authorized recipient for live email. |
-| Each package | UI-T09 — Quality review | Applied to T01–T04; responsive, keyboard/axe, UX and repeated local timing. Zoom capture limitation and remaining growth/error states are explicit in review. |
+| Each package | UI-T09 — Quality review | Applied to T01–T04 and T07; responsive, keyboard/axe, UX and repeated local timing. Zoom capture limitation and remaining growth/error states are explicit in review. |
 
 ## Risks and bugs
+
+Ollama findings: BUG-049 mock follow-up selection; BUG-050 hidden settings remain focusable; BUG-051 narrow mobile input; BUG-052 invalid role-badge ARIA; BUG-053 overflowing tool arguments; BUG-054 plain chat retry sends invalid history after a controlled failure; BUG-055 tool chat unlocks before completion. All remain open.
 
 New confirmed reports: **BUG-041** unnamed order-status select; **BUG-042** checkout contrast; **BUG-043** silent blank-description create rejection; **BUG-044** clipped admin tables; **BUG-045** keyboard-inaccessible inventory rows; **BUG-046** first-50 dashboard aggregation. See the [bug index](../bugs/README.md). BUG-046 was reproduced with injected pagination data, not persisted bulk orders. Existing findings remain open despite passing tests.
 

@@ -46,7 +46,7 @@ During a tool-assisted response the input becomes enabled after the first tool-s
 
 ## Cleanup
 
-One-shot route removed automatically; browser account scheduled for deletion. No shared prompts or products changed.
+One-shot route removed automatically; browser account deleted and saved authentication removed. No shared prompts or products changed.
 
 ## Follow-up and automation
 
