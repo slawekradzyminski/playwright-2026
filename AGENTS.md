@@ -20,11 +20,11 @@
 ## UI test rules
 - run functional UI tests once on the configured desktop viewport; keep mobile/tablet and breakpoint coverage in exploration, not a viewport matrix in the automated suite
 - before automating tests do exploratory tests first using playwright-cli, use dedicated skill
-- follow [the UI exploration workflow](docs/ui-exploration.md) for viewport coverage, screenshot review and selective human review
+- follow [the UI exploration workflow](docs/ui-exploration.md) for viewport coverage, screenshot review, mandatory accessibility, UX and performance checks, and selective human review
 - use page object model
 - always initialise the page object under test in `test.beforeEach`
 - use data-testid selectors when possible
-- use http API clients for test setup and test cleanup
+- use http API clients and dedicated fixtures for test setup and test cleanup
 - run only ui tests as verification - `npm run test:ui`
 
 ## Agent execution

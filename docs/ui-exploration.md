@@ -2,7 +2,7 @@
 
 Trial workflow for UI exploration before test automation. Use the `playwright-cli` skill for browser operations and [AGENTS.md](../AGENTS.md) for test conventions. Keep this as a project document while the workflow is being evaluated.
 
-Explore functionality and rendered appearance together. Save screenshots locally, inspect every captured image, and ask the user to review only unresolved visual findings. This workflow uses no screenshot baselines, pixel comparisons, `toHaveScreenshot` assertions or Docker requirement. Screenshots are exploration evidence, not visual regression tests.
+Explore functionality, rendered appearance, accessibility, user experience and performance together. Save screenshots locally, inspect every captured image, and ask the user to review only unresolved findings or expectations. This workflow uses no screenshot baselines, pixel comparisons, `toHaveScreenshot` assertions or Docker requirement. Screenshots are exploration evidence, not visual regression tests.
 
 ## Viewports
 
@@ -99,10 +99,56 @@ Adapt the bug template's endpoint/request fields to the UI route and browser act
 
 The task result should link to the complete local review index for optional browsing and summarize inspected coverage, confirmed bugs, unresolved questions and any pending images. Display or request review of only the unresolved screenshots. Do not ask for approval of the whole gallery or block all test generation on visual sign-off. If an unresolved question affects a particular test's expected result, defer that assertion and continue with verified scenarios.
 
-## Optional accessibility checks
+## Required accessibility checks
 
-Use axe when an explored state involves forms, dialogs, navigation or suspected accessibility issues and an axe integration is available. It adds useful checks for accessible names and some contrast failures that image review may miss. Scan the actual relevant state after opening a dialog or triggering validation; save results in the same ignored run directory. Record whether axe ran, its scope/version, findings and any checks requiring manual review. A skipped scan must not be reported as a pass.
+Include accessibility in every UI exploration, before automating the verified scenarios. Check each distinct page and relevant interactive state, including open menus/dialogs, validation feedback, loading, errors and empty results. Apply checks to the controls present; record a reason when a check is not applicable. A successful mouse interaction or accessibility snapshot alone does not establish accessibility.
 
-Treat scan findings as evidence to investigate and report, not as design approval. Continue screenshot inspection and relevant keyboard exploration. [Playwright's accessibility guidance](https://playwright.dev/docs/accessibility-testing) documents `@axe-core/playwright` and the limits of automated checks. This initial workflow does not install axe or add accessibility test assertions; adoption in the suite can follow exploration of the actual findings.
+| Area | Required exploration |
+| --- | --- |
+| Keyboard operation | Complete the primary journey using the keyboard. Check Tab/Shift+Tab order and access to every action, including clickable cards, images and custom controls. Exercise Enter/Space and arrow keys where appropriate. Check for unreachable actions and keyboard traps. |
+| Focus | Inspect visible focus and whether sticky elements or overlays obscure it. Check focus placement when opening a dialog/menu and restoration when closing it, including Escape where applicable. |
+| Names and structure | Inspect rendered roles, accessible names, form labels, headings, landmarks and image alternatives. Icon-only controls need meaningful names; related controls must be distinguishable. Check that selected, expanded, required and invalid states are exposed where relevant. |
+| Feedback | Check that validation identifies the affected field and explains recovery. Inspect how loading, errors and success feedback are exposed to assistive technology; do not infer screen-reader announcements from visible text alone. Record whether actual screen-reader testing was performed. |
+| Readability and reflow | Check text at 200% browser zoom and at the narrow exploration viewport for lost content or unusable controls. Inspect text/control contrast with tooling; record measured evidence for suspected failures. Resizing alone does not establish zoom coverage. |
+
+Run an axe scan on each distinct page and materially different state in scope, using an existing integration or an exploration-only axe setup when none is installed. Missing integration is a setup task, not a reason to silently skip accessibility. Record the tool/version, rules or tags used, scanned state, violations and incomplete checks; save sanitized results in the ignored run directory. If installation or execution is blocked, record the exact limitation and mark automated accessibility review incomplete, continue the manual checks and independent work, and disclose the gap in the task result. Do not report an unavailable or skipped scan as passed.
+
+Investigate scan findings in the rendered UI, triage confirmed and suspected issues using the same bug workflow, and manually review applicable incomplete checks. A clean scan does not establish complete accessibility or WCAG compliance. [Playwright's accessibility guidance](https://playwright.dev/docs/accessibility-testing) describes axe integration and the limits of automated checks. Exploration tooling does not automatically require adding axe assertions to the regression suite; automate verified behavior according to repository test conventions.
+
+## Required user experience review
+
+For every explored feature, assess whether a user can discover the intended action, understand the current state, complete the task and recover from mistakes. Evaluate this separately from whether the implementation technically works. Use realistic journeys and edge cases, including long content, empty results and unexpected input, at the relevant viewport sizes.
+
+| Area | Required questions and probes |
+| --- | --- |
+| Discoverability and hierarchy | Can users find primary actions, search and content without unnecessary scrolling or opening unrelated controls? Does secondary content, such as a long category list, push the main task out of view? |
+| Input expectations | Try pasted input, surrounding spaces, mixed case and relevant punctuation. Compare behavior with field wording and user expectations; distinguish an established requirement from an assumption. |
+| State and consistency | Are counts, selected filters, sorting, labels and enabled/disabled actions consistent with the displayed data? Is it clear why an action is unavailable? Check combinations, not only isolated controls. |
+| Feedback and recovery | Is the result of an action clear and timely? Can users correct invalid input, clear filters, recover from empty/error states and retry safely? Do notifications hide the next action or disappear before they can be understood? |
+| Navigation and effort | Check back navigation and state retention against the journey's needs. Look for avoidable repeated input, unnecessary steps, ambiguous click targets and actions with surprising side effects. |
+
+When behavior seems wrong or unnecessarily difficult, reproduce it and record the user goal, exact action, observed friction, impact and expected alternative with its source. Do not dismiss a concern merely because it matches the implementation or no design specification exists. Report a confirmed defect directly. If intended behavior remains uncertain, create a suspected bug, mark “Needs clarification” and ask the user a focused question with relevant evidence. Use screenshots for visual concerns and action/result evidence for behavioral concerns. Continue independent work; defer only assertions whose expected result depends on the answer. Update the finding when the user clarifies the requirement.
+
+Include separate accessibility and UX summaries in `review.md`: checks actually performed, states/viewports, concrete observations, evidence, bug references, unresolved questions and coverage gaps. Use the same evidence-first result labels as visual review, but keep scan results, manual accessibility checks and UX judgments distinct. Before completing exploration, ensure every suspicious accessibility or UX observation has a bug reference, an explicit question or evidence explaining why it is not a defect. Summarize material findings and incomplete checks in the task result.
+
+## Required performance and scalability review
+
+Include a lightweight performance review in every exploration. Measure the primary page load and data-dependent interactions under normal use, including search, filtering, sorting and navigation where applicable. Passing functional assertions does not establish acceptable speed. This review is not a load test and does not require generating a large dataset or concurrent traffic.
+
+| Area | Required evidence and questions |
+| --- | --- |
+| User-visible delay | Measure from navigation/action to usable content or completion feedback. Record the completion condition. Does the page remain responsive, show useful loading feedback and prevent accidental duplicate submissions? |
+| Request timing | Record method, route, status and duration for relevant requests. Where available, distinguish time to first byte, response download and subsequent rendering. Do not label browser-observed duration as backend processing time without server evidence. |
+| Repeatability | Record an initial load separately from a small set of repeat observations (normally 3–5). State sample count, individual timings and range/median, cache conditions, dataset size and known environmental factors. Do not present a small sample as a production percentile or SLA result. |
+| Payload and request count | Record returned record count, payload/transfer size when available and requests per action. Investigate duplicate fetches, retries, request waterfalls and unexpectedly fetching full datasets for a small visible result. Distinguish intentional polling or retry policy from unexplained traffic. |
+| Growth and pagination | For lists, check whether API results are bounded by pagination/limits and whether the UI actually uses them. Consider server-side search/sort/filtering, image loading and rendering cost as data grows. Missing pagination is a scalability concern to assess, not automatically a proven defect or the cause of current latency. |
+
+Use browser network/performance evidence alongside the existing observer. Its timestamps alone do not capture time until usable UI or separate server processing from transport/rendering; supplement them with explicit measurements. Save sanitized timings and summaries in the exploration directory, label simulated delays separately and record measurement gaps. Do not silently run stress tests or create large shared datasets as part of this checklist.
+
+Compare measurements with an agreed performance target when one exists. Without a target, flag repeatable multi-second waits on small datasets as suspected problems worth investigation; do not invent a universal pass/fail threshold or infer a cause such as a missing database index. Record the measured user impact, competing explanations and the next diagnostic step. Ask a focused question when an expected latency or intended scale materially affects classification, while continuing independent work.
+
+Report a demonstrated regression or requirement violation through [the bug workflow](../reports/bugs/README.md). Use a suspected bug when observed behavior may be defective but evidence or expectations remain incomplete. Record a proposed optimization or future scalability concern in [improvements](../reports/improvements/README.md), with evidence, expected benefit, unknowns and a validation plan. Link related records rather than reporting the same issue twice. User-reported latency must remain labeled as user-reported until measured.
+
+Include a performance summary in `review.md`: actual measurements, dataset and cache conditions, request counts, pagination findings, bugs/improvements and untested scaling assumptions. Keep functional automation free of arbitrary timing assertions; add performance budgets only when their threshold and measurement environment are established.
 
 Sources reviewed on 2026-09-08. Revisit the viewport sample when product requirements or observed usage justify it.

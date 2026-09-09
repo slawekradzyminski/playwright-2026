@@ -66,3 +66,11 @@ Disposable exploration accounts were deleted through the existing API cleanup he
 ## Follow-up and automation
 
 Confirm intended placement/obstruction policy and assess action hit testing while the toast is visible. Do not encode a placement expectation in automated tests before that decision. Keep functional toast-message assertions for verified registration outcomes.
+
+## Product catalog follow-up — 2026-09-09
+
+Reproduced with live cart actions at 360 × 800. A settled “Added to cart” notification covers lower footer actions; stacked notifications can also cover card actions depending on scroll position. This adds evidence to the existing placement finding, without resolving its original design question.
+
+![Settled catalog cart notification](/Users/slawek/IdeaProjects/playwright-2026/reports/exploration/ui/2026-09-09-products-01/screenshots/cart-mobile-settled.png)
+
+[Product exploration review](/Users/slawek/IdeaProjects/playwright-2026/reports/exploration/ui/2026-09-09-products-01/review.md). Images are ignored and available only in the originating workspace, not another checkout or GitHub. The customer cart was cleared after the scenario.

@@ -47,3 +47,8 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-030](BUG-030-homepage-mobile-welcome-clipping.md) | Functional | Open | Mobile welcome panel clips text |
 | [BUG-031](BUG-031-mobile-menu-logout-alignment.md) | Functional | Open | Mobile Logout label centered unlike adjacent account links |
 | [BUG-032](BUG-032-mobile-menu-footer-overlap.md) | Functional | Suspected | Expanded mobile menu obscures footer heading |
+| [BUG-033](BUG-033-product-category-badge-clipping.md) | Functional | Open | Long category badge is clipped by product cards |
+| [BUG-034](BUG-034-product-details-keyboard-inaccessible.md) | Functional | Open | Product details cannot be opened using keyboard navigation |
+| [BUG-035](BUG-035-product-search-surrounding-spaces.md) | Functional | Open | Search fails when pasted name has surrounding spaces |
+| [BUG-036](BUG-036-product-categories-push-search-below-fold.md) | Functional | Open | Category list pushes search and products below initial viewport |
+| [BUG-037](BUG-037-empty-catalog-category-count.md) | Functional | Open | Empty catalog reports one category |
