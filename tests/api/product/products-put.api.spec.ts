@@ -10,11 +10,8 @@ let client: ProductClient;
 test.beforeEach(({ request }) => { client = new ProductClient(request); });
 
 let product: ProductDto;
-test.beforeEach(async ({ adminToken, productIds }) => {
-  const response = await client.createProduct(generateProduct(), adminToken);
-  product = await response.json();
-  if (product.id) productIds.add(product.id);
-  expect(response.status()).toBe(201);
+test.beforeEach(async ({ productFactory }) => {
+  product = await productFactory.create();
 });
 
 async function expectUnchanged(token: string) {

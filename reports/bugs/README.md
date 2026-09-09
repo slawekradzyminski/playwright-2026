@@ -98,3 +98,4 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-044]([M][UI]-BUG-044-admin-tables-clip-columns-on-narrow-viewports.md) | medium | ui | Functional | Open | Admin product and order tables clip action columns on narrow viewports |
 | [BUG-045]([H][A]-BUG-045-inventory-rows-keyboard-inaccessible.md) | high | accessibility | Functional | Open | Inventory rows cannot be selected with the keyboard |
 | [BUG-046]([M][F]-BUG-046-admin-dashboard-aggregates-only-first-50-orders.md) | medium | functional | Functional | Open | Admin dashboard aggregates only the first 50 orders |
+| [BUG-047]([L][F]-BUG-047-order-route-rounds-large-identifiers.md) | low | functional | Functional | Open | Order route rounds large identifiers and requests an invalid ID |

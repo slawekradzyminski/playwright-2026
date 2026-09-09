@@ -8,7 +8,7 @@ Screen coverage measures target-screen assertions, separately from execution hea
 | --- | --- |
 | What changed? | Reviewed the pending UI diff; separated cart, checkout and route-navigation specs, clarified scenario names and page-object responsibilities, and tightened table-cell assertions/save synchronization. **43 tests** now cover T01–T04, up from 41 by splitting two mixed scenarios. |
 | What is implemented? | **17/28 screens (61%)** have partial functional coverage; **4** navigation only; **7** have no screen assertions. |
-| What passed? | `npm run test:ui`: **115 passed, 0 failed, 0 skipped**, Chromium desktop, 21.3s. |
+| What passed? | `npm run test:ui -- --trace on`: **115 passed, 0 failed, 0 skipped**, Chromium desktop, 24.7s. |
 | What remains? | Open bugs, deeper state/pagination/concurrency coverage, and UI-T05–T08. Passing tests do not establish complete accessibility, visual quality or performance. |
 | Next action | Address BUG-041–046 and add their regressions after verification; then UI-T05 user management. |
 
@@ -64,3 +64,13 @@ Controlled dashboard responses prove complete-page arithmetic and empty renderin
 Always update this plan after a work package, meaningful coverage change or verification run, including failures. Keep the summary, package status, assertions, gaps, bugs and next action current. Update affected [screen inventory](coverage-map.json) entries, counting target-screen assertions rather than fixture calls. Recheck route counts only when routes change; keep execution results separate from breadth.
 
 Follow the [UI testing skill](../../.agents/skills/ui-testing/SKILL.md) and run `npm run test:ui` for test changes. Plan-only edits need link/count consistency checks, not live scenarios. No spec hashes or separate backlog are required.
+
+## Resource factory refactor — 2026-09-09
+
+`npm run test:ui -- --trace on`: **115 passed, 0 failed/skipped**, 24.7s, local gateway Chromium desktop. [Local log](../exploration/resource-factories/ui-suite.log). Product setup/cleanup is shared with API fixtures, and order browser authentication no longer creates products. The missing-order trace contains one customer creation, no product creation, and no `orderSetup`/`orderProducts` fixtures. Teardown deletes the account before the product owner.
+
+[BUG-047](../bugs/[L][F]-BUG-047-order-route-rounds-large-identifiers.md) records rounding of large route IDs discovered during exploration. The ordinary missing-order case now uses an exactly representable ID and explicitly asserts 404. Large-ID UI support remains uncovered pending a fix. Screen/endpoint breadth is unchanged. [Exploration review](../exploration/resource-factories/review.md) and traces are ignored/workspace-only; deployed revision remains unknown.
+
+### Factory directory extraction
+
+Product/account creation and cleanup plus order setup now live in the dedicated `factories/` directory. UI fixtures keep the same dependency graph and scenario interfaces. `npm run test:ui`: **115 passed**, 0 failed/skipped, 22.1s, configured Chromium desktop. [Local log](../exploration/resource-factories/ui-directory.log). No screen or target-assertion changes in this extraction.

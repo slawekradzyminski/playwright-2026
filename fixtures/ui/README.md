@@ -13,3 +13,7 @@ See [homepage tests](../../tests/ui/home.ui.spec.ts) for navigation, identity, r
 Import `test` and `expect` from `loggedInAdminUi.fixture.ts` for admin UI tests. It signs in using `ADMIN_USERNAME` and `ADMIN_PASSWORD` from the existing configuration, validates `ROLE_ADMIN`, and seeds the same origin-scoped storage through `authStorageState`. `loggedInAdmin` exposes the login response: identity fields, roles, token and refreshToken.
 
 Each test uses a fresh login and browser context. The configured admin account is shared: this fixture does not create/delete the account or log it out. Keep tests read-only unless their mutations have explicitly isolated setup and cleanup. See [admin navigation tests](../../tests/ui/navigation/adminNavigation.ui.spec.ts). Client tests continue to use disposable accounts from `loggedInUi.fixture.ts`.
+
+## Shared resource ownership
+
+Authenticated UI fixtures extend the shared [resource base](../README.md). Product catalogs, admin products and inventory reuse `productFactory`; customer cleanup belongs to `accountFactory`. Order authentication selects a lazy identity and does not instantiate order products. Request `orderSetup` only for scenarios requiring its users/products.

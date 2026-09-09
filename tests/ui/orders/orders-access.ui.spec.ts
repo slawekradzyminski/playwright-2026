@@ -27,14 +27,17 @@ test.describe('Customer order access', () => {
     ]);
   });
 
-  test('shows the missing order state', async () => {
+  test('shows the missing order state', async ({ page }) => {
     // given
     const absentId = missingOrderId;
 
     // when
+    const responsePromise = page.waitForResponse(response => response.url().endsWith(`/api/v1/orders/${absentId}`));
     await details.goto(absentId);
+    const response = await responsePromise;
 
     // then
+    expect(response.status()).toBe(404);
     await details.assertNotFound();
   });
 });

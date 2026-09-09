@@ -43,7 +43,7 @@
         401,
         403
       ],
-      "reviewedSha256": "dcc491bfc3e2e83eabc20490813d51475132154ff18238a89b94886f3972bc85"
+      "reviewedSha256": "81e3cc3f20d26c7202a05b1dd93a43d52d58fdeaa1c688f9828b784db78bb3d8"
     },
     "GET /api/v1/products/{id}": {
       "spec": "tests/api/product/products-id.api.spec.ts",
@@ -53,7 +53,7 @@
         401,
         404
       ],
-      "reviewedSha256": "d00837d6e44f3880af0c82af5a31694f403bf0bec2d74a281f520d15c563556c"
+      "reviewedSha256": "64307537bc724169968081506e3e58c61abeaad635ce355fead457515a7e8c5a"
     },
     "PUT /api/v1/products/{id}": {
       "spec": "tests/api/product/products-put.api.spec.ts",
@@ -64,7 +64,7 @@
         403,
         404
       ],
-      "reviewedSha256": "1eb5a1ba9c194c72bce72ca7a5393e1ec5736086c948a4e20c6aca94db4441aa"
+      "reviewedSha256": "f726821fe1da616ed4667303e1212e8ac79bb540dcd3798fc420227ac2dff78b"
     },
     "DELETE /api/v1/products/{id}": {
       "spec": "tests/api/product/products-delete.api.spec.ts",
@@ -75,7 +75,7 @@
         403,
         404
       ],
-      "reviewedSha256": "a349d153dba4ba4498cde2c3d5befca66d371d23928780aa21491cd393c0a610"
+      "reviewedSha256": "9f4e4b55e1dbaec166173d549f3ee374f42d455135a7100cd79392dc1435532c"
     },
     "GET /api/v1/cart": {
       "spec": "tests/api/cart/cart-get.api.spec.ts",
@@ -187,7 +187,7 @@
         401,
         403
       ],
-      "reviewedSha256": "41dd12de348f5d6d55ec649000a80bc7c9e2a2c464efcd542bdcd39983436c95"
+      "reviewedSha256": "f981471afcb882f3aeb6d790021856569de3b816821b00e3f7ee8e251df08925"
     },
     "POST /api/v1/orders/{id}/cancel": {
       "spec": "tests/api/orders/orders-cancel.api.spec.ts",
@@ -298,7 +298,7 @@
         403,
         404
       ],
-      "reviewedSha256": "f7f20c05050ec7ed2f27894c1d75488265c8bac3956eefefd094c890670b9550"
+      "reviewedSha256": "889c16b68f1bf17191f370ef811b476c914f252d642cea2ca07a0266145f7e86"
     },
     "GET /api/v1/users/chat-system-prompt": {
       "spec": "tests/api/prompts/chat-system-prompt-get.api.spec.ts",

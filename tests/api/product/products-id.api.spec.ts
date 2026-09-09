@@ -1,7 +1,6 @@
 import { expectJson } from '../../../validators/jsonResponse';
 import { ProductClient } from '../../../http/productClient';
 import { expect, test } from '../../../fixtures/products.fixture';
-import { generateProduct } from '../../../generators/productGenerator';
 import { expectValidProduct } from '../../../validators/productResponse';
 
 const UNKNOWN_PRODUCT_ID = '9223372036854775807';
@@ -14,14 +13,10 @@ test.describe('/api/v1/products/{id} API tests', () => {
   });
 
   test('should return a product by its ID to an authenticated user - 200', async ({
-    loggedInUser, adminToken, productIds
+    loggedInUser, productFactory
   }) => {
     // given
-    const payload = generateProduct();
-    const created = await productClient.createProduct(payload, adminToken);
-    const product = await created.json();
-    if (product.id) productIds.add(product.id);
-    expect(created.status()).toBe(201);
+    const product = await productFactory.create();
     const productId = product.id;
 
     // when

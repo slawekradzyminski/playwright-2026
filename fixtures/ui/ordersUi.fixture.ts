@@ -1,23 +1,17 @@
-import { test as base, expect } from '../../fixtures/orders.fixture';
+import { test as base } from '../orders.fixture';
 import { authStorageState } from './authStorageState';
-import { LoginClient } from '../../http/loginClient';
-import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
-import { expectValidLoginResponse } from '../../validators/authResponse';
 
-export { missingOrderId, shippingAddress } from '../../fixtures/orders.fixture';
-
+export { shippingAddress } from '../orders.fixture';
+// BUG-047: the UI converts route IDs to Number; use an exact integer for 404 coverage.
+export const missingOrderId = String(Number.MAX_SAFE_INTEGER);
 type OrderIdentity = 'owner' | 'other' | 'admin';
 
 export const test = base.extend<{ orderIdentity: OrderIdentity }>({
   orderIdentity: ['owner', { option: true }],
-  storageState: async ({ baseURL, orderIdentity, orderSetup, request }, use) => {
-    if (orderIdentity === 'admin') {
-      const authentication = await expectValidLoginResponse(await new LoginClient(request).signIn({ username: ADMIN_USERNAME, password: ADMIN_PASSWORD }), ADMIN_USERNAME);
-      expect(authentication.roles).toContain('ROLE_ADMIN');
-      await use(authStorageState(baseURL, authentication));
-      return;
-    }
-    const authentication = orderIdentity === 'owner' ? orderSetup.owner : orderSetup.other;
+  storageState: async ({ baseURL, orderIdentity, orderIdentities, loggedInAdmin }, use) => {
+    const authentication = orderIdentity === 'admin'
+      ? loggedInAdmin
+      : await orderIdentities.get(orderIdentity);
     await use(authStorageState(baseURL, authentication));
   }
 });

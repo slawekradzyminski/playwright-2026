@@ -4,17 +4,17 @@ Scope: HTTP API operations and response contracts. Screen and browser-journey co
 
 ## Status at a glance
 
-**Updated: 2026-09-09 · Overall: In progress — current suite verification pending.**
+**Updated: 2026-09-09 · Overall: In progress — current suite verified; uncovered operations remain.**
 
-This is a manually maintained snapshot for GitLab readers. It reflects recorded evidence, not live pipeline status. Coverage was last reviewed on 2026-09-08; this update adds reporting structure, with no new test execution.
+This is a manually maintained snapshot for GitLab readers. It reflects recorded evidence, not live pipeline status. Resource factories and affected target assertions were reviewed on 2026-09-09; endpoint/status breadth is unchanged.
 
 | Question | Current status |
 | --- | --- |
 | What has been implemented? | Dedicated tests for **35/55 API operations (63.6%)**, across the nine areas below. This measures implemented coverage, not passing tests or complete behavior coverage. |
-| What has been verified? | The previous full run recorded **130 passed, 0 failed, 0 skipped** on 2026-09-08 against the local gateway. It predates the expanded suite; see [execution evidence](#execution-evidence). |
+| What has been verified? | The current full run recorded **182 passed, 0 failed, 0 skipped** on 2026-09-09 against the local gateway; see [execution evidence](#execution-evidence). |
 | What is not done? | **20 operations** still lack dedicated tests: password/email, MFA, SSO, Ollama and traffic. Existing areas also have [behavior gaps](#gaps-in-covered-areas). |
 | What needs attention? | Known functional findings include product deletion returning 500 and reopening orders without deducting stock. See [risks and dependencies](#risks-and-dependencies). |
-| What happens next? | Verify the expanded suite and record its result, address P0 gaps, then start package F — password & email. |
+| What happens next? | Address P0 gaps, then start package F — password & email. |
 
 ## Execution evidence
 
@@ -23,7 +23,7 @@ Keep execution results separate from implemented coverage. A passing historical 
 | Scope | Execution date | Environment | Result | Evidence / limitation |
 | --- | --- | --- | --- | --- |
 | Previous full API suite, before expansion | 2026-09-08 | Local gateway | 130 passed, 0 failed, 0 skipped | Carried forward from the previous plan. Exact command, tested revision and run artifact were not linked; this result excludes the new packages. |
-| Current expanded API suite | Not recorded | Not recorded | Verification pending | No completed result recorded in this plan. Next verification: `npm run test:api`; record revision, environment, counts and a GitLab-accessible report or job link. |
+| Resource factory refactor, full API suite | 2026-09-09 | http://localhost:8081 | **182 passed, 0 failed, 0 skipped**, 14.9s | `npm run test:api -- tests/api/product tests/api/orders tests/api/accounts tests/api/cart tests/api/inventory` selected the full suite because the script already includes `tests/api/`. [Local log](../exploration/resource-factories/api-focused.log), ignored/workspace-only; no CI job link. Deployed revision unknown. |
 
 ## Implemented coverage
 
@@ -43,7 +43,7 @@ Keep execution results separate from implemented coverage. A passing historical 
 
 ## To do
 
-**Immediate next action:** verify the expanded suite and update execution evidence above. **Next new scope: F — password & email.** Address existing gaps (A) alongside new endpoint coverage. Packages F–K below are not yet automated; their prerequisites still need verification.
+**Immediate next action:** address the remaining P0 gaps. **Next new scope: F — password & email.** Address existing gaps (A) alongside new endpoint coverage. Packages F–K below are not yet automated; their prerequisites still need verification.
 
 | Priority | Package | Scope | Main checks / dependency |
 | --- | --- | --- | --- |
@@ -99,3 +99,15 @@ Bug filenames now include severity and primary category; IDs and existing severi
 ## Severity reassessment — 2026-09-09
 
 Reassessed all bug reports from recorded impact; see [the bug index](../bugs/README.md). Three account API specs changed only in bug-link comments; reviewed those path-only differences and refreshed their hashes. Endpoint/status breadth and executable assertions are unchanged. No live requests or API suite were run for this documentation task. `npm run coverage:api` and `npm run coverage:api:check` passed: 35/55 operations, unchanged.
+
+## Resource factory review — 2026-09-09
+
+Shared `productFactory` owns product creation/tracking/deletion; `accountFactory` owns disposable customers and removes cart/order references before product teardown. API product read/update/delete and account-forget setup now use typed factories. Create-product targets, including negative cases, remain raw client requests and track returned IDs before assertions. Reviewed affected target assertions and shared cart/order/inventory/prompt setup semantics: no asserted endpoint/status removed or added. Refreshed spec hashes after this review. Signup/login setup validates success and records ownership before validation. Existing representative 400/401 coverage is preserved.
+
+Exploration verified create/read/cart/checkout and user-before-product cleanup. Existing account tests retain explicit cascade assertions; setup cleanup calls do not count as endpoint coverage. [Local exploration](../exploration/resource-factories/plan.md) is ignored/workspace-only. Backend source inspected at `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed alignment and backend test execution are not established. This refactor introduces no new endpoint cases.
+
+The pre-existing stale hash for `orders-admin.api.spec.ts` was also reconciled after reviewing its pagination/owner-membership and 400/401/403 target assertions; its code and status mapping are unchanged.
+
+### Factory directory extraction
+
+Moved product/account lifecycle implementations and order setup into `factories/productFactory.ts`, `factories/accountFactory.ts` and `factories/orderFactory.ts`. Fixtures retain test scope, lazy composition and account-before-product cleanup. Reviewed the moved methods: HTTP calls, payload generation, assertions and cleanup statuses are unchanged. No specs or coverage mappings changed in this extraction. `npm run test:api`: **182 passed**, 0 failed/skipped, 16.5s; [local log](../exploration/resource-factories/api-directory.log). Coverage generation/check passed with unchanged breadth.

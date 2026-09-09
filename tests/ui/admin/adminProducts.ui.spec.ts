@@ -12,7 +12,7 @@ test.describe('Admin products workflows', () => {
     formPage = new AdminProductFormPage(page);
   });
 
-  test('creates a product and verifies list data plus edit prefill', async ({ page, adminProductIds }) => {
+  test('creates a product and verifies list data plus edit prefill', async ({ page, productFactory }) => {
     // given
     const product = { name: `UI Create ${randomUUID()}`, description: 'Disposable create description', price: '19.75', stock: '6', category: 'UI Create Tests' };
     const created = page.waitForResponse(response => response.url().endsWith('/api/v1/products') && response.request().method() === 'POST');
@@ -26,7 +26,7 @@ test.describe('Admin products workflows', () => {
     await formPage.submit.click();
     const response = await created;
     const createdId: number = (await response.json()).id;
-    adminProductIds.add(createdId);
+    productFactory.track(createdId);
 
     // then
     expect(response.status()).toBe(201);
@@ -92,7 +92,7 @@ test.describe('Admin products workflows', () => {
     await expect(productsPage.row(adminProduct.id)).toHaveCount(0);
   });
 
-  test('shows required validation and creates after correction', async ({ page, adminProductIds }) => {
+  test('shows required validation and creates after correction', async ({ page, productFactory }) => {
     // given
     const product = { name: `UI Validation ${randomUUID()}`, description: 'Required description', price: '22.10', stock: '3', category: 'UI Validation Tests' };
     const created = page.waitForResponse(response => response.url().endsWith('/api/v1/products') && response.request().method() === 'POST');
@@ -115,7 +115,7 @@ test.describe('Admin products workflows', () => {
     const response = await created;
     expect(response.status()).toBe(201);
     const id = (await response.json()).id;
-    adminProductIds.add(id);
+    productFactory.track(id);
     await expect(formPage.name).toHaveValue('');
   });
 });

@@ -10,12 +10,12 @@ Apply this profile only when working in the course repository. Paths below are r
 
 | Purpose | Fixture | Value / behavior to verify in current code |
 | --- | --- | --- |
-| Admin requests | `fixtures/loggedInAdmin.fixture.ts` | `adminToken`; extends customer fixture |
+| Admin requests | `fixtures/loggedInAdmin.fixture.ts` | `adminToken`; shared resource base, test-scoped login |
 | Customer requests | `fixtures/loggedInUser.fixture.ts` | `loggedInUser.token`; disposable customer and cleanup |
-| Product writes/cleanup | `fixtures/products.fixture.ts` | Both identities and `productIds`; extends admin fixture |
+| Product writes/cleanup | `fixtures/products.fixture.ts` | `productFactory.create(overrides)` for setup; `productFactory.track(id)` for tested creations |
 | Public endpoints | `@playwright/test` where authentication/cleanup fixtures are unnecessary | No token |
 
-Keep specs for each HTTP method/path separate under `tests/api`. Initialize endpoint clients in `test.beforeEach`, use given/when/then separated by one blank line, parameterize equivalent cases, and order expected response codes ascending. Prefer existing `http/`, `generators/`, and `validators/` helpers.
+Keep specs for each HTTP method/path separate under `tests/api`. Initialize endpoint clients in `test.beforeEach`, use given/when/then separated by one blank line, parameterize equivalent cases, and order expected response codes ascending. Prefer existing `http/`, `generators/`, and `validators/` helpers. Follow [resource ownership](../../../../fixtures/README.md): factories own setup/cleanup; tested requests remain direct client calls.
 
 Run an affected spec with `npx playwright test tests/api/<existing-spec>.spec.ts`, substituting the actual file, then run `npm run test:api`. Confirm current commands in `package.json` before execution.
 

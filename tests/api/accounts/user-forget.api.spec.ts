@@ -2,24 +2,19 @@ import { test, expect } from '../../../fixtures/accounts.fixture';
 import { UserClient } from '../../../http/userClient';
 import { CartClient } from '../../../http/cartClient';
 import { OrderClient } from '../../../http/orderClient';
-import { ProductClient } from '../../../http/productClient';
 import { SignupClient } from '../../../http/signupClient';
 import { LoginClient } from '../../../http/loginClient';
 import { SessionClient } from '../../../http/sessionClient';
 import { expectValidLoginResponse } from '../../../validators/authResponse';
-import { generateProduct } from '../../../generators/productGenerator';
 import { expectError, expectJson } from '../../../validators/jsonResponse';
 
 let client: UserClient;
 test.beforeEach(({ request }) => { client = new UserClient(request); });
 
-test('204 - forget a customer account and its owned cart and order data', async ({ request, adminToken, accountFactory, productIds }) => {
+test('204 - forget a customer account and its owned cart and order data', async ({ request, adminToken, accountFactory, productFactory }) => {
   // given
   const account = await accountFactory.create();
-  const productResponse = await new ProductClient(request).createProduct(generateProduct({ stockQuantity: 10 }), adminToken);
-  const product = await productResponse.json() as { id: number };
-  if (Number.isInteger(product.id)) productIds.add(product.id);
-  expect(productResponse.status()).toBe(201);
+  const product = await productFactory.create({ stockQuantity: 10 });
   await expect((await new CartClient(request).addItem({ productId: product.id, quantity: 1 }, account.token)).status()).toBe(200);
   const orderResponse = await new OrderClient(request).create({ street: 'Owned Street', city: 'Warsaw', state: 'Mazovia', zipCode: '00-001', country: 'PL' }, account.token);
   const order = await expectJson<{ id: number }>(orderResponse, 201);
