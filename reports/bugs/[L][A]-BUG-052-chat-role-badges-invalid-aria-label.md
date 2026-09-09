@@ -52,7 +52,7 @@ Invalid redundant accessibility metadata. Actual assistive-technology announceme
 
 ## Cleanup
 
-Disposable browser account scheduled for API deletion after exploration; no persisted conversation changes.
+Disposable browser account deleted through the existing API factory; no persisted conversation changes.
 
 ## Follow-up and automation
 

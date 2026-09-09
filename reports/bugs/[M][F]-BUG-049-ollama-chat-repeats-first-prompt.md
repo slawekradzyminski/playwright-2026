@@ -46,7 +46,7 @@ Multi-turn chat users receive the first answer again after asking another suppor
 
 ## Cleanup
 
-API exploration account deleted (204); browser account retained only for ongoing exploration, scheduled for API cleanup. No shared settings or seeded products changed.
+API exploration account deleted (204); browser account deleted through the existing API factory and saved authentication removed. No shared settings or seeded products changed.
 
 ## Follow-up and automation
 

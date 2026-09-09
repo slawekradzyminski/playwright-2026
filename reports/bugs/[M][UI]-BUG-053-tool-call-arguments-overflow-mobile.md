@@ -52,7 +52,7 @@ Users lose readable access to the complete displayed function arguments at narro
 
 ## Cleanup
 
-Read-only catalog requests; disposable customer scheduled for cleanup after exploration.
+Read-only catalog requests; disposable customer deleted after exploration.
 
 ## Follow-up and automation
 
