@@ -5,26 +5,29 @@ import { RegisterPage } from '../../pages/RegisterPage';
 
 test.describe('Login UI tests', () => {
   let loginPage: LoginPage;
+  let registerPage: RegisterPage;
+  let homePage: HomePage;
 
   test.beforeEach(({ page }) => {
     loginPage = new LoginPage(page);
+    registerPage = new RegisterPage(page);
+    homePage = new HomePage(page);
   });
 
-  test('should successfully login with valid credentials', async ({ registeredUser, page }) => {
+  test('should successfully login with valid credentials', async ({ registeredUser }) => {
     // given
-    const homePage = new HomePage(page);
     await loginPage.goto();
 
     // when
     await loginPage.login(registeredUser);
 
     // then
-    await expect(page).toHaveURL('/');
-    await expect(homePage.profileLink).toHaveText(`${registeredUser.firstName} ${registeredUser.lastName}`);
-    await expect(homePage.profileLink).toBeVisible();
+    await homePage.assertLoaded();
+    await expect(homePage.header.profileLink).toHaveText(`${registeredUser.firstName} ${registeredUser.lastName}`);
+    await expect(homePage.header.profileLink).toBeVisible();
   });
 
-  test('should show error for invalid credentials', async ({ page }) => {
+  test('should show error for invalid credentials', async () => {
     // given
     const credentials = { username: 'wrong_username', password: 'wrong_password' };
     await loginPage.goto();
@@ -34,14 +37,14 @@ test.describe('Login UI tests', () => {
 
     // then
     await loginPage.toast.assertError('Invalid username/password');
-    await expect(page).toHaveURL('/login');
+    await loginPage.assertLoaded();
   });
 
   for (const scenario of [
     { name: 'empty password', username: 'validation.user', password: '', field: 'passwordError', message: 'Password is required' },
     { name: 'short username', username: 'abc', password: 'ValidPassword123!', field: 'usernameError', message: 'Username must be at least 4 characters' }
   ] as const) {
-    test(`should show validation error for ${scenario.name}`, async ({ page }) => {
+    test(`should show validation error for ${scenario.name}`, async () => {
       // given
       await loginPage.goto();
 
@@ -51,22 +54,19 @@ test.describe('Login UI tests', () => {
       // then
       await expect(loginPage[scenario.field]).toHaveText(scenario.message);
       await expect(loginPage[scenario.field]).toBeVisible();
-      await expect(page).toHaveURL('/login');
+      await loginPage.assertLoaded();
     });
   }
 
-  for (const control of ['registerButton', 'registerLink'] as const) {
-    test(`should navigate to register page using ${control}`, async ({ page }) => {
-      // given
-      const registerPage = new RegisterPage(page);
-      await loginPage.goto();
+  test('should navigate to register page using the form button', async () => {
+    // given
+    await loginPage.goto();
 
-      // when
-      await loginPage[control].click();
+    // when
+    await loginPage.registerButton.click();
 
-      // then
-      await expect(page).toHaveURL('/register');
-      await expect(registerPage.root).toBeVisible();
-    });
-  }
+    // then
+    await registerPage.assertLoaded();
+  });
+
 });

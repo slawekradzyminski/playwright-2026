@@ -44,3 +44,6 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-027](BUG-027-prompt-error-schema-mismatch.md) | Documentation/contract | Open | Prompt authentication errors modeled as prompt DTOs |
 | [BUG-028](BUG-028-register-sign-in-creates-account.md) | Functional | Open | Registration Sign in button also creates an account when the form is valid |
 | [BUG-029](BUG-029-mobile-toasts-cover-footer-actions.md) | Functional | Suspected | Mobile bottom toasts overlap footer actions; placement requirement needs clarification |
+| [BUG-030](BUG-030-homepage-mobile-welcome-clipping.md) | Functional | Open | Mobile welcome panel clips text |
+| [BUG-031](BUG-031-mobile-menu-logout-alignment.md) | Functional | Open | Mobile Logout label centered unlike adjacent account links |
+| [BUG-032](BUG-032-mobile-menu-footer-overlap.md) | Functional | Suspected | Expanded mobile menu obscures footer heading |

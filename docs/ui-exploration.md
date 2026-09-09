@@ -31,6 +31,25 @@ Resizing checks responsive layout. For touch, mobile viewport metadata or mobile
 
 During image review, check clipped or overlapping text, wrapping, unexpected horizontal overflow, alignment and spacing consistency, missing images/icons, readable feedback, dialogs and overlays, navigation and visible focus states where exercised. Support precise geometry or contrast claims with DOM measurements or an appropriate tool. A screenshot alone cannot establish keyboard behavior, exact contrast compliance or complete accessibility.
 
+## Visual review before assigning a result
+
+Review appearance separately from interaction results. A successful click or passing functional test does not establish that the control or surrounding layout looks correct. For each image, make two passes: first inspect the overall composition and boundaries between regions, then compare related controls and text within each region.
+
+Use the applicable checks below and record concrete observations; do not mechanically mark every item as passed.
+
+| Area | Required comparison |
+| --- | --- |
+| Related controls | Compare label alignment, left/right insets, icon placement, widths and spacing within each group. Investigate an outlier such as centered Logout among left-aligned account links; different HTML element types do not explain away a visible inconsistency. |
+| Content containment | Inspect text and icons inside cards and panels, including their right and bottom edges. No document-level horizontal overflow does not rule out content clipped by an ancestor. Measure the affected container when clipping is suspected. |
+| Menus, dialogs and sticky elements | Compare closed and open states at the same viewport and scroll position. Inspect the boundary with background content: partially hidden headings, text appearing to continue the menu, overlapping actions and unclear grouping. For sticky navigation on a long page, check opening near the top and near the footer. |
+| Intent and evidence | Distinguish what is visibly different from why it happens and whether it is intended. Use requirements, neighboring controls and browser measurements as evidence. Source classes suggest intent or cause but do not prove deployed behavior. Intentional overlays can obscure content; do not automatically classify every overlap as a defect. |
+
+If a detail looks suspicious, investigate it before assigning “No concern observed.” If intent remains unclear, record “Needs clarification” and a suspected bug with the specific uncertainty; do not silently dismiss it as subjective. Ask only about the unresolved detail and continue independent work.
+
+For each image, first write a concise, evidence-based observation of what was actually inspected, then assign the review result. Present the observation before the result in the report; do not start with “No concern observed” and add a justification afterward. Describe visible facts and relevant measurements, not private internal reasoning. For example: “Account labels share the same left edge; menu/footer boundary remains clear in the open state.” Generic phrases such as “looks fine” or “consistent spacing” without naming the inspected region are insufficient. Do not prefill positive results across the screenshot list. Functional outcomes belong in the scenario results, not as justification for visual approval.
+
+Before completing the review, revisit screenshots containing open menus/dialogs, feedback overlays or suspected clipping. Check that every observed anomaly has either a bug reference, an explicit unresolved question, or evidence explaining why it is not a defect. Keep uninspected areas and untested states as coverage gaps; do not imply they passed.
+
 ## Console and API evidence
 
 Start observation before the first navigation or action. Collect browser console warnings/errors, uncaught page errors, failed requests, and **all API requests/responses**, including successful responses. A request failure is a transport failure; HTTP 400/500 responses must also be reviewed explicitly. Correlate each entry with a named scenario and the UI action, then inspect method, route, sanitized payload, status, response body, request count and resulting UI feedback against requirements. Check that client-side validation and navigation do not unexpectedly submit data. Report unexpected errors even when the UI assertion passes; do not treat an expected duplicate-account 400 as a defect.
@@ -64,9 +83,9 @@ The existing `reports/exploration/*` ignore rule covers this directory. Verify n
 
 In `review.md`, record the application URL/version if known, date, browser/version, OS, actual viewport/emulation settings, relevant theme/locale, scenario setup, tested states and coverage gaps. Use sanitized test data and keep credentials/tokens out of evidence. Include one row per image:
 
-| Screenshot | Page/state and viewport | Review result | Evidence, bug or open question |
+| Screenshot | Page/state and viewport | Observation, evidence, bug or open question | Review result |
 | --- | --- | --- | --- |
-| Relative image link | Reproducible state | Pending / No concern observed / Confirmed issue / Needs clarification | Observation and follow-up, if any |
+| Relative image link | Reproducible state | Describe inspected details and any anomaly or uncertainty first | Then assign: Pending / No concern observed / Confirmed issue / Needs clarification |
 
 Every saved image must have an entry, including extra crops or recaptures. Before finishing, reconcile the image files with the index. Do not claim complete visual review while entries remain pending. “No concern observed” describes this inspection, not a guarantee that the page has no defects.
 

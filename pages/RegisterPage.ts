@@ -1,11 +1,12 @@
-import type { Locator, Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { expect, type Locator, type Page } from '@playwright/test';
+import { LoggedOutPage } from './LoggedOutPage';
 import { Toast } from './components/Toast';
 import type { SignupDto } from '../types/auth';
 
-export class RegisterPage extends BasePage {
+export class RegisterPage extends LoggedOutPage {
   readonly toast: Toast;
   readonly root: Locator;
+  readonly title: Locator;
   readonly usernameInput: Locator;
   readonly emailInput: Locator;
   readonly passwordInput: Locator;
@@ -19,12 +20,12 @@ export class RegisterPage extends BasePage {
   readonly submitButton: Locator;
   readonly submitError: Locator;
   readonly loginLink: Locator;
-  readonly headerLoginLink: Locator;
 
   constructor(page: Page) {
     super(page);
     this.toast = new Toast(page);
     this.root = page.getByTestId('register-page');
+    this.title = this.root.getByTestId('register-title');
     this.usernameInput = page.getByTestId('register-username-input');
     this.emailInput = page.getByTestId('register-email-input');
     this.passwordInput = page.getByTestId('register-password-input');
@@ -38,7 +39,13 @@ export class RegisterPage extends BasePage {
     this.submitButton = page.getByTestId('register-submit-button');
     this.submitError = page.getByTestId('register-submit-error');
     this.loginLink = page.getByTestId('register-login-link');
-    this.headerLoginLink = page.getByTestId('login-link');
+  }
+
+  async assertLoaded() {
+    await expect(this.page).toHaveURL('/register');
+    await expect(this.root).toBeVisible();
+    await expect(this.title).toHaveText('Create your account');
+    await expect(this.title).toBeVisible();
   }
 
   async goto() {

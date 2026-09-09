@@ -39,15 +39,17 @@ const validationCases = [
 
 test.describe('Registration UI tests', () => {
   let registerPage: RegisterPage;
+  let loginPage: LoginPage;
+  let homePage: HomePage;
 
   test.beforeEach(({ page }) => {
     registerPage = new RegisterPage(page);
+    loginPage = new LoginPage(page);
+    homePage = new HomePage(page);
   });
 
-  test('should register and allow immediate login', async ({ page, signupUser }) => {
+  test('should register and allow immediate login', async ({ signupUser }) => {
     // given
-    const loginPage = new LoginPage(page);
-    const homePage = new HomePage(page);
     await registerPage.goto();
     await registerPage.fill(signupUser);
 
@@ -55,15 +57,15 @@ test.describe('Registration UI tests', () => {
     await registerPage.submitButton.click();
 
     // then
-    await expect(page).toHaveURL('/login');
+    await loginPage.assertLoaded();
     await registerPage.toast.assertSuccess('Registration successful! You can now log in.');
     await loginPage.login(signupUser);
-    await expect(page).toHaveURL('/');
-    await expect(homePage.profileLink).toHaveText(`${signupUser.firstName} ${signupUser.lastName}`);
-    await expect(homePage.profileLink).toBeVisible();
+    await homePage.assertLoaded();
+    await expect(homePage.header.profileLink).toHaveText(`${signupUser.firstName} ${signupUser.lastName}`);
+    await expect(homePage.header.profileLink).toBeVisible();
   });
 
-  test('should show all required field errors', async ({ page }) => {
+  test('should show all required field errors', async () => {
     // given
     await registerPage.goto();
 
@@ -77,11 +79,11 @@ test.describe('Registration UI tests', () => {
       await expect(error).toBeVisible();
     }
     await expect(registerPage.usernameInput).toBeFocused();
-    await expect(page).toHaveURL('/register');
+    await registerPage.assertLoaded();
   });
 
   for (const scenario of validationCases) {
-    test(`should reject ${scenario.name}`, async ({ page }) => {
+    test(`should reject ${scenario.name}`, async () => {
       // given
       const user = generateSignupUser(scenario.values);
       await registerPage.goto();
@@ -95,12 +97,12 @@ test.describe('Registration UI tests', () => {
         await expect(error).toHaveText(message);
         await expect(error).toBeVisible();
       }
-      await expect(page).toHaveURL('/register');
+      await registerPage.assertLoaded();
     });
   }
 
   for (const field of ['username', 'email'] as const) {
-    test(`should show a duplicate ${field} error`, async ({ page, registeredUser, signupUser }) => {
+    test(`should show a duplicate ${field} error`, async ({ registeredUser, signupUser }) => {
       // given
       const user = { ...signupUser, [field]: registeredUser[field] };
       await registerPage.goto();
@@ -110,7 +112,7 @@ test.describe('Registration UI tests', () => {
 
       // then
       await registerPage.toast.assertError(field === 'username' ? 'Username already exists' : 'Email already exists');
-      await expect(page).toHaveURL('/register');
+      await registerPage.assertLoaded();
       await expect(registerPage.usernameInput).toHaveValue(user.username);
       await expect(registerPage.emailInput).toHaveValue(user.email);
       await expect(registerPage.submitButton).toBeEnabled();
@@ -118,16 +120,15 @@ test.describe('Registration UI tests', () => {
   }
 
   // BUG-028: valid-filled-form Sign in also creates an account; excluded until fixed.
-  test('should navigate to login from an empty registration form', async ({ page }) => {
+  test('should navigate to login using the form link from an empty registration form', async () => {
     // given
-    const loginPage = new LoginPage(page);
     await registerPage.goto();
 
     // when
     await registerPage.loginLink.click();
 
     // then
-    await expect(page).toHaveURL('/login');
+    await loginPage.assertLoaded();
     await expect(loginPage.usernameInput).toBeVisible();
   });
 
@@ -156,6 +157,6 @@ test.describe('Registration UI tests', () => {
     await expect(registerPage.submitError).toBeVisible();
     await expect(registerPage.submitButton).toBeEnabled();
     await expect(registerPage.usernameInput).toHaveValue(signupUser.username);
-    await expect(page).toHaveURL('/register');
+    await registerPage.assertLoaded();
   });
 });
