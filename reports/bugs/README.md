@@ -99,3 +99,11 @@ Older reports preserve their original observation dates. Inventory/accounts/prom
 | [BUG-045]([H][A]-BUG-045-inventory-rows-keyboard-inaccessible.md) | high | accessibility | Functional | Open | Inventory rows cannot be selected with the keyboard |
 | [BUG-046]([M][F]-BUG-046-admin-dashboard-aggregates-only-first-50-orders.md) | medium | functional | Functional | Open | Admin dashboard aggregates only the first 50 orders |
 | [BUG-047]([L][F]-BUG-047-order-route-rounds-large-identifiers.md) | low | functional | Functional | Open | Order route rounds large identifiers and requests an invalid ID |
+| [BUG-048]([M][D]-BUG-048-ollama-error-response-contract.md) | medium | contract | Documentation/contract | Open | Ollama error responses do not match advertised streams |
+| [BUG-049]([M][F]-BUG-049-ollama-chat-repeats-first-prompt.md) | medium | functional | Functional | Open | Mock chat repeats the first scenario instead of answering a follow-up |
+| [BUG-050]([M][A]-BUG-050-llm-collapsed-settings-focusable.md) | medium | accessibility | Functional | Open | Collapsed LLM settings expose invisible keyboard stops |
+| [BUG-051]([M][UX]-BUG-051-llm-mobile-chat-input-too-narrow.md) | medium | ux | Functional | Open | Mobile chat input and transcript are excessively narrow |
+| [BUG-052]([L][A]-BUG-052-chat-role-badges-invalid-aria-label.md) | low | accessibility | Functional | Open | Chat role badges use prohibited aria-label |
+| [BUG-053]([M][UI]-BUG-053-tool-call-arguments-overflow-mobile.md) | medium | ui | Functional | Open | Tool-call arguments overflow narrow bubbles |
+| [BUG-054]([M][F]-BUG-054-chat-error-retry-invalid-history.md) | medium | functional | Functional | Open | Plain chat cannot recover after a failed request |
+| [BUG-055]([M][F]-BUG-055-tool-chat-unlocks-before-final-answer.md) | medium | functional | Functional | Open | Tool chat unlocks input before the response finishes |
