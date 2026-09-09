@@ -321,8 +321,10 @@ For more information on setting up and using the Dockerized environment, refer t
 
 ## API test plan and coverage
 
-The maintained [API test plan](reports/api/test-plan.md) contains priorities, dependencies,
-parallel work packages, known gaps and update instructions. The generated
+The maintained [API test plan and status](reports/api/test-plan.md) starts with a progress
+summary for GitLab readers: implemented work, recorded execution results, remaining scope,
+risks and next actions. It also contains package priorities, dependencies, known gaps and
+update instructions. The generated
 [endpoint inventory](reports/api/coverage.md) tracks every OpenAPI method/path and documented
 response status against reviewed dedicated tests. These percentages measure implemented
 breadth, not passing tests or complete behavior coverage.

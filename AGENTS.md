@@ -1,5 +1,5 @@
 ## Common rules
-
+- always use English
 - use given (test setup), when (tested action) and then (assertion)
 - separate the given, when and then sections with one blank line
 - report bugs in reports/bugs if you see any

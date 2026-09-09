@@ -1,12 +1,31 @@
-# API coverage plan
+# API test plan and status
 
-**Covered: 35/55 operations (63.6%) · Remaining: 20**
+## Status at a glance
 
-Previous full API run: **130 passed, 0 failed/skipped** — 2026-09-08, local gateway. Verification of the expanded suite is in progress; this historical result does not include the new packages.
+**Updated: 2026-09-09 · Overall: In progress — current suite verification pending.**
 
-Coverage means dedicated endpoint tests, not complete behavior coverage. Known gaps are listed below.
+This is a manually maintained snapshot for GitLab readers. It reflects recorded evidence, not live pipeline status. Coverage was last reviewed on 2026-09-08; this update adds reporting structure, with no new test execution.
 
-## Covered
+| Question | Current status |
+| --- | --- |
+| What has been implemented? | Dedicated tests for **35/55 API operations (63.6%)**, across the nine areas below. This measures implemented coverage, not passing tests or complete behavior coverage. |
+| What has been verified? | The previous full run recorded **130 passed, 0 failed, 0 skipped** on 2026-09-08 against the local gateway. It predates the expanded suite; see [execution evidence](#execution-evidence). |
+| What is not done? | **20 operations** still lack dedicated tests: password/email, MFA, SSO, Ollama and traffic. Existing areas also have [behavior gaps](#gaps-in-covered-areas). |
+| What needs attention? | Known functional findings include product deletion returning 500 and reopening orders without deducting stock. See [risks and dependencies](#risks-and-dependencies). |
+| What happens next? | Verify the expanded suite and record its result, address P0 gaps, then start package F — password & email. |
+
+## Execution evidence
+
+Keep execution results separate from implemented coverage. A passing historical run does not establish the health of the current suite.
+
+| Scope | Execution date | Environment | Result | Evidence / limitation |
+| --- | --- | --- | --- | --- |
+| Previous full API suite, before expansion | 2026-09-08 | Local gateway | 130 passed, 0 failed, 0 skipped | Carried forward from the previous plan. Exact command, tested revision and run artifact were not linked; this result excludes the new packages. |
+| Current expanded API suite | Not recorded | Not recorded | Verification pending | No completed result recorded in this plan. Next verification: `npm run test:api`; record revision, environment, counts and a GitLab-accessible report or job link. |
+
+## Implemented coverage
+
+“Implemented” means dedicated endpoint assertions exist in the [reviewed inventory](coverage.md). It does not mean an area is complete or has passed current verification.
 
 | Area | Operations | Covered behavior |
 | --- | --- | --- |
@@ -22,7 +41,7 @@ Coverage means dedicated endpoint tests, not complete behavior coverage. Known g
 
 ## To do
 
-**Next: F — password & email.** Address existing gaps (A) alongside new endpoint coverage.
+**Immediate next action:** verify the expanded suite and update execution evidence above. **Next new scope: F — password & email.** Address existing gaps (A) alongside new endpoint coverage. Packages F–K below are not yet automated; their prerequisites still need verification.
 
 | Priority | Package | Scope | Main checks / dependency |
 | --- | --- | --- | --- |
@@ -48,6 +67,15 @@ For each package: assess → explore → automate → verify. Include applicable
 
 Functional regressions wait for a fix and fresh exploration. Documentation-only issues do not block tests of verified intended behavior.
 
+## Risks and dependencies
+
+| Item | Impact on progress | Next action |
+| --- | --- | --- |
+| Current suite result missing | Implemented coverage cannot yet be reported as verified. | Run the expanded API suite and publish its actual result, including failures and cleanup issues. |
+| [Referenced-product deletion](../bugs/BUG-008-product-delete-referenced-by-cart.md) and [order reopening](../bugs/BUG-009-order-reopening-inventory.md) | Known 500 response and stock-consistency defect remain unresolved in the bug index. | Fix, explore the corrected behavior and add passing regressions. |
+| Suspected findings and unclear requirements | Some expected behaviors still need confirmation; affected gaps remain open. | Clarify and reproduce the findings linked above; update their bug reports. |
+| Mail sink/outbox, OIDC issuer and model/mock availability | Prerequisites for F, I and J are not yet confirmed; these are dependencies, not established blockers. | Verify isolation and availability during package assessment. |
+
 ## Reports
 
 - [Coverage inventory](coverage.md) — endpoints, specs, covered/missing statuses.
@@ -55,8 +83,9 @@ Functional regressions wait for a fix and fresh exploration. Documentation-only 
 
 ## Keeping this plan current
 
-- Update current coverage, package status, gaps and next action; keep entries short.
-- Put execution details in reports, not a running diary here.
+- After each completed work package or verification run, update the snapshot date, overall status, coverage, gaps and next action. Do not refresh the coverage review date without a review.
+- Use explicit states: not started, in progress, implemented / verification pending, verified, or blocked (with a reason and next action). Mark a scope verified only with execution evidence; retain any known gaps.
+- Keep the latest execution summary here: date, tested commit, command, environment, passed/failed/skipped counts, cleanup outcome and a GitLab-accessible report or CI job link. Preserve the previous result when a new run is pending or blocked. Put detailed logs in linked reports; local or ignored artifacts alone are not evidence accessible to GitLab readers.
 - Review target assertions and helpers; refresh [coverage mapping](coverage-map.json) statuses, spec hashes and review date.
 - Run `npm run coverage:api`, `npm run coverage:api:check`, affected tests and the API suite after test changes. Record actual results separately from coverage.
 - Follow [API testing workflow](../../.agents/skills/api-testing/SKILL.md) for assessment, exploration and safe cleanup.
