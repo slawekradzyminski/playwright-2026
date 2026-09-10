@@ -2,7 +2,7 @@
 
 This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
 
-**Current register:** 14 findings — 13 Open and 1 Needs clarification; 7 functional API and 7 documentation; 4 Medium and 10 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
+**Current register:** 17 findings — 16 Open and 1 Needs clarification; 7 functional API and 10 documentation; 5 Medium and 12 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
 
 | ID | Finding title | Status |
 |---|---|---|
@@ -20,6 +20,9 @@ This is the central place to find and track API bugs discovered in this reposito
 | [DOC-05](%5BL%5D%5BD%5D%20DOC-05%20-%20User%20GET%20errors%20use%20success%20schemas.md) | User GET error models mislead consumers; authentication remains enforced. Severity: Low. | Open |
 | [DOC-06](%5BL%5D%5BD%5D%20DOC-06%20-%20Prompt%20and%20refresh%20error%20schemas%20misdescribe%20responses.md) | Prompt/refresh errors give consumers misleading models; rejection works. Severity: Low. | Open |
 | [DOC-07](%5BM%5D%5BD%5D%20DOC-07%20-%20Prompt%20update%20returns%20undocumented%20null%20values.md) | Valid omitted-field requests produce success values incompatible with declared string types. Severity: Medium. | Open |
+| [DOC-08](%5BL%5D%5BD%5D%20DOC-08%20-%20Product%20error%20schemas%20misdescribe%20responses.md) | Product error models mislead consumers; tested rejections work. Severity: Low. | Open |
+| [DOC-09](%5BM%5D%5BD%5D%20DOC-09%20-%20Product%20success%20schema%20excludes%20returned%20values.md) | Normal product responses contradict nullable and timestamp types. Severity: Medium. | Open |
+| [DOC-10](%5BL%5D%5BD%5D%20DOC-10%20-%20Product%20creation%20omits%20nonempty%20description%20constraint.md) | Empty descriptions satisfy the schema but fail creation; nonempty text works. Severity: Low. | Open |
 
 
 ## How to maintain the register
@@ -70,3 +73,14 @@ Username lookup returned exact public fields for the caller and another disposab
 Refresh required no access token, returned exactly two token fields, rotated refresh credentials, rejected reuse, and accepted the replacement. Missing/null/empty/blank refresh tokens returned 400; unknown refresh tokens returned 401. Logout returned an empty 200, revoked refresh tokens from two sessions, left another account's refresh token usable, and accepted a repeated call. Existing access tokens remained usable after logout; the contract promises refresh-token revocation only. Every created exploratory user was deleted with a verified 204.
 
 Uncovered: real expiry, concurrent refresh races, disabled accounts, MFA branches, malformed JSON/media-type matrices, and administrative-role variants. Cross-account prompt isolation was only sampled via default reads, not exhaustively proven. This is not a release-readiness assessment.
+
+
+## Product exploration — 2026-09-10
+
+Before automation, ran two bounded exploratory passes over all five operations using the live Swagger operations and linked schemas, a disposable ROLE_CLIENT without MFA, and the configured administrator. Gateway: localhost:8081. Build identity and rate-limit configuration were not verified. Drivers, live specification and sanitized results remain in ignored `exploration/products-*` files. No access tokens were recorded in results.
+
+Both roles could read the created product and find it in the catalog. Only admin could create, update and delete. Client POST/PUT/DELETE returned 403 Access denied; subsequent reads confirmed no mutation. Missing and malformed tokens returned 401 on all five operations. Admin partial updates preserved unspecified fields and accepted price 0.01 and stock zero. Short/overlong names, overlong descriptions, zero price, negative stock and invalid image URL returned 400 field errors. Required-field creation errors, nonnumeric IDs, missing IDs and repeated deletion were explored. Every created product and disposable account was cleaned up with verified 204 responses.
+
+DOC-08 and DOC-09 record reproduced contract defects. PUT accepts an empty category although POST rejects it; PUT with null name preserves the existing name. These differences need requirement clarification and are not automated as approved semantics. Uncovered: concurrency, orders referencing deleted products, decimal precision and overflow, real token expiry, MFA, rate limiting, exhaustive null/type/media matrices and timezone configuration. This is not a release-readiness claim.
+
+Follow-up after a boundary test failed: repeated POST with an empty description twice, confirming 400 despite the declared minLength 0; PUT accepts it. DOC-10 records the discrepancy. The passing creation boundary test uses a nonempty description.

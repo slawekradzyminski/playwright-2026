@@ -22,21 +22,21 @@ This repository contains automated API and UI tests for the local training envir
 .
 ├── tests/
 │   ├── api/
-│   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
+│   │   ├── users/        # Authentication, user profiles and system prompts
+│   │   ├── products/     # Product reads, creation, updates and deletion
+│   │   └── test-data/    # Cases shared across API domains
 │   └── ui/
-│       └── login.ui.spec.ts        # UI tests for the login page
+│       └── login.ui.spec.ts
 ├── clients/
-│   └── login-client.ts             # HTTP transport for login
-├── validators/
-│   └── login-response-validator.ts # Full successful-login response assertions
-├── types/
-│   └── auth.ts                     # TypeScript interfaces for authentication
-├── .nvmrc                          # Course Node.js major version
-├── playwright.config.ts            # Playwright configuration
-├── test-config.ts                  # .env-backed test configuration
-├── .env.example                    # Safe configuration template
-├── package.json                    # Project metadata and dependencies
-└── ...
+│   ├── users/            # One HTTP client per user endpoint
+│   └── products/         # One HTTP client per product endpoint
+├── fixtures/             # Reusable authentication, setup and cleanup
+├── generators/           # User and product data generators
+├── validators/           # Reusable response assertions
+├── types/                # Request and response interfaces
+├── playwright.config.ts
+├── test-config.ts
+└── package.json
 ```
 
 ## Exploratory API testing
@@ -125,7 +125,10 @@ The local stack exposes the following gateway routes:
 ```bash
 npm run test:api
 # or
-npx playwright test tests/api/login.api.spec.ts
+npx playwright test tests/api/users/login.api.spec.ts
+# Run one domain
+npx playwright test tests/api/products/
+npx playwright test tests/api/users/
 ```
 
 **UI Tests**
@@ -157,7 +160,7 @@ The `playwright.config.ts` file is configured to:
 
 ## 🧪 Test Details
 
-### API Tests (`tests/api/login.api.spec.ts`)
+### API Tests (`tests/api/users/login.api.spec.ts`)
 
 These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ordered by response code:
 
@@ -316,7 +319,7 @@ For more information on setting up and using the Dockerized environment, refer t
 
 ### Sign-up API tests
 
-`tests/api/signup.api.spec.ts` covers registration success, representative validation errors, and duplicate username/email rejection. Cases use given/when/then sections, are ordered by expected status (201, then 400), and keep parameter data immediately above each group. Sign-up tests do not log in newly registered users.
+`tests/api/users/signup.api.spec.ts` covers registration success, representative validation errors, and duplicate username/email rejection. Cases use given/when/then sections, are ordered by expected status (201, then 400), and keep parameter data immediately above each group. Sign-up tests do not log in newly registered users.
 
 Generate valid disposable data with `UserGenerator.generate()` from `generators/user-generator.ts`, using partial overrides for specific scenarios. Cleanup lives in `fixtures/signup-fixture.ts`: it authenticates an administrator and deletes only accounts created by the current test, even when an assertion fails. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` through the existing configuration and use a disposable local environment.
 

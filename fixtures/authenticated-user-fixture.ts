@@ -1,6 +1,6 @@
 import { expect } from '@playwright/test';
 import { test as base } from './signup-fixture';
-import { LoginClient } from '../clients/login-client';
+import { LoginClient } from '../clients/users/login-client';
 import { UserGenerator } from '../generators/user-generator';
 import type { UserRegisterDto } from '../types/auth';
 
@@ -22,6 +22,7 @@ export const test = base.extend<{ authenticatedUser: AuthenticatedUser }>({
     });
     expect(response.status(), 'Log in fixture user').toBe(200);
     const body = await response.json();
+    expect(body.roles, 'Fixture user must have only client privileges').toEqual(['ROLE_CLIENT']);
     expect(body.mfaRequired, 'Fixture user must not require MFA').toBe(false);
     expect(body.token, 'Fixture access token').toEqual(expect.stringMatching(/\S+/));
     expect(body.refreshToken, 'Fixture refresh token').toEqual(expect.stringMatching(/\S+/));
