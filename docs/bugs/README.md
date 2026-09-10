@@ -2,7 +2,7 @@
 
 This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
 
-**Current register:** 12 findings — 11 Open and 1 Needs clarification; 7 functional API and 5 documentation; 3 Medium and 9 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
+**Current register:** 14 findings — 13 Open and 1 Needs clarification; 7 functional API and 7 documentation; 4 Medium and 10 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
 
 | ID | Finding title | Status |
 |---|---|---|
@@ -18,6 +18,8 @@ This is the central place to find and track API bugs discovered in this reposito
 | [DOC-03](%5BL%5D%5BD%5D%20DOC-03%20-%20Swagger%20sign-in%20contract%20omits%20401.md) | [L][D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract | Open |
 | [DOC-04](%5BL%5D%5BD%5D%20DOC-04%20-%20Swagger%20sign-up%20omits%20error%20response%20schemas.md) | [L][D] POST /api/v1/users/signup — Validation response bodies have no documented schema | Open |
 | [DOC-05](%5BL%5D%5BD%5D%20DOC-05%20-%20User%20GET%20errors%20use%20success%20schemas.md) | User GET error models mislead consumers; authentication remains enforced. Severity: Low. | Open |
+| [DOC-06](%5BL%5D%5BD%5D%20DOC-06%20-%20Prompt%20and%20refresh%20error%20schemas%20misdescribe%20responses.md) | Prompt/refresh errors give consumers misleading models; rejection works. Severity: Low. | Open |
+| [DOC-07](%5BM%5D%5BD%5D%20DOC-07%20-%20Prompt%20update%20returns%20undocumented%20null%20values.md) | Valid omitted-field requests produce success values incompatible with declared string types. Severity: Medium. | Open |
 
 
 ## How to maintain the register
@@ -55,3 +57,16 @@ Before automation, explored both GET routes through localhost:8081 with an admin
 A regular client could see other accounts' names and email addresses. The contract says “all user accounts visible to the authenticated caller” without defining visibility. Confirm whether this directory is intended for all clients before asserting any narrower access policy; no authorization bypass is claimed. The new list test checks its own account without assuming list size/order or codifying access to another account.
 
 DOC-05 records the reproduced Swagger error mismatch. Expired tokens, disabled/deleted accounts with existing tokens, MFA, pagination/ordering guarantees, rate limiting, and build identity were not verified. Exploration does not establish release readiness.
+
+
+## Prompt, username lookup and session exploration — 2026-09-10
+
+Explored all seven requested operations before automation, then repeated the session. Used the live operation/request/response/security definitions, two disposable ROLE_CLIENT users without MFA, and the configured administrator for cleanup. Gateway: localhost:8081; deployed image/revision and effective rate-limit policy were not identified. Original snapshot remains intact. Local driver and sanitized results: ignored `exploration/remaining-users-session.mjs` and `remaining-users-results.txt`.
+
+Both prompt defaults were nonempty strings. Unicode/multiline overrides persisted; 5000 ASCII characters succeeded and 5001 returned field validation errors. Empty strings reset the effective GET value to its default. Null and omitted fields returned null and also restored defaults; numeric input was coerced to a string. DOC-07 covers the successful-response null contradiction; numeric coercion policy remains an open question. Prompt errors and refresh errors use misleading Swagger models (DOC-06). Null/coercion branches are not automated as approved behavior.
+
+Username lookup returned exact public fields for the caller and another disposable account, 404 for a UUID-based nonexistent username, and 401 without credentials. Its 401 success-schema mismatch extends DOC-05. Visibility of other accounts remains the existing policy question.
+
+Refresh required no access token, returned exactly two token fields, rotated refresh credentials, rejected reuse, and accepted the replacement. Missing/null/empty/blank refresh tokens returned 400; unknown refresh tokens returned 401. Logout returned an empty 200, revoked refresh tokens from two sessions, left another account's refresh token usable, and accepted a repeated call. Existing access tokens remained usable after logout; the contract promises refresh-token revocation only. Every created exploratory user was deleted with a verified 204.
+
+Uncovered: real expiry, concurrent refresh races, disabled accounts, MFA branches, malformed JSON/media-type matrices, and administrative-role variants. Cross-account prompt isolation was only sampled via default reads, not exhaustively proven. This is not a release-readiness assessment.

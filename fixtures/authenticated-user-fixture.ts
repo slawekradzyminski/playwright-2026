@@ -6,6 +6,7 @@ import type { UserRegisterDto } from '../types/auth';
 
 export interface AuthenticatedUser {
   token: string;
+  refreshToken: string;
   user: UserRegisterDto;
 }
 
@@ -23,6 +24,7 @@ export const test = base.extend<{ authenticatedUser: AuthenticatedUser }>({
     const body = await response.json();
     expect(body.mfaRequired, 'Fixture user must not require MFA').toBe(false);
     expect(body.token, 'Fixture access token').toEqual(expect.stringMatching(/\S+/));
-    await use({ token: body.token, user });
+    expect(body.refreshToken, 'Fixture refresh token').toEqual(expect.stringMatching(/\S+/));
+    await use({ token: body.token, refreshToken: body.refreshToken, user });
   },
 });

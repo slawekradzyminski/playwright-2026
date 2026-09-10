@@ -17,3 +17,8 @@ Severity: Low. Category: Documentation.
 ## Expected behavior and retest
 
 Document 401 bodies using ErrorDto, with examples for missing credentials and invalid tokens. Retest both routes without a token and with an invalid token; compare the generated schema with the responses. Active API tests cover the runtime rejection behavior, not the incorrect Swagger model.
+
+
+## Scope extension — username lookup, 2026-09-10
+
+GET `/api/v1/users/{username}` without Authorization also returns `401 {"message":"Unauthorized"}` while Swagger uses UserResponseDto. Reproduced using a disposable existing username during two subsequent exploratory sessions. The same impact, severity and proposed ErrorDto correction apply. Its 404 branch already uses ErrorDto and returned `{"message":"The user doesn't exist"}` as documented.
