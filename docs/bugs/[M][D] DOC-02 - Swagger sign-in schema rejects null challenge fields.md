@@ -1,8 +1,7 @@
-# [M][D] POST /api/v1/users/signin — Successful response schema does not represent nullable fields correctly
+# [D] POST /api/v1/users/signin — Successful response schema does not represent nullable fields correctly
 
 **ID:** DOC-02  
-**Status:** Open  
-**Severity:** Medium — A normal successful login conflicts with the declared types and can fail strict response validation.  
+**Status:** Open
 **Category:** D — Documentation  
 **Observed on:** 2026-09-10
 
@@ -26,15 +25,23 @@ curl -i http://localhost:8081/api/v1/users/signin -H 'Content-Type: application/
   --data-binary '{"username":"client","password":"client"}'
 ```
 
-Do not attach issued tokens to a bug report. Impact: strict response validation rejects a normal successful login.
+Do not attach issued tokens to a bug report. The recorded response conflicts with the declared property types; no deployed consumer validation failure was recorded.
 
 Observed non-MFA responses explicitly contain null `challengeToken` and `challengeExpiresAt`. Live OpenAPI 3.1 declares each as `type:string`, without null in the allowed type. Optional properties may be absent; optionality does not permit a present null. These actual success bodies therefore conflict with the declared property types.
 
 Correct nullability or omit absent properties, and model normal-token versus MFA-challenge responses explicitly (for example with separate schemas and `oneOf`). Mark truly required fields per branch. The operation description currently promises tokens without explaining the conditional MFA branch. MFA fields have brief descriptions, but the branch itself is not explained at operation level. Runtime MFA behavior was not exercised, so only the observed nullability mismatch is confirmed dynamically.
 
-## Impact
+## Impact assessment
 
-A normal successful login conflicts with the declared types and can fail strict response validation.
+The recorded normal non-MFA login response contains explicit null challenge fields, while the schema permits only strings for those properties. This is a direct type contradiction on the successful login branch, not merely missing error guidance. A consumer enforcing those declared types cannot accept that recorded response unchanged; relaxing or overriding the schema is the workaround. No deployed consumer outage or runtime MFA failure was demonstrated. The scope of actual consumer adoption remains unknown.
+
+## Severity decision
+
+Medium is retained because the published types contradict an ordinary successful response and prevent that response from conforming to the advertised contract. The assessment concerns contract compatibility, not a demonstrated authentication outage. Evidence that consumers do not enforce the schema affects operational priority; a confirmed broad login outage would warrant reassessment.
+
+**Severity:** M
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: M. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 

@@ -1,8 +1,7 @@
-# [L][D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract
+# [D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract
 
 **ID:** DOC-03  
-**Status:** Open  
-**Severity:** Low — Clients cannot discover the stale/invalid Authorization-header failure from the published operation.  
+**Status:** Open
 **Category:** D — Documentation  
 **Observed on:** 2026-09-10
 
@@ -30,9 +29,17 @@ Compare the status with the sign-in `responses` map in the saved specification. 
 
 Correct credentials plus `Authorization: Bearer invalid` return 401 with `{"message":"Invalid or expired token"}`. Live Swagger does not list 401. Document this behavior or decide that public login should ignore stale authorization headers. Rejecting an explicitly invalid Bearer token is not by itself classified as a security defect; clients with globally attached stale tokens need a clear recovery contract.
 
-## Impact
+## Impact assessment
 
-Clients cannot discover the stale/invalid Authorization-header failure from the published operation.
+A request carrying an invalid Bearer header receives a 401 branch omitted from the login documentation. The recorded behavior affects callers that attach that header; login without it remains the available path. Removing a stale header is a practical workaround. No recovery loop or inability to log in after removing the header was demonstrated. Whether public login should ignore such headers is a separate policy decision; the confirmed defect is incomplete documentation.
+
+## Severity decision
+
+Low is retained because the demonstrated impact is an undocumented conditional failure with a straightforward client workaround. Reassess if a supported client cannot recover from stale headers.
+
+**Severity:** L
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: L. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 

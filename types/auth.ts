@@ -20,3 +20,11 @@ export interface ErrorResponse {
   message?: string;
   errors?: Record<string, string[]>;
 }
+
+export interface UserRegisterDto {
+  username: string;
+  email: string;
+  password: string;
+  firstName: string;
+  lastName: string;
+}

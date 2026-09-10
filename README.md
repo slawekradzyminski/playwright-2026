@@ -313,3 +313,11 @@ Restart Claude Desktop.
 This project is licensed under the ISC License.
 
 For more information on setting up and using the Dockerized environment, refer to the awesome-localstack repository.
+
+### Sign-up API tests
+
+`tests/api/signup.api.spec.ts` covers registration success, representative validation errors, and duplicate username/email rejection. Cases use given/when/then sections, are ordered by expected status (201, then 400), and keep parameter data immediately above each group. Sign-up tests do not log in newly registered users.
+
+Generate valid disposable data with `UserGenerator.generate()` from `generators/user-generator.ts`, using partial overrides for specific scenarios. Cleanup lives in `fixtures/signup-fixture.ts`: it authenticates an administrator and deletes only accounts created by the current test, even when an assertion fails. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` through the existing configuration and use a disposable local environment.
+
+Run `npm run test:api`. Known-defect regressions are proposed in the [bug reports](docs/bugs/README.md), not executed as expected failures. Detailed length and Unicode boundary matrices are candidates for backend validation/service tests; those tests have not been added in this repository. Role-assignment checks remain exploratory evidence rather than a registration-only API assertion.

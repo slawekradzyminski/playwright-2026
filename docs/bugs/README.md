@@ -2,21 +2,27 @@
 
 This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
 
-**Current register:** 6 open findings — 3 functional API and 3 documentation; 4 Medium and 2 Low. No High-severity defect was confirmed in this session. All entries concern `POST /api/v1/users/signin`, observed on 2026-09-10.
+**Current register:** 11 findings — 10 Open and 1 Needs clarification; 7 functional API and 4 documentation; 3 Medium and 8 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
 
 | ID | Finding title | Status |
 |---|---|---|
-| [BUG-01](%5BM%5D%5BFA%5D%20BUG-01%20-%20Sign-in%20request%20errors%20return%20401.md) | [M][FA] POST /api/v1/users/signin — Request/protocol errors are reported as unauthorized | Open |
-| [BUG-02](%5BM%5D%5BFA%5D%20BUG-02%20-%20Sign-in%20missing%20credentials%20bypass%20validation.md) | [M][FA] POST /api/v1/users/signin — Required login credentials lack presence validation | Open |
+| [BUG-01](%5BL%5D%5BFA%5D%20BUG-01%20-%20Sign-in%20request%20errors%20return%20401.md) | [L][FA] POST /api/v1/users/signin — Request/protocol errors are reported as unauthorized | Open |
+| [BUG-02](%5BL%5D%5BFA%5D%20BUG-02%20-%20Sign-in%20missing%20credentials%20bypass%20validation.md) | [L][FA] POST /api/v1/users/signin — Required login credentials lack presence validation | Needs clarification |
 | [BUG-03](%5BL%5D%5BFA%5D%20BUG-03%20-%20Sign-in%20maximum-length%20error%20mentions%20minimum.md) | [L][FA] POST /api/v1/users/signin — Maximum-length violations show a minimum-length error | Open |
-| [DOC-01](%5BM%5D%5BD%5D%20DOC-01%20-%20Swagger%20sign-in%20errors%20use%20success%20schema.md) | [M][D] POST /api/v1/users/signin — Error responses are documented as successful login objects | Open |
+| [BUG-04](%5BM%5D%5BFA%5D%20BUG-04%20-%20Sign-up%20accepts%20empty%20email.md) | [M][FA] POST /api/v1/users/signup — Empty email addresses create accounts | Open |
+| [BUG-05](%5BL%5D%5BFA%5D%20BUG-05%20-%20Sign-up%20parsing%20errors%20return%20401.md) | [L][FA] POST /api/v1/users/signup — Malformed JSON is reported as unauthorized | Open |
+| [BUG-06](%5BM%5D%5BFA%5D%20BUG-06%20-%20Sign-up%20password%20limit%20contradicts%20contract.md) | [M][FA] POST /api/v1/users/signup — Documented valid passwords fail above 72 bytes | Open |
+| [BUG-07](%5BL%5D%5BFA%5D%20BUG-07%20-%20Sign-up%20maximum%20errors%20mention%20minimum.md) | [L][FA] POST /api/v1/users/signup — Maximum-length violations describe the minimum | Open |
+| [DOC-01](%5BL%5D%5BD%5D%20DOC-01%20-%20Swagger%20sign-in%20errors%20use%20success%20schema.md) | [L][D] POST /api/v1/users/signin — Error responses are documented as successful login objects | Open |
 | [DOC-02](%5BM%5D%5BD%5D%20DOC-02%20-%20Swagger%20sign-in%20schema%20rejects%20null%20challenge%20fields.md) | [M][D] POST /api/v1/users/signin — Successful response schema does not represent nullable fields correctly | Open |
 | [DOC-03](%5BL%5D%5BD%5D%20DOC-03%20-%20Swagger%20sign-in%20contract%20omits%20401.md) | [L][D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract | Open |
+| [DOC-04](%5BL%5D%5BD%5D%20DOC-04%20-%20Swagger%20sign-up%20omits%20error%20response%20schemas.md) | [L][D] POST /api/v1/users/signup — Validation response bodies have no documented schema | Open |
+
 
 ## How to maintain the register
 
-1. Copy the [bug-report template](../exploratory-testing/bug-report-template.md) into this folder. Use the next unused `BUG-NN` for FA or `DOC-NN` for D; keep the ID stable. Name the file `[severity][category] ID - Short description.md`, for example `[M][FA] BUG-01 - Sign-in request errors return 401.md`. Keep filename prefixes aligned with severity/category changes and update links when renaming.
-2. Start the title with `[H/M/L][FA/D]`, followed by the method, path, and observable problem. Explain severity using the [classification guide](../exploratory-testing/README.md#classify-findings).
+1. Copy the [bug-report template](../exploratory-testing/bug-report-template.md) into this folder. Use the next unused `BUG-NN` for FA or `DOC-NN` for D; keep the ID stable. Name the file `[severity][category] ID - Short description.md`, for example `[L][FA] BUG-01 - Sign-in request errors return 401.md`. Keep filename prefixes aligned with severity/category changes and update links when renaming.
+2. Start new report headings with `[FA/D]`, followed by the method, path, and observable problem. Present evidence and an impact assessment before assigning severity, following the [classification guide](../exploratory-testing/README.md#classify-findings). Add severity prefixes to filenames and register entries only after completing the assessment. When reassessing an existing report, move its severity decision below its impact assessment.
 3. Add the report to the table above using its full title, including the severity and category prefixes. Update its status here and in the report together; keep the counts current.
 4. Record fixes as **Fixed, awaiting retest**. Use **Verified** only after recording the retest date, build, and evidence. Keep closed reports for history.
 
@@ -25,3 +31,17 @@ The individual reports are the authoritative place for status and retest updates
 ## Open questions requiring investigation
 
 The September 10 sign-in session left four open questions: throttling was not observed in the bounded local run; numeric/boolean credentials reached authentication; duplicate username keys used the last value; GET/PUT on the sign-in path matched user routes. Effective rate-limit configuration, coercion policy, duplicate-key policy, and method-specific access rules still need investigation. These are not confirmed additional defects. Promote one to a report when its expected behavior and impact are established; use **Needs clarification** if a requirement is unresolved.
+
+## Sign-up exploration scope and remaining questions
+
+The 2026-09-10 session used a 20-minute timebox to investigate account creation, validation, contract consistency and role assignment. Covered: valid registration followed by login, duplicate username/email, missing/null/empty/whitespace/numeric values, independent minimum and maximum boundaries, malformed JSON and array bodies, invalid email syntax, admin-role injection, and the password byte boundary including Unicode. All successful exploratory fixtures were removed with verified 204 responses. Functional findings were reproduced before writing automation.
+
+Whitespace-only username/password/names and numeric username/names were accepted. Their normalization, coercion and nonblank policies need clarification; these are not counted as confirmed defects. Concurrent duplicate creation, email case sensitivity, verification delivery, abuse/rate limiting, other HTTP media types/methods, and broader Unicode normalization were not tested. This session is not a release-readiness declaration.
+
+## Reassessment — 2026-09-10
+
+All 11 reports now present the impact assessment before the severity decision. The review uses existing evidence; it is not a new runtime test or confirmation of fixes. Claims about client outages, recovery loops and downstream security consequences have been qualified where they were not demonstrated.
+
+Misleading rejection responses and incomplete error documentation currently show diagnostic or integration effort, without demonstrated material consumer failure. Consequently BUG-01, BUG-05, DOC-01 and DOC-04 move from Medium to Low. BUG-02 likewise moves to provisional Low and Needs clarification because the proposed missing-credential policy is not an agreed requirement.
+
+Persisted invalid account data, rejection of contract-valid passwords, and a type contradiction on a normal successful response have stronger direct consequences. BUG-04, BUG-06 and DOC-02 therefore remain Medium. BUG-03, BUG-07 and DOC-03 remain Low because their demonstrated effects concern corrective guidance or an undocumented conditional failure with a workaround. Each report records its own limitations and reassessment triggers.

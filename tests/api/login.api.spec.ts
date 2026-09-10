@@ -5,20 +5,15 @@ import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
 
 const validCredentials = { username: ADMIN_USERNAME, password: ADMIN_PASSWORD };
 
-const validationCases = [
-  { name: 'empty username', credentials: { ...validCredentials, username: '' }, field: 'username' },
-  { name: 'username too short', credentials: { ...validCredentials, username: 'abc' }, field: 'username' },
-  { name: 'password too short', credentials: { ...validCredentials, password: 'abc' }, field: 'password' },
-] as const;
-
 test.describe('/api/v1/users/signin API tests', () => {
   let loginClient: LoginClient;
 
   test.beforeEach(async ({ request }) => {
+    // given
     loginClient = new LoginClient(request);
   });
 
-  test('should successfully authenticate with valid credentials - 200', async ({ request }) => {
+  test('should successfully authenticate with valid credentials - 200', async () => {
     // when
     const response = await loginClient.login(validCredentials);
 
@@ -26,6 +21,12 @@ test.describe('/api/v1/users/signin API tests', () => {
     expect(response.status()).toBe(200);
     expectSuccessfulLogin(await response.json(), validCredentials.username);
   });
+
+  const validationCases = [
+    { name: 'empty username', credentials: { ...validCredentials, username: '' }, field: 'username' },
+    { name: 'username too short', credentials: { ...validCredentials, username: 'abc' }, field: 'username' },
+    { name: 'password too short', credentials: { ...validCredentials, password: 'abc' }, field: 'password' },
+  ] as const;
 
   for (const { name, credentials, field } of validationCases) {
     test(`should return validation error for ${name} - 400`, async () => {

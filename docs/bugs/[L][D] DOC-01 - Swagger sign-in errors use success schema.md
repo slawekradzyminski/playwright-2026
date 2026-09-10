@@ -1,8 +1,7 @@
-# [M][D] POST /api/v1/users/signin — Error responses are documented as successful login objects
+# [D] POST /api/v1/users/signin — Error responses are documented as successful login objects
 
 **ID:** DOC-01  
-**Status:** Open  
-**Severity:** Medium — Integrations and generated tests use the wrong response model for validation and credential failures.  
+**Status:** Open
 **Category:** D — Documentation  
 **Observed on:** 2026-09-10
 
@@ -34,9 +33,17 @@ The live sign-in responses for both 400 and 422 reference `LoginResponseDto`. Ac
 
 Correct 422 to `ErrorDto`, document the field-validation object for 400, and describe parse-error response shape after BUG-01 is fixed. Use explicit `application/json` response media types. Because all LoginResponseDto properties are optional and additional properties are unconstrained, a permissive schema validator may misleadingly accept these error bodies despite the incorrect model.
 
-## Impact
+## Impact assessment
 
-Integrations and generated tests use the wrong response model for validation and credential failures.
+The 400 and 422 branches advertise a login-success model instead of the observed error objects. Consumers cannot obtain an accurate typed error model from this declaration, but can handle the failure status and parse the observed JSON with a manual mapping. The report itself notes that the permissive schema may accept those bodies. No generated SDK failure, production integration failure, or blocked valid login was demonstrated. Stronger claims about broken clients are potential consequences, not recorded outcomes.
+
+## Severity decision
+
+Low replaces Medium because the evidence establishes inaccurate error documentation and extra integration work, without demonstrated material workflow disruption. Reassess upward if a supported generated client demonstrably loses required error handling because of the wrong model.
+
+**Severity:** L
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: M. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 

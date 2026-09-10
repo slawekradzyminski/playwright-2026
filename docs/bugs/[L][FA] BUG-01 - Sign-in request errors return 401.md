@@ -1,8 +1,7 @@
-# [M][FA] POST /api/v1/users/signin — Request/protocol errors are reported as unauthorized
+# [FA] POST /api/v1/users/signin — Request/protocol errors are reported as unauthorized
 
 **ID:** BUG-01  
-**Status:** Open  
-**Severity:** Medium — Clients receive an authentication error for invalid requests and cannot choose the correct recovery action.  
+**Status:** Open
 **Category:** FA — Functional API  
 **Observed on:** 2026-09-10
 
@@ -28,7 +27,7 @@ curl -i http://localhost:8081/api/v1/users/signin \
 
 Actual: `401 {"message":"Unauthorized"}`. Same outcome for an empty body, JSON `null`, a root array, object-valued username, array-valued password, unsupported request media type and unsupported response media type. Malformed JSON was reproduced again; malformed JSON and media negotiation failures also return 401 when a valid client Bearer token is attached.
 
-Expected: 400 for unreadable/missing/incorrectly structured JSON; 415 for unsupported request media type; 406 for an unsupported Accept type. These cases should not instruct clients to reauthenticate. Impact: wrong client recovery behavior and unusable negative contract assertions.
+Expected: 400 for unreadable/missing/incorrectly structured JSON; 415 for unsupported request media type; 406 for an unsupported Accept type. These cases should not instruct clients to reauthenticate. Potential consequence: incorrect client recovery behavior; no consumer recovery failure was recorded.
 
 Evidence: the malformed JSON reproduction above returned the same 401 in the initial and follow-up runs; the related input variants are listed above. Investigate exception handling and error dispatch authorization; source permits ASYNC dispatch but does not explicitly permit ERROR dispatch. This is a root-cause hypothesis, not a confirmed deployed-code diagnosis.
 
@@ -43,9 +42,17 @@ curl -i http://localhost:8081/api/v1/users/signin -H 'Content-Type: application/
 
 Both returned 401; expected 415 and 406 respectively (BUG-01).
 
-## Impact
+## Impact assessment
 
-Clients receive an authentication error for invalid requests and cannot choose the correct recovery action.
+Callers sending malformed bodies or unsupported media types receive a misleading authentication response. The recorded requests are rejected; valid login remains usable. Correcting the body or headers is a practical workaround. No client retry loop, forced logout, lost session, or accepted invalid request was demonstrated. Such integration consequences are possible, but the evidence currently establishes an error-reporting and diagnostic problem.
+
+## Severity decision
+
+The demonstrated impact is limited to incorrect failure classification and troubleshooting, so Low replaces Medium. Reassess upward if a supported client is shown to lose access or enter an unrecoverable authentication flow because of these responses.
+
+**Severity:** L
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: M. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 

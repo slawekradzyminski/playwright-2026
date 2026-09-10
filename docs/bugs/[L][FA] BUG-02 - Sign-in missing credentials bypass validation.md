@@ -1,8 +1,7 @@
-# [M][FA] POST /api/v1/users/signin — Required login credentials lack presence validation
+# [FA] POST /api/v1/users/signin — Required login credentials lack presence validation
 
 **ID:** BUG-02  
-**Status:** Open  
-**Severity:** Medium — Absent credentials are not distinguished from failed authentication, making validation inconsistent. The proposed presence requirement needs agreement.  
+**Status:** Needs clarification
 **Category:** FA — Functional API  
 **Observed on:** 2026-09-10
 
@@ -26,11 +25,19 @@ curl -i http://localhost:8081/api/v1/users/signin \
 
 Actual: 422 generic credentials error. Omitting either field or explicitly setting either/both to null has the same outcome. Empty strings instead produce field validation errors.
 
-Expected: consistent 400 field validation for missing/null credentials. This is an input-validation defect, not an authentication bypass: no token was issued. The source DTO only has `@Size`, with no presence constraint. Swagger also omits `required`, so this requires coordinated implementation and contract correction rather than treating it as a direct violation of an existing required-field declaration. Decide separately whether whitespace-only passwords should be rejected; do not trim passwords automatically.
+Expected: consistent 400 field validation for missing/null credentials. This is a proposed input-validation change requiring agreement; no authentication bypass was observed and no token was issued. The source DTO only has `@Size`, with no presence constraint. Swagger also omits `required`, so this requires coordinated implementation and contract correction rather than treating it as a direct violation of an existing required-field declaration. Decide separately whether whitespace-only passwords should be rejected; do not trim passwords automatically.
 
-## Impact
+## Impact assessment
 
-Absent credentials are not distinguished from failed authentication, making validation inconsistent. The proposed presence requirement needs agreement.
+Missing or null credentials receive a generic authentication failure instead of field-specific feedback. No token is issued, and valid credentials still work. Supplying credentials is the normal recovery path. Swagger does not require the fields, and the proposed distinction between missing credentials and incorrect credentials has not been agreed. The evidence therefore establishes inconsistent feedback, not an authentication bypass or a confirmed violation of an agreed presence-validation requirement.
+
+## Severity decision
+
+Low, provisional, replaces Medium because only limited feedback impact is demonstrated. The status changes to Needs clarification until the API owner agrees whether missing/null credentials must receive 400 field errors or may receive the existing generic rejection. Reassess if a concrete consumer failure is demonstrated.
+
+**Severity:** L — provisional
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: M. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 

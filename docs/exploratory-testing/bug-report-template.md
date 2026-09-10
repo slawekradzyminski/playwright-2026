@@ -4,11 +4,10 @@ Copy the section below into an issue or a Markdown report. Replace placeholders 
 
 ---
 
-# [M][FA] METHOD /path — short description of the observable problem
+# [FA] METHOD /path — short description of the observable problem
 
 **ID:** <stable ID, or issue number after filing>
 **Status:** Open / Needs clarification / Fixed, awaiting retest / Verified
-**Severity:** H / M / L — <one sentence explaining user/test/integration impact>
 **Category:** FA (functional API) / D (documentation)
 **Observed on:** YYYY-MM-DD
 
@@ -58,9 +57,15 @@ Use `-X` for methods other than the POST implied by `--data-binary`. Explain any
 - Observed behavior: <link to evidence above>
 - Proposed correction: <specific schema/description/example change>
 
-## Impact
+## Impact assessment
 
-<Who is affected and what fails? Explain the severity. Separate demonstrated impact from possible consequences.>
+<Before assigning severity, describe who is affected, the affected workflow, the demonstrated consequence, its scope, and any practical workaround. Separate observed impact from possible consequences. State uncertainties and missing context.>
+
+## Severity decision
+
+<Briefly connect the assessed impact to the classification criteria. If provisional, state what evidence is needed to confirm or change the rating.>
+
+**Severity:** <Select H / M / L only after writing the explanation above; mark provisional if necessary.>
 
 ## Evidence and investigation notes
 

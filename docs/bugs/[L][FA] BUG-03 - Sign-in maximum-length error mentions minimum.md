@@ -1,8 +1,7 @@
-# [L][FA] POST /api/v1/users/signin — Maximum-length violations show a minimum-length error
+# [FA] POST /api/v1/users/signin — Maximum-length violations show a minimum-length error
 
 **ID:** BUG-03  
-**Status:** Open  
-**Severity:** Low — The request is rejected correctly, but the message tells the caller to fix the wrong boundary.  
+**Status:** Open
 **Category:** FA — Functional API  
 **Observed on:** 2026-09-10
 
@@ -27,9 +26,17 @@ python3 -c 'import json; print(json.dumps({"username":"x"*256,"password":"xxxx"}
 
 Actual: `400 {"username":"Minimum username length: 4 characters"}`. Password has the same problem. Expected: identify the 255-character maximum or the allowed 4–255 range. Reproduced in the follow-up run. Source uses one minimum-only message for both `@Size` limits.
 
-## Impact
+## Impact assessment
 
-The request is rejected correctly, but the message tells the caller to fix the wrong boundary.
+Callers exceeding the username or password maximum receive a message about the minimum. The request is still rejected with 400, and the documented maximum provides a workaround. No acceptance of overlong credentials or failure for valid lengths was demonstrated by this finding. The impact is confusing corrective guidance for an invalid request.
+
+## Severity decision
+
+Low is retained because validation enforces the boundary and the demonstrated defect concerns the explanation.
+
+**Severity:** L
+
+**Reassessed on:** 2026-09-10. Evidence review of the recorded exploration and saved specification; no new runtime session or fixed-build retest was performed. Previous severity: L. This reassessment does not mark the defect fixed.
 
 ## Evidence and investigation notes
 
