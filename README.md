@@ -41,6 +41,8 @@ This repository contains automated API and UI tests for the local training envir
 
 ## Exploratory API testing
 
+**Planning:** see the [short API test plan](docs/api-test-plan.md) for endpoint coverage, remaining work and parallel-work dependencies.
+
 **Found bugs:** see the [API bug register](docs/bugs/README.md) for individual reports and current status.
 
 See [Exploratory testing documentation](docs/exploratory-testing/README.md) for the curl workflow, functional and Swagger checks, severity labels, and a reusable bug-report template. Findings are tracked in the bug register; the [OpenAPI snapshot](docs/exploratory-testing/openapi-2026-09-10.json) preserves the contract observed on September 10, 2026.
