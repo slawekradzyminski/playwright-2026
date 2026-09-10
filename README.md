@@ -321,3 +321,30 @@ For more information on setting up and using the Dockerized environment, refer t
 Generate valid disposable data with `UserGenerator.generate()` from `generators/user-generator.ts`, using partial overrides for specific scenarios. Cleanup lives in `fixtures/signup-fixture.ts`: it authenticates an administrator and deletes only accounts created by the current test, even when an assertion fails. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` through the existing configuration and use a disposable local environment.
 
 Run `npm run test:api`. Known-defect regressions are proposed in the [bug reports](docs/bugs/README.md), not executed as expected failures. Detailed length and Unicode boundary matrices are candidates for backend validation/service tests; those tests have not been added in this repository. Role-assignment checks remain exploratory evidence rather than a registration-only API assertion.
+
+
+### Authenticated API user fixture
+
+Import `test` from `fixtures/authenticated-user-fixture` and request `authenticatedUser`:
+
+```ts
+import { expect } from '@playwright/test';
+import { test } from './fixtures/authenticated-user-fixture';
+import { CurrentUserClient } from './clients/current-user-client';
+
+test('current user - 200', async ({ request, authenticatedUser }) => {
+  // given
+  const { token, user } = authenticatedUser;
+  const client = new CurrentUserClient(request);
+
+  // when
+  const response = await client.getMe(token);
+
+  // then
+  expect(response.status()).toBe(200);
+  expect((await response.json()).username).toBe(user.username);
+});
+```
+
+The example paths are relative to the repository root; specs under `tests/api` use `../../`.
+The fixture returns `{ token, user }`, where `user` contains the generated registration data, including credentials. Each requesting test gets a unique account. Tests that do not request it create no account. Setup performs one registration and one user login; it makes no user-info request. The existing `signup` fixture owns administrator authentication and deletion, including when user login or test assertions fail. Cleanup requires the configured `ADMIN_USERNAME` and `ADMIN_PASSWORD`; unsuccessful deletion fails the test. Accounts are isolated per test, so the fixture supports parallel execution and retries without sharing mutable user data.

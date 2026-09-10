@@ -19,18 +19,22 @@ export const test = base.extend<{
 }>({
   signup: async ({ request }, use) => {
     const login = await new LoginClient(request).login({ username: ADMIN_USERNAME, password: ADMIN_PASSWORD });
+    expect(login.status(), 'Authenticate cleanup administrator').toBe(200);
     const { token } = await login.json();
+    expect(token, 'Cleanup administrator token').toEqual(expect.stringMatching(/\S+/));
+    const signupClient = new SignupClient(request);
+    const deleteUserClient = new DeleteUserClient(request);
     const created: string[] = [];
     try {
       await use(async (user) => {
-        const response = await new SignupClient(request).signup(user);
+        const response = await signupClient.signup(user);
         if (response.status() === 201) created.push(user.username);
         return response;
       });
     } finally {
       for (const username of created) {
-        const response = await new DeleteUserClient(request).deleteUser(username, token);
-        expect(response.status(), `Cleanup of ${username}`).toBe(204);
+        const response = await deleteUserClient.deleteUser(username, token);
+        expect.soft(response.status(), `Cleanup of ${username}`).toBe(204);
       }
     }
   },

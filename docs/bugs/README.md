@@ -2,7 +2,7 @@
 
 This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
 
-**Current register:** 11 findings — 10 Open and 1 Needs clarification; 7 functional API and 4 documentation; 3 Medium and 8 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
+**Current register:** 12 findings — 11 Open and 1 Needs clarification; 7 functional API and 5 documentation; 3 Medium and 9 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
 
 | ID | Finding title | Status |
 |---|---|---|
@@ -17,6 +17,7 @@ This is the central place to find and track API bugs discovered in this reposito
 | [DOC-02](%5BM%5D%5BD%5D%20DOC-02%20-%20Swagger%20sign-in%20schema%20rejects%20null%20challenge%20fields.md) | [M][D] POST /api/v1/users/signin — Successful response schema does not represent nullable fields correctly | Open |
 | [DOC-03](%5BL%5D%5BD%5D%20DOC-03%20-%20Swagger%20sign-in%20contract%20omits%20401.md) | [L][D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract | Open |
 | [DOC-04](%5BL%5D%5BD%5D%20DOC-04%20-%20Swagger%20sign-up%20omits%20error%20response%20schemas.md) | [L][D] POST /api/v1/users/signup — Validation response bodies have no documented schema | Open |
+| [DOC-05](%5BL%5D%5BD%5D%20DOC-05%20-%20User%20GET%20errors%20use%20success%20schemas.md) | User GET error models mislead consumers; authentication remains enforced. Severity: Low. | Open |
 
 
 ## How to maintain the register
@@ -45,3 +46,12 @@ All 11 reports now present the impact assessment before the severity decision. T
 Misleading rejection responses and incomplete error documentation currently show diagnostic or integration effort, without demonstrated material consumer failure. Consequently BUG-01, BUG-05, DOC-01 and DOC-04 move from Medium to Low. BUG-02 likewise moves to provisional Low and Needs clarification because the proposed missing-credential policy is not an agreed requirement.
 
 Persisted invalid account data, rejection of contract-valid passwords, and a type contradiction on a normal successful response have stronger direct consequences. BUG-04, BUG-06 and DOC-02 therefore remain Medium. BUG-03, BUG-07 and DOC-03 remain Low because their demonstrated effects concern corrective guidance or an undocumented conditional failure with a workaround. Each report records its own limitations and reassessment triggers.
+
+
+## User GET exploration — 2026-09-10
+
+Before automation, explored both GET routes through localhost:8081 with an administrator and a disposable, newly registered ROLE_CLIENT without MFA. Read the live operation/security declarations and UserResponseDto. Both authenticated roles received 200; `/me` matched the caller, and the list included the disposable account with the six documented public fields. Missing/empty credentials and a wrong authorization scheme returned 401 Unauthorized; malformed and modified-signature tokens returned 401 Invalid or expired token. Repeated the session and removed each disposable account with a verified 204 response. Local drivers and sanitized output remain in ignored `exploration/`.
+
+A regular client could see other accounts' names and email addresses. The contract says “all user accounts visible to the authenticated caller” without defining visibility. Confirm whether this directory is intended for all clients before asserting any narrower access policy; no authorization bypass is claimed. The new list test checks its own account without assuming list size/order or codifying access to another account.
+
+DOC-05 records the reproduced Swagger error mismatch. Expired tokens, disabled/deleted accounts with existing tokens, MFA, pagination/ordering guarantees, rate limiting, and build identity were not verified. Exploration does not establish release readiness.

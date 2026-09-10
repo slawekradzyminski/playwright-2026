@@ -7,3 +7,4 @@
 - order tests by status code ascending (200 -> 400 -> ...)
 - make sure tests keep passing - `npm run test:api`
 - before automating given tests perform exploratory testing session, see docs/
+- initialize clients in beforeEach
