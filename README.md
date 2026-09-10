@@ -25,6 +25,10 @@ This repository contains automated API and UI tests for the local training envir
 │   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
 │   └── ui/
 │       └── login.ui.spec.ts        # UI tests for the login page
+├── clients/
+│   └── login-client.ts             # HTTP transport for login
+├── validators/
+│   └── login-response-validator.ts # Full successful-login response assertions
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
 ├── .nvmrc                          # Course Node.js major version
@@ -158,8 +162,12 @@ The `playwright.config.ts` file is configured to:
 These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ordered by response code:
 
 - **Successful Authentication (200)**: Valid credentials return a 200 status with a JWT token and complete user information
-- **Validation Errors (400)**: Tests for empty username, short username, and short password scenarios with appropriate error messages
+- **Validation Errors (400)**: A parameterized table covers empty username, short username, and short password, checking the exact error map.
 - **Authentication Errors (422)**: Invalid credentials result in 422 status codes with error messages
+
+The success validator checks all ten response fields, including refresh tokens and the non-MFA state, and rejects unexpected keys. It accepts unknown JSON so TypeScript interfaces cannot substitute for runtime validation.
+
+Coverage review: the local `test-secure-backend` has service unit tests for successful sign-in and MFA challenges (`UserServiceTest`), plus integration coverage for short credentials and incorrect passwords/usernames (`SignInControllerTest`). No dedicated login DTO validation unit tests were found. The three existing 400 scenarios are therefore retained as separate parameterized cases; this preserves independent field validation through the gateway without repeating HTTP and assertion code.
 
 ### UI Tests (`tests/ui/login.ui.spec.ts`)
 

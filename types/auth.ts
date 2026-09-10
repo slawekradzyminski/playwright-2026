@@ -4,12 +4,16 @@ export interface LoginDto {
 }
 
 export interface LoginResponseDto {
-  token: string;
+  token: string | null;
+  refreshToken: string | null;
   username: string;
   email: string;
   firstName: string;
   lastName: string;
   roles: string[];
+  mfaRequired: boolean;
+  challengeToken: string | null;
+  challengeExpiresAt: string | null;
 }
 
 export interface ErrorResponse {

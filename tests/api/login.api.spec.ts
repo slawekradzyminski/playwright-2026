@@ -1,120 +1,54 @@
 import { test, expect } from '@playwright/test';
-import type { LoginDto, LoginResponseDto } from '../../types/auth';
-import { ADMIN_PASSWORD, ADMIN_USERNAME, APP_BASE_URL } from '../../test-config';
+import { LoginClient } from '../../clients/login-client';
+import { expectSuccessfulLogin } from '../../validators/login-response-validator';
+import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
 
-const SIGNIN_ENDPOINT = '/api/v1/users/signin';
+const validCredentials = { username: ADMIN_USERNAME, password: ADMIN_PASSWORD };
+
+const validationCases = [
+  { name: 'empty username', credentials: { ...validCredentials, username: '' }, field: 'username' },
+  { name: 'username too short', credentials: { ...validCredentials, username: 'abc' }, field: 'username' },
+  { name: 'password too short', credentials: { ...validCredentials, password: 'abc' }, field: 'password' },
+] as const;
 
 test.describe('/api/v1/users/signin API tests', () => {
-  test('should successfully authenticate with valid credentials - 200', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: ADMIN_USERNAME,
-      password: ADMIN_PASSWORD
-    };
+  let loginClient: LoginClient;
 
+  test.beforeEach(async ({ request }) => {
+    loginClient = new LoginClient(request);
+  });
+
+  test('should successfully authenticate with valid credentials - 200', async ({ request }) => {
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await loginClient.login(validCredentials);
 
     // then
     expect(response.status()).toBe(200);
-
-    const responseBody: LoginResponseDto = await response.json();
-    expect(responseBody.token).toBeDefined();
-    expect(responseBody.token).toMatch(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/);
-    expect(responseBody.username).toBe(loginData.username);
-    expect(responseBody.email).toBeDefined();
-    expect(responseBody.firstName).toBeDefined();
-    expect(responseBody.lastName).toBeDefined();
-    expect(responseBody.roles).toBeDefined();
-    expect(Array.isArray(responseBody.roles)).toBe(true);
+    expectSuccessfulLogin(await response.json(), validCredentials.username);
   });
 
-  test('should return validation error for empty username - 400', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: '',
-      password: ADMIN_PASSWORD
-    };
+  for (const { name, credentials, field } of validationCases) {
+    test(`should return validation error for ${name} - 400`, async () => {
+      // when
+      const response = await loginClient.login(credentials);
 
-    // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      // then
+      expect(response.status()).toBe(400);
+      expect(await response.json()).toEqual({
+        [field]: `Minimum ${field} length: 4 characters`,
+      });
     });
+  }
 
-    // then
-    expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.username).toBe('Minimum username length: 4 characters');
-  });
-
-  test('should return validation error for username too short - 400', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: 'abc',
-      password: ADMIN_PASSWORD
-    };
-
+  test('should return authentication error for both invalid credentials - 422', async () => {
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // then
-    expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.username).toBe('Minimum username length: 4 characters');
-  });
-
-  test('should return validation error for password too short - 400', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: ADMIN_USERNAME,
-      password: 'abc'
-    };
-
-    // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // then
-    expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.password).toBe('Minimum password length: 4 characters');
-  });
-
-  test('should return authentication error for both invalid credentials - 422', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
+    const response = await loginClient.login({
       username: 'wronguser',
-      password: 'wrongpassword'
-    };
-
-    // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+      password: 'wrongpassword',
     });
 
     // then
     expect(response.status()).toBe(422);
-    const responseBody = await response.json();
-    expect(responseBody.message).toBe('Invalid username/password supplied');
+    expect(await response.json()).toEqual({ message: 'Invalid username/password supplied' });
   });
-}); 
+});
