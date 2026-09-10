@@ -1,45 +1,58 @@
 # API test plan
 
-**Baseline: 2026-09-10.** Reference: [API Docs JSON snapshot](exploratory-testing/openapi-2026-09-10.json); [live JSON](http://localhost:8081/v3/api-docs). Sources: [API tests](../tests/api), [bug register](bugs/README.md).
+**Current status: 2026-09-10.** [Management report](api-coverage-report.html) · [API contract snapshot](exploratory-testing/openapi-2026-09-10.json) · [API tests](../tests/api) · [Bug register](bugs/README.md)
 
-**Endpoint coverage: 16/55 = 29.1%; 39 operations remain.** Count one HTTP method + path as one operation, covered only when a dedicated active spec asserts its behavior. Fixture/cleanup calls do not count: user DELETE has a client but no dedicated spec. This measures breadth, not complete scenario or contract coverage. Baseline run: `npm run test:api` — **80 passed (5.7s)**.
+## Coverage and execution
 
-| Area | Covered / total | Automated now | Still to automate |
-|---|---:|---|---|
-| Users | 11/24 | Sign-up/sign-in; refresh/logout; GET list, me, username; GET/PUT both system prompts | Profile PUT; both account DELETE routes; six MFA operations; SSO exchange; forgot/reset password; email events |
-| Products | 5/5 | List, detail, create, update, delete | Deeper scenarios below |
-| Cart | 0/5 | — | GET/DELETE cart; POST items; PUT/DELETE item |
-| Orders | 0/6 | — | Create, list own/all, detail, status update, cancel |
-| Inventory | 0/4 | — | List, detail, movements, adjustment |
-| Ollama | 0/4 | — | Generate, chat, tool chat, tool definitions |
-| Email / local outbox / QR | 0/4 | — | Send email; GET/DELETE outbox; create QR |
-| Traffic | 0/3 | — | Info; log list; correlation lookup |
+**27/55 operations covered — 49.1%; 28 remain.** One operation is one HTTP method + path from the dated contract snapshot. Count it only when a dedicated active spec asserts its behavior. Fixture and cleanup calls do not count; user DELETE has a client but no dedicated spec. Coverage measures endpoint breadth, not exhaustive scenarios or contract conformance.
 
-**Commerce update — 2026-09-10:** Added dedicated active specs and clients for all 5 cart and 6 order operations after exploration. Current coverage is **27/55 = 49.1%**, with 28 operations remaining; the baseline above is retained for comparison. Current run: `npm run test:api` — **135 passed**; `npx tsc --noEmit` passes. Inventory remains 0/4.
+**Verified on 2026-09-10:** `npm run test:api` — **135 passed, 0 failed, 0 skipped (14.6s)** against the configured local stack. A passing suite does not close recorded findings or establish release readiness. These figures describe the current snapshot, not a historical comparison or a measured daily increase.
+
+| Area | Covered / total | Coverage | Automated now | Still to automate |
+|---|---:|---:|---|---|
+| Users | 11/24 | 45.8% | Sign-up/sign-in; refresh/logout; GET list, me, username; GET/PUT both system prompts | Profile PUT; both account DELETE routes; six MFA operations; SSO exchange; forgot/reset password; email events |
+| Products | 5/5 | 100% | List, detail, create, update, delete | Deeper scenarios below |
+| Cart | 5/5 | 100% | GET/DELETE cart; POST items; PUT/DELETE item | Deeper scenarios below |
+| Orders | 6/6 | 100% | Create, list own/all, detail, status update, cancel | Deeper scenarios below |
+| Inventory | 0/4 | 0% | — | List, detail, movements, adjustment |
+| Ollama | 0/4 | 0% | — | Generate, chat, tool chat, tool definitions |
+| Email / local outbox / QR | 0/4 | 0% | — | Send email; GET/DELETE outbox; create QR |
+| Traffic | 0/3 | 0% | — | Info; log list; correlation lookup |
+| **Total** | **27/55** | **49.1%** | **27 dedicated endpoint specs** | **28 operations** |
+
+## Covered scenarios
+
+- **Users:** successful responses and body checks; representative validation/authentication failures; duplicate registration; refresh rotation/reuse and logout revocation; prompt persistence, reset and length boundaries.
+- **Products:** admin/client permissions, CRUD responses, rejected mutations, invalid/missing IDs and representative input boundaries.
+- **Cart and orders:** client/admin permissions, cross-account isolation, zero/negative/at-stock/above-stock quantities, cumulative additions, checkout stock revalidation, address validation, empty-cart rejection, totals, cart clearing, stock consumption/restoration, pagination/filtering, forward status changes, cancellation restrictions and authentication failures.
 
 | Commerce access | Operations |
 |---|---|
 | Authenticated caller | GET/DELETE cart; POST items; PUT/DELETE item; POST orders; GET own orders |
-| Owner or admin | GET order detail; POST cancellation (subject to status) |
+| Owner or admin | GET order detail; POST cancellation, subject to status |
 | Admin only | GET all orders `/orders/admin`; PUT order status |
 
-New scenarios cover client/admin permissions, cross-account cart/order isolation, quantities zero/negative/at stock/above stock, cumulative additions, checkout stock revalidation, address validation, empty-cart rejection, totals, cart clearing, stock consumption/restoration, pagination/filtering, forward status changes, cancellation restrictions and authentication failures. Fixtures use deterministic stock/price and disposable accounts/products; owners and dependent orders are deleted before products. No shared admin cart is mutated.
+## Findings and decisions
 
-See the [commerce findings](bugs/README.md#commerce-exploration--2026-09-10): stock conflicts are undocumented; invalid status parsing returns 401; referenced-product deletion returns 500; reopening/backward transition rules need clarification. These are not treated as approved behavior. The register now contains 19 Open and 2 Needs clarification; the original baseline counts below remain historical.
+[Current register](bugs/README.md): **21 findings — 19 Open, 2 Needs clarification; 10 functional API, 11 documentation; 5 Medium, 16 Low** (including two provisional Low). No High-severity impact is demonstrated in the recorded evidence. Passing automation does not resolve these findings.
 
-**Existing scenario coverage:** successful responses and meaningful body checks; representative validation/authentication errors; duplicate registration; refresh rotation/reuse and logout revocation; prompt persistence/reset/length; product admin/client permissions, rejected mutations, invalid/missing IDs. Coverage varies by operation; 5/5 products does not mean every documented response is tested.
+Prioritize BUG-04/06 and DOC-02/07/09. Resolve missing-credential requirements (BUG-02) and reopening/backward order-transition policy (BUG-10) before encoding them as approved behavior. Commerce findings also cover undocumented stock conflicts, invalid status parsing returning 401 and referenced-product deletion returning 500. Contract defects prevent treating the snapshot as an unquestioned schema oracle.
 
-**Priority work and parallel ownership** — proposed workstreams, not required test execution order:
+## Next work
 
-| Stream | Next work | Dependencies / coordination |
+| Priority | Scope | Dependencies / completion target |
 |---|---|---|
-| A — Commerce | Cart → order creation → reads/cancel/status; inventory in parallel after product setup | Reuse account/product fixtures. Own products per test; verify stock effects, empty-cart rejection, cross-user access, status transitions and adjustment idempotency. Agree cart/order setup and cleanup first. |
-| B — Accounts & security | Profile/update/delete permissions; password reset; MFA; then SSO | Reset: forgot → captured email/token → reset → login/session checks. MFA: setup → confirm → sign-in challenge → second factor; then recovery/disable. SSO needs a configured OIDC test provider. |
-| C — Utilities & integrations | Email/outbox/events, QR, traffic, Ollama | Can start alongside A/B. Provide isolated email capture for B; Ollama needs an available model/service. Check response behavior without asserting exact generated prose. |
-| D — Defect follow-up | Clarify expectations, retest fixes, add agreed regressions | Can run alongside A–C; coordinate shared validators with their owners. Prioritize BUG-04/06 and DOC-02/07/09; resolve BUG-02 before encoding a requirement. |
+| 1 | Inventory: all four operations | Isolated product fixtures; verify stock effects, movement records and adjustment idempotency after exploration. Completes breadth coverage of commerce including inventory: **31/55 = 56.4%** overall. |
+| 2 | Accounts and security: 13 remaining operations | Profile/update/delete permissions; forgot → captured token → reset → login/session checks; MFA setup → confirm → challenge → second factor → recovery/disable. SSO requires a configured OIDC test provider. |
+| 3 | Utilities and integrations: 11 operations | Email/outbox/events coordination for account tests; QR and traffic; available Ollama model/service. Assert response behavior without exact generated prose. User email events are counted under Users, not twice. |
+| Ongoing | Defect follow-up and scenario depth | Retest fixes, add agreed regressions; expiry/refresh races, throttling, stock concurrency, multi-product atomic rollback, monetary precision, full order transitions, malformed/type/null/overflow boundaries and price-change policy. |
 
-**Dependency rules:** signup → signin supplies authenticated fixtures; admin signin supplies product setup and account cleanup. Order creation consumes and clears the caller's cart. Never share mutable accounts, carts, products or refresh tokens across workers. Reset, MFA disable and logout revoke refresh tokens; use dedicated accounts. Serialize global outbox clearing and shared rate-limit tests. Account deletion removes dependent data: verify deletion effects before cleanup; establish order/product cleanup during exploration rather than assuming products with orders can be deleted safely.
+Clarify user-directory visibility, coercion/nonblank rules and product POST/PUT differences. Existing cross-account checks are representative, not an exhaustive authorization matrix.
 
-**Remaining depth / decisions:** expiry and refresh races; cross-account isolation; rate limits; stock concurrency and monetary precision; malformed/type/null boundaries. Clarify user-directory visibility, coercion/nonblank rules and product POST/PUT differences. [Recorded findings](bugs/README.md): **16 Open + 1 Needs clarification**; a green suite does not close them. Contract defects also prevent treating current JSON as an unquestioned schema oracle.
+## Execution and maintenance
 
-**Working agreement:** explore each new operation first using the [existing workflow](exploratory-testing/README.md). Then add one client and one spec per operation, initialize clients in `beforeEach`, use given/when/then and ascending status codes. Keep detailed boundary matrices at the backend layer. Finish each batch with passing `npm run test:api`, verified cleanup and updated coverage/bug status. Recount method/path operations against a new dated JSON snapshot when the API changes; keep this baseline intact. First breadth milestone: cart + orders + inventory adds 15 operations → **31/55 (56.4%)**, assuming an unchanged contract.
+Explore each new operation first using the [exploratory workflow](exploratory-testing/README.md). Add one endpoint client and one dedicated spec per operation; initialize clients in `beforeEach`, use given/when/then and order tests by ascending status code. Keep detailed boundary matrices at the backend layer.
+
+Signup/signin supplies authenticated fixtures; admin signin supplies product setup and account cleanup. Use deterministic stock/price and disposable accounts/products. Never share mutable accounts, carts, products or refresh tokens across workers, or mutate a shared admin cart. Checkout consumes stock and clears the caller's cart; reset, MFA disable and logout revoke refresh tokens. Serialize global outbox clearing and shared rate-limit tests. Delete owners and dependent orders before products, assert cleanup responses and verify deletion effects before cleanup.
+
+Finish each batch with passing `npm run test:api`, verified cleanup and current coverage/finding counts. When the API changes, capture a new dated contract and recount method/path operations. Maintain this document as one coherent current version, and regenerate the management report from it; do not append historical status updates.
