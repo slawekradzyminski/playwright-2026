@@ -17,3 +17,6 @@ artifacts
 .DS_Store
 
 .idea
+
+# Temporary exploratory scripts and raw HTTP captures
+/exploration/
