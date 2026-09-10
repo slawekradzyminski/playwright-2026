@@ -15,6 +15,18 @@
 | Email / local outbox / QR | 0/4 | — | Send email; GET/DELETE outbox; create QR |
 | Traffic | 0/3 | — | Info; log list; correlation lookup |
 
+**Commerce update — 2026-09-10:** Added dedicated active specs and clients for all 5 cart and 6 order operations after exploration. Current coverage is **27/55 = 49.1%**, with 28 operations remaining; the baseline above is retained for comparison. Current run: `npm run test:api` — **135 passed**; `npx tsc --noEmit` passes. Inventory remains 0/4.
+
+| Commerce access | Operations |
+|---|---|
+| Authenticated caller | GET/DELETE cart; POST items; PUT/DELETE item; POST orders; GET own orders |
+| Owner or admin | GET order detail; POST cancellation (subject to status) |
+| Admin only | GET all orders `/orders/admin`; PUT order status |
+
+New scenarios cover client/admin permissions, cross-account cart/order isolation, quantities zero/negative/at stock/above stock, cumulative additions, checkout stock revalidation, address validation, empty-cart rejection, totals, cart clearing, stock consumption/restoration, pagination/filtering, forward status changes, cancellation restrictions and authentication failures. Fixtures use deterministic stock/price and disposable accounts/products; owners and dependent orders are deleted before products. No shared admin cart is mutated.
+
+See the [commerce findings](bugs/README.md#commerce-exploration--2026-09-10): stock conflicts are undocumented; invalid status parsing returns 401; referenced-product deletion returns 500; reopening/backward transition rules need clarification. These are not treated as approved behavior. The register now contains 19 Open and 2 Needs clarification; the original baseline counts below remain historical.
+
 **Existing scenario coverage:** successful responses and meaningful body checks; representative validation/authentication errors; duplicate registration; refresh rotation/reuse and logout revocation; prompt persistence/reset/length; product admin/client permissions, rejected mutations, invalid/missing IDs. Coverage varies by operation; 5/5 products does not mean every documented response is tested.
 
 **Priority work and parallel ownership** — proposed workstreams, not required test execution order:

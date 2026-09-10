@@ -2,7 +2,7 @@
 
 This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
 
-**Current register:** 17 findings — 16 Open and 1 Needs clarification; 7 functional API and 10 documentation; 5 Medium and 12 Low (including one provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
+**Current register:** 21 findings — 19 Open and 2 Needs clarification; 10 functional API and 11 documentation; 5 Medium and 16 Low (including two provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
 
 | ID | Finding title | Status |
 |---|---|---|
@@ -84,3 +84,21 @@ Both roles could read the created product and find it in the catalog. Only admin
 DOC-08 and DOC-09 record reproduced contract defects. PUT accepts an empty category although POST rejects it; PUT with null name preserves the existing name. These differences need requirement clarification and are not automated as approved semantics. Uncovered: concurrency, orders referencing deleted products, decimal precision and overflow, real token expiry, MFA, rate limiting, exhaustive null/type/media matrices and timezone configuration. This is not a release-readiness claim.
 
 Follow-up after a boundary test failed: repeated POST with an empty description twice, confirming 400 despite the declared minLength 0; PUT accepts it. DOC-10 records the discrepancy. The passing creation boundary test uses a nonempty description.
+
+
+## Commerce exploration — 2026-09-10
+
+Explored all five cart and six order operations before automation, using disposable client accounts and products plus admin credentials. Session scope: role boundaries, quantities and stock, checkout, order reads, cancellation/status and cleanup. Several bounded passes took approximately 10 minutes. Backend image: `slawekradzyminski/backend:3.7.16`; gateway localhost:8081. Source revision and effective rate-limit settings were not identified. The live commerce contract matches the retained September 10 snapshot; ignored `exploration/` contains local drivers, raw results and the live capture.
+
+Clients manage their own carts, create orders and list their own orders. Only GET `/orders/admin` and PUT `/orders/{id}/status` require admin. Admin can read/cancel a client's order. Another client gets 404 for detail and 403 for cancellation. All 11 operations reject missing credentials; automated cases also cover malformed and tampered tokens. Cart quantities merge on POST and replace on PUT; zero PUT removes the item, zero POST and negative PUT fail with 400, absent items/products return 404, and stock overflow returns 409. Cart changes do not consume stock. Checkout rechecks stock, consumes it and clears the cart only on success; empty cart and invalid address fail with 400. Failed stock checkout retains the cart. Cancellation restores stock once; repeated cancellation and cancellation after shipping fail with 400. Pagination rejects negative page and zero size.
+
+Cleanup order was investigated explicitly: product deletion before dependent order removal returned 500. All exploratory accounts and products were ultimately removed with 204, including the product retained by the failed deletion attempt. The isolated commerce fixture deletes account-owned orders before products and asserts cleanup responses.
+
+| ID | Observed impact | Severity | Status |
+|---|---|---|---|
+| [DOC-11](%5BL%5D%5BD%5D%20DOC-11%20-%20Commerce%20errors%20omit%20stock%20conflicts%20and%20use%20success%20schemas.md) | Error consumers lack documented stock-conflict handling and receive misleading models; no consumer outage demonstrated. | Low | Open |
+| [BUG-08](%5BL%5D%5BFA%5D%20BUG-08%20-%20Invalid%20order%20status%20returns%20unauthorized.md) | A valid administrator gets misleading authentication guidance for invalid input; valid status changes remain usable. | Low | Open |
+| [BUG-09](%5BL%5D%5BFA%5D%20BUG-09%20-%20Deleting%20a%20referenced%20product%20returns%20internal%20server%20error.md) | Admin product removal fails with an opaque server error when orders reference it; ordinary unreferenced cleanup works. | Low | Open |
+| [BUG-10](%5BL%5D%5BFA%5D%20BUG-10%20-%20Order%20reopening%20and%20backward%20transition%20policy%20is%20unclear.md) | Admin can reopen cancelled orders without reserving stock again; intended workflow and downstream impact need clarification. | Low (provisional) | Needs clarification |
+
+New findings: four Low (one provisional), three Open and one Needs clarification. These remain unresolved despite the passing suite. Uncovered: simultaneous checkout/stock races, multi-product atomic rollback, full null/type/overflow/address matrices, price-change policy, real expiry/MFA, rate-limit quotas and the complete order transition matrix. Quantity and pagination limits here are business-input boundaries; API throttling policy remains untested. Inventory endpoint automation remains a separate plan item.
