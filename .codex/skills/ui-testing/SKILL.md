@@ -18,6 +18,7 @@ Explore as a tester trying to uncover consequential failures, not as an executor
 - For actionable findings, use [bug reporting](references/bug-reporting.md) and the [report template](references/bug-report-template.md). Assess impact before severity and preserve reproducible evidence.
 - When implementing tests, read [automation](references/automation.md). Select a small set of business scenarios after exploration; do not let that suite-size preference constrain discovery.
 - Finish code changes with [review and improvement](references/review-and-improvement.md). Keep coverage notes and execution claims tied to actual evidence.
+- Maintain `docs/ui-test-plan.md` when screens or UI coverage change; use the compact [plan guidance](references/test-plan.md).
 
 Load only references needed for the task. Keep scratch evidence in ignored `exploration/ui/`; do not generate per-screen exploration reports or screenshot galleries. Creating this skill does not require exploring or expanding the test suite.
 

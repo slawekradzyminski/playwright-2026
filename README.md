@@ -41,7 +41,7 @@ This repository contains automated API and UI tests for the local training envir
 
 ## API Testing skill
 
-**Planning:** see the [short API test plan](docs/api-test-plan.md) for endpoint coverage, remaining work and prerequisites.
+**Planning:** see the [API test plan](docs/api-test-plan.md) for endpoint coverage and the [UI test plan](docs/ui-test-plan.md) for screen coverage, remaining work and prerequisites.
 
 **Found bugs:** see the [API bug register](docs/bugs/api/README.md) for individual reports and current status.
 
