@@ -1,5 +1,6 @@
 import { defineConfig, devices } from '@playwright/test';
 import { loadEnvFile } from 'node:process';
+import { UI_VIEWPORTS } from './ui-viewports';
 
 /**
  * Load local configuration when a .env file is present.
@@ -39,36 +40,15 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chrome'] },
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport: UI_VIEWPORTS.desktop,
+        screenshot: 'only-on-failure',
+      },
     },
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'] }, 
-    // },
-
-    /* Test against mobile viewports. */
-    // {
-    //   name: 'Mobile Chrome',
-    //   use: { ...devices['Pixel 5'] },
-    // },
-    // {
-    //   name: 'Mobile Safari',
-    //   use: { ...devices['iPhone 12'] },
-    // },
-
-    /* Test against branded browsers. */
-    // {
-    //   name: 'Microsoft Edge',
-    //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-    // },
-    // {
-    //   name: 'Google Chrome',
-    //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-    // },
   ],
 
   /* Run your local dev server before starting the tests */

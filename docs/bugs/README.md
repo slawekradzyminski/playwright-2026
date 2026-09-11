@@ -111,3 +111,7 @@ Generate and chat deliver multiline JSON SSE events incrementally, preserve asse
 The mock chooses a scenario from recognized history, including an earlier matching user prompt; it does not demonstrate real model reasoning about the latest turn. A follow-up without history returns the supported-prompt list, which allows a narrow statelessness regression. Canned assistant catalog claims can differ from real tool data by design; tests compare tool snapshots to a backend read and assert canned prose separately. The two-tool scenario requires seeded product 1 and does not mutate it.
 
 Uncovered: controlled upstream 404/429/500 and mid-stream failures, disconnect propagation, cancellation/resource cleanup on the backend, tool-iteration limits, arbitrary Unicode prompt handling, real LLM quality, and exhaustive history/tool schema validation. The stock mock accepts unknown model names, so a model-not-found test against it would provide false coverage. Local drivers/results remain in ignored `exploration/ollama-*`. The four new endpoint specs contain 24 tests; the complete suite passed 234 tests in 22.4s with TypeScript checks passing.
+
+## UI exploration
+
+UI findings are maintained in the [UI register](ui/README.md), with a separate [UI report template](../ui/bug-report-template.md). They are not included in the API counts above.

@@ -12,6 +12,8 @@
   "include": [
     "playwright.config.ts",
     "test-config.ts",
+    "ui-viewports.ts",
+    "pages/**/*.ts",
     "tests/**/*.ts",
     "types/**/*.ts",
     "clients/**/*.ts",
