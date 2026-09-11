@@ -19,3 +19,7 @@ Load only references needed for the task. A review-only request does not require
 ## Shared copies
 
 The canonical skill is `.agents/skills/api-testing`. Keep `.claude/skills/api-testing` identical after edits, including references. Both copies read the same repository `AGENTS.md`, test plan, and bug records. Use ordinary files so team checkouts do not depend on symlink support.
+
+## Self-improvement
+
+This skill is a living reference. When actual use reveals missing or misleading guidance, fix them and improve the skill.
