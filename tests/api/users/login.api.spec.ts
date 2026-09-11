@@ -14,8 +14,11 @@ test.describe('/api/v1/users/signin API tests', () => {
   });
 
   test('should successfully authenticate with valid credentials - 200', async () => {
+    // given
+    const credentials = validCredentials;
+
     // when
-    const response = await loginClient.login(validCredentials);
+    const response = await loginClient.login(credentials);
 
     // then
     expect(response.status()).toBe(200);
@@ -30,8 +33,11 @@ test.describe('/api/v1/users/signin API tests', () => {
 
   for (const { name, credentials, field } of validationCases) {
     test(`should return validation error for ${name} - 400`, async () => {
+      // given
+      const payload = credentials;
+
       // when
-      const response = await loginClient.login(credentials);
+      const response = await loginClient.login(payload);
 
       // then
       expect(response.status()).toBe(400);
@@ -42,11 +48,11 @@ test.describe('/api/v1/users/signin API tests', () => {
   }
 
   test('should return authentication error for both invalid credentials - 422', async () => {
+    // given
+    const credentials = { username: 'wronguser', password: 'wrongpassword' };
+
     // when
-    const response = await loginClient.login({
-      username: 'wronguser',
-      password: 'wrongpassword',
-    });
+    const response = await loginClient.login(credentials);
 
     // then
     expect(response.status()).toBe(422);

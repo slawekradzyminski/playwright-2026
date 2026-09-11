@@ -1,0 +1,5 @@
+# Streaming and controlled model mocks
+
+Use an incremental HTTP reader for SSE/NDJSON delivery checks; Playwright's buffered API response can verify the final body but cannot prove incremental arrival. Decode UTF-8 across byte boundaries, frame SSE events independently of network reads, join multiline `data:` fields, and bound duration/body size with cancellation on failure. Assert assembled content, event order and completion; do not assume one network read equals one event or stop at the first `done` marker in a multi-iteration tool flow without an agreed contract.
+
+For a controlled deterministic mock, exact scenario text is a useful oracle. Keep its version/prompts explicit and distinguish canned assistant prose from real backend tool results. Explore through the configured gateway before automation. Record model/error-injection and seeded-data prerequisites; a mock accepting arbitrary model names cannot test model-not-found propagation. Keep unresolved stream semantics in reports rather than asserting them as approved behavior.

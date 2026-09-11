@@ -60,6 +60,7 @@ test.describe('Login UI tests', () => {
 
   test('should navigate to register page when register button is clicked', async ({ page }) => {
     // given
+
     // when
     await page.getByRole('button', { name: 'Register' }).click();
 
@@ -69,6 +70,7 @@ test.describe('Login UI tests', () => {
 
   test('should navigate to register page when register link is clicked', async ({ page }) => {
     // given
+
     // when
     await page.getByRole('link', { name: 'Register' }).click();
 

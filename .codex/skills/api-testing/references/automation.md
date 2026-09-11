@@ -16,6 +16,14 @@ Use given/when/then to show preparation, the operation being tested, and asserti
 
 Keep transport details out of specs where clients can own them. Direct Playwright assertions remain appropriate when they clearly express the outcome. Avoid a generic workflow framework, deep helper chains, or hiding the tested action in setup. Multi-call behavior such as refresh rotation may need more than one action; retain its causal sequence.
 
+### Write assertions as observable outcomes
+
+Read the `then` section as a description of what the caller receives or what changes in the business state. Use focused assertions such as `expectGeneratedAnswer(response, { model, text, thinking })`, `expectToolResult(response, 'get_product_snapshot', expectedProduct)`, or `expectStockUnchanged(...)`. Keep scenario-specific expected values visible at the call site; cohesive fixed domain contracts may use a named validator such as `expectCatalogToolDefinitions`.
+
+Move JSON parsing, stream assembly, nested DTO traversal, repeated header/schema checks, event indexing, and chains of `map`/`filter`/`reduce` into validators or response helpers. Preserve every meaningful check when extracting, including ordering, exact content, authorization, and completion, and give failures useful domain descriptions. Keep the tested client action explicit in `when`.
+
+Do not target zero Playwright API usage: simple assertions such as `expect(response.status()).toBe(201)` remain readable, especially when checking setup before reading its body. Avoid wrappers for single obvious assertions, generic `validateResponse` helpers, and a separate abstraction for every matcher. Extract mechanics that distract from the scenario, even when used by only one complex test.
+
 Assert status and meaningful content, persisted effects, or absence of mutation as appropriate. Check setup/read responses before trusting their bodies. For access control, distinguish unauthenticated callers, forbidden roles and other owners; prove protected state survives rejected mutations. A valid PNG does not prove correct QR content, and a TypeScript type does not validate a runtime response.
 
 Automate stable behavior and representative validation cases. Keep exhaustive length, null/presence and Unicode matrices at the backend validation/service layer. Do not encode a confirmed defect as correct behavior or add expected-failure regressions for unresolved defects to the passing suite. Keep proposed regressions in reports until the requirement and fix are agreed. Registration tests should focus on registration without a subsequent login. Avoid exact dynamic tokens, timestamps and map ordering.

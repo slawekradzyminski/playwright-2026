@@ -29,12 +29,14 @@ The individual reports contain reproduction evidence, expected behavior, impact,
 | [DOC-12](%5BM%5D%5BD%5D%20DOC-12%20-%20Inventory%20response%20schemas%20and%20error%20branches%20are%20incomplete.md) | Routine inventory values violate success types; error and conflict branches are incomplete. | Medium | Open |
 | [DOC-13](%5BL%5D%5BD%5D%20DOC-13%20-%20QR%20error%20responses%20are%20documented%20as%20PNG%20images.md) | QR errors are JSON although the contract advertises PNG. | Low | Open |
 | [DOC-14](%5BL%5D%5BD%5D%20DOC-14%20-%20Traffic%20authentication%20session%20and%20error%20contracts%20are%20incomplete.md) | Traffic secured-profile setup and error/empty-body branches are incomplete. | Low | Open |
+| [BUG-12](%5BL%5D%5BFA%5D%20BUG-12%20-%20Tool%20chat%20completion%20marker%20semantics%20are%20unclear.md) | A client stopping at the first completion marker misses tool results and the answer; the intended marker scope is unagreed. | Low (provisional) | Needs clarification |
+| [DOC-15](%5BM%5D%5BD%5D%20DOC-15%20-%20Ollama%20streaming%20and%20nullable%20response%20contracts%20mismatch%20runtime.md) | Normal SSE events, tool metadata and JSON errors contradict the published response models. | Medium | Open |
 
-**Current register: 25 findings — 23 Open, 2 Needs clarification; 11 functional API, 14 documentation; 7 Medium, 18 Low (including two provisional Low).** No High impact or production security compromise has been demonstrated. The latest supervisor assessment distinguishes fresh reproductions, reviewed historical evidence and blocked prerequisites.
+**Current register: 27 findings — 24 Open, 3 Needs clarification; 12 functional API, 15 documentation; 8 Medium, 19 Low (including three provisional Low).** No High impact or production security compromise has been demonstrated. The latest supervisor assessment distinguishes fresh reproductions, reviewed historical evidence and blocked prerequisites.
 
 ## Reporting workflow
 
-Use the [API Testing bug-reporting reference](../../.agents/skills/api-testing/references/bug-reporting.md) and its template. Individual reports remain authoritative for evidence and status.
+Use the [API Testing bug-reporting reference](../../.codex/skills/api-testing/references/bug-reporting.md) and its template. Individual reports remain authoritative for evidence and status.
 
 ## Open questions requiring investigation
 
@@ -98,3 +100,14 @@ Clients manage their own carts, create orders and list their own orders. Only GE
 Cleanup order was investigated explicitly: product deletion before dependent order removal returned 500. All exploratory accounts and products were ultimately removed with 204, including the product retained by the failed deletion attempt. The isolated commerce fixture deletes account-owned orders before products and asserts cleanup responses.
 
 Commerce findings are indexed in the central table above. Uncovered: simultaneous checkout/stock races, multi-product atomic rollback, full null/type/overflow/address matrices, price-change policy, real expiry/MFA, rate-limit quotas and the complete order transition matrix. Quantity and pagination limits here are business-input boundaries; API throttling policy remains untested. Inventory endpoint automation remains a separate plan item.
+
+
+## Ollama exploration — 2026-09-11
+
+Explored the four requested operations through `http://localhost:8081` before automation: backend `3.7.16`, Docker mock `1.0.9`, disposable ROLE_CLIENT users without MFA. The user confirmed this gateway as authoritative; the separately started backend on 4001 is excluded. Captured [live OpenAPI](../exploratory-testing/openapi-2026-09-11-8081.json). Deployed source revisions remain unverified.
+
+Generate and chat deliver multiline JSON SSE events incrementally, preserve assembled canned text (including Unicode/newlines), honor thinking true/false, and end with a completion event. Blank/missing required fields, empty history, invalid role, blank content, tool messages lacking a name, empty tools, and missing credentials were explored. The automated suite also checks empty, malformed and tampered bearer tokens. Tool chat exercised one and two backend function calls, real tool result payloads, and the subsequent canned answer. Intermediate completion semantics remain BUG-12; wire/schema mismatches are DOC-15. All exploratory users were removed with 204, and automated fixtures own cleanup.
+
+The mock chooses a scenario from recognized history, including an earlier matching user prompt; it does not demonstrate real model reasoning about the latest turn. A follow-up without history returns the supported-prompt list, which allows a narrow statelessness regression. Canned assistant catalog claims can differ from real tool data by design; tests compare tool snapshots to a backend read and assert canned prose separately. The two-tool scenario requires seeded product 1 and does not mutate it.
+
+Uncovered: controlled upstream 404/429/500 and mid-stream failures, disconnect propagation, cancellation/resource cleanup on the backend, tool-iteration limits, arbitrary Unicode prompt handling, real LLM quality, and exhaustive history/tool schema validation. The stock mock accepts unknown model names, so a model-not-found test against it would provide false coverage. Local drivers/results remain in ignored `exploration/ollama-*`. The four new endpoint specs contain 24 tests; the complete suite passed 234 tests in 22.4s with TypeScript checks passing.
