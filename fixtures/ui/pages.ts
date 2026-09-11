@@ -1,3 +1,4 @@
+import { ProductDetailsPage } from '../../pages/product-details-page';
 import { UsersPage } from '../../pages/users-page';
 import { AdminDashboardPage } from '../../pages/admin-dashboard-page';
 import { TrafficMonitorPage } from '../../pages/traffic-monitor-page';
@@ -21,6 +22,7 @@ export const test = base.extend<{
   trafficMonitorPage: TrafficMonitorPage;
   adminDashboardPage: AdminDashboardPage;
   productsPage: ProductsPage;
+  productDetailsPage: ProductDetailsPage;
   profilePage: ProfilePage;
   cartPage: CartPage;
   loginPage: LoginPage;
@@ -34,6 +36,7 @@ export const test = base.extend<{
   llmPage: async ({ page }, use) => { await use(new LlmPage(page)); },
   trafficMonitorPage: async ({ page }, use) => { await use(new TrafficMonitorPage(page)); },
   adminDashboardPage: async ({ page }, use) => { await use(new AdminDashboardPage(page)); },
+  productDetailsPage: async ({ page }, use) => { await use(new ProductDetailsPage(page)); },
   productsPage: async ({ page }, use) => { await use(new ProductsPage(page)); },
   profilePage: async ({ page }, use) => { await use(new ProfilePage(page)); },
   cartPage: async ({ page }, use) => { await use(new CartPage(page)); },

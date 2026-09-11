@@ -4,9 +4,9 @@
 
 ## Coverage and last execution
 
-**3/27 screens (11.1%); 24 remaining.** Count a screen when a dedicated active screen spec asserts its behavior beyond opening its URL/root. This measures screen breadth, not complete workflows, roles, accessibility or visual coverage. **Covered** = behavioral tests; **Navigation** = destination checks only; **Planned** = no current UI assertions. Headers are shared components, excluded from the denominator.
+**4/27 screens (14.8%); 23 remaining.** Count a screen when a dedicated active screen spec asserts its behavior beyond opening its URL/root. This measures screen breadth, not complete workflows, roles, accessibility or visual coverage. **Covered** = behavioral tests; **Navigation** = destination checks only; **Planned** = no current UI assertions. Headers are shared components, excluded from the denominator.
 
-Last run: `npm run test:ui` — **33 passed, 0 failed, 0 skipped (5.1s)** at `http://localhost:8081`, Chromium, desktop **1920 × 1080**. Source inventory: frontend revision `41e177a`; deployed revision unverified. CLI sign-in and read-only admin/AI navigation confirmed the additional views; this was an inventory check, not full screen exploration.
+Last run: `npm run test:ui` — **38 passed, 0 failed, 0 skipped (7.1s)** at `http://localhost:8081`, Chromium, desktop **1920 × 1080**. Source inventory: frontend revision `41e177a`; deployed revision unverified. CLI sign-in and read-only admin/AI navigation confirmed the additional views; this was an inventory check, not full screen exploration.
 
 | Screen / route | Access | Coverage | Automated now / next behavior |
 |---|---|---|---|
@@ -16,8 +16,8 @@ Last run: `npm run test:ui` — **33 passed, 0 failed, 0 skipped (5.1s)** at `ht
 | Reset password `/reset` | Guest + reset token | Planned | Reset and sign in; invalid/expired token |
 | SSO callback `/auth/sso/callback` | SSO flow | Planned | Complete exchange; reject invalid callback |
 | Home `/` | Signed in | Covered | 8 tests: identity after reload and seven shortcuts |
-| Products `/products` | Signed in | Navigation | Search/filter catalog and select a product |
-| Product detail `/products/:id` | Signed in | Planned | Details and add to cart; unavailable product |
+| Products `/products` | Signed in | Covered | 5 tests: category/search, price sorting, empty-result recovery, detail navigation, persisted cart add/update/remove with aggregate counter and toast feedback; UI-11 open |
+| Product detail `/products/:id` | Signed in | Navigation | Catalog selection checks matching URL/name/price/description; next: detail actions and unavailable product |
 | Cart `/cart` | Signed in | Navigation | Change quantity/remove items; totals and empty state |
 | Checkout `/checkout` | Signed in | Planned | Submit an order from an API-seeded cart |
 | Order detail `/orders/:id` | Signed in | Planned | Own order content/status and permitted cancellation |
@@ -38,11 +38,11 @@ Last run: `npm run test:ui` — **33 passed, 0 failed, 0 skipped (5.1s)** at `ht
 | Admin orders `/admin/orders` | Admin | Planned | Filter orders and update allowed status |
 | Admin inventory `/admin/inventory`, `/admin/inventory/:productId` | Admin | Planned | Select stock, adjust quantity and verify movement history |
 
-**Test reconciliation:** 17 screen tests (login 5, registration 4, home 8) + 16 shared-header tests (guest 4, authenticated 12) = **33**. Ten additional screens have navigation checks only; fourteen are planned.
+**Test reconciliation:** 22 screen tests (login 5, registration 4, home 8, products 5) + 16 shared-header tests (guest 4, authenticated 12) = **38**. Ten additional screens have navigation checks only; thirteen are planned.
 
 ## Next priorities and prerequisites
 
-1. Products → detail → cart → checkout → order detail, then profile/order history. Use isolated API-created users/products/orders and cleanup.
+1. Product detail actions → cart → checkout → order detail, then profile/order history. Use isolated API-created users/products/orders and cleanup.
 2. Admin catalog, orders, inventory and user editing. Cover client denial as well as admin success; use disposable records, preserving shared admin credentials/data.
 3. Recovery/SSO/MFA need reset-token access, a configured test identity provider and disposable MFA enrollment. Email needs a local outbox; AI needs the deterministic mock.
 4. Complete QR, AI modes and traffic behavior; add regressions for agreed [UI findings](bugs/ui/README.md) after fixes. Passing tests do not close known defects.

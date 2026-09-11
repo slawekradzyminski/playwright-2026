@@ -6,7 +6,7 @@ Fixtures are lazy and test-scoped. Import the smallest entry point that supplies
 |---|---|---|
 | `shared/` | API-backed authentication and account lifecycle used by both test layers | `admin`, `signup`, `account` |
 | `api/` | Product, inventory and commerce setup for API scenarios | `product`, `inventory`, `commerce` |
-| `ui/` | Page objects, browser authentication and registration scenarios | `pages`, `authenticated`, `registration` |
+| `ui/` | Page objects, browser authentication and registration scenarios | `pages`, `authenticated`, `registration`, `products` |
 
 ## Shared setup
 
@@ -26,6 +26,8 @@ The dependency chain is `account → createAccount → signup → trackUser → 
 - `ui/pages.ts` constructs page objects without authenticating.
 - `ui/authenticated.ts` exports `test` for a disposable client and `adminTest` for the configured administrator. Each composes page objects with the appropriate shared fixture. Admin tests do not inherit client creation. Both use the same initial storage-state builder with a unique browser session ID; no init script restores tokens after logout.
 - `ui/registration.ts` supplies a unique `registrationUser` and API-created `existingRegistrationUser`. Both use the shared cleanup tracker, including when UI registration fails.
+
+- `ui/products.ts` supplies three API-created catalog products with distinct prices in a unique category. `cartWithOtherProduct` optionally seeds one existing cart item for aggregate-count checks. It clears the disposable client cart before product deletion even after test failure; shared account teardown then deletes the client.
 
 Browser actions and assertions belong to page objects. Endpoint clients belong to `clients/`; fixtures own only setup, composition and teardown. Add fixtures to `shared/` when both test layers need them, rather than making UI fixtures depend on the API scenario layer.
 

@@ -20,6 +20,17 @@ export class AuthenticatedHeader {
     await expect(this.root.getByTestId('username-profile-link')).toHaveText(`${firstName} ${lastName}`);
   }
 
+  async expectCartCount(quantity: number) {
+    const cart = this.root.getByTestId('desktop-cart-icon');
+    await expect(cart).toBeVisible();
+    const count = cart.getByTestId('cart-item-count');
+    if (quantity === 0) {
+      await expect(count).toHaveCount(0);
+    } else {
+      await expect(count).toHaveText(String(quantity));
+    }
+  }
+
   async goToProducts() {
     await this.root.getByTestId('desktop-menu-products').click();
   }

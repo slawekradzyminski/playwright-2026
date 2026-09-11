@@ -26,4 +26,6 @@ Use isolated browser contexts and test-scoped data. Read credentials and base UR
 
 Assert meaningful positive outcomes and precise negative messages. Do not encode known defects as expected behavior, weaken checks to pass, or add skipped/expected-failure cases for open findings by default. Keep proposed regressions in bug reports until behavior is agreed and fixed.
 
+For each selected journey, assert its relevant visible consequences as well as persisted state: for example, a cart action can change the product card, shared header count and notification. A small scenario count is not a reason to omit those outcomes. Keep component assertions explicit in the scenario, and use multi-item state when a counter must aggregate across items.
+
 Live integration checks and controlled failure experiments establish different things. Label injected failures; introduce permanent mocks only when the requested coverage needs them. Use the configured desktop viewport without adding mobile/tablet projects. Finish with [review and improvement](review-and-improvement.md).
