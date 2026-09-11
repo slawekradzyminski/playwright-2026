@@ -61,9 +61,9 @@ Use `-X` for methods other than the POST implied by `--data-binary`. Explain any
 
 <Before assigning severity, describe who is affected, the affected workflow, the demonstrated consequence, its scope, and any practical workaround. Separate observed impact from possible consequences. State uncertainties and missing context.>
 
-## Severity decision
+## Severity rationale and decision
 
-<Briefly connect the assessed impact to the classification criteria. If provisional, state what evidence is needed to confirm or change the rating.>
+<Explain the concrete consequence, scope, workaround and uncertainty before naming a rating. Do not lead with an existing or proposed severity. If provisional, state what evidence would settle the assessment.>
 
 **Severity:** <Select H / M / L only after writing the explanation above; mark provisional if necessary.>
 

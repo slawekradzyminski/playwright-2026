@@ -1,6 +1,6 @@
 # API test plan
 
-**Last verified: 2026-09-11.** [API Testing skill](../.codex/skills/api-testing/SKILL.md) · [Contract](exploratory-testing/openapi-2026-09-11-8081.json) · [Tests](../tests/api) · [Bug register](bugs/README.md) · [Historical management report](api-coverage-report.html)
+**Last verified: 2026-09-11.** [API Testing skill](../.codex/skills/api-testing/SKILL.md) · Contract (the referenced September 11 snapshot is missing from this checkout; recorded observations remain in the reports) · [Tests](../tests/api) · [Bug register](bugs/api/README.md) · [Historical management report](api-coverage-report.html)
 
 ## Coverage and last execution
 
@@ -22,7 +22,7 @@ Last run: `npm run test:api` — **234 passed, 0 failed, 0 skipped (22.4s)** at 
 
 ## Next priorities and prerequisites
 
-1. Retest agreed defects against the deployed build, especially QR Unicode encoding and Medium findings. Add regressions after correction; retain unresolved behavior and proposed cases in the [bug register](bugs/README.md).
+1. Retest agreed defects against the deployed build, especially QR Unicode encoding and Medium findings. Add regressions after correction; retain unresolved behavior and proposed cases in the [bug register](bugs/api/README.md).
 2. Cover six MFA operations and SSO (7 operations): disposable enrollment/challenge/recovery fixtures and a configured OIDC test provider.
 3. Cover dedicated user email-events, send email and GET/DELETE outbox (4 operations): deterministic delivery timing and isolated outbox data. Do not clear a shared global outbox.
 4. Extend Ollama depth with isolated upstream fault scenarios (404/429/500, truncated stream) and agree tool completion-marker semantics before adding regressions.

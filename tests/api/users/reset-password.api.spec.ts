@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/account-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { LoginClient } from '../../../clients/users/login-client';
 import { ForgotPasswordClient } from '../../../clients/users/forgot-password-client';
 import { ResetPasswordClient } from '../../../clients/users/reset-password-client';

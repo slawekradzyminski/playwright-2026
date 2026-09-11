@@ -30,7 +30,7 @@ This repository contains automated API and UI tests for the local training envir
 ├── clients/
 │   ├── users/            # One HTTP client per user endpoint
 │   └── products/         # One HTTP client per product endpoint
-├── fixtures/             # Reusable authentication, setup and cleanup
+├── fixtures/             # shared account setup, API data, and UI composition (see fixtures/README.md)
 ├── generators/           # User and product data generators
 ├── validators/           # Reusable response assertions
 ├── types/                # Request and response interfaces
@@ -43,7 +43,7 @@ This repository contains automated API and UI tests for the local training envir
 
 **Planning:** see the [short API test plan](docs/api-test-plan.md) for endpoint coverage, remaining work and prerequisites.
 
-**Found bugs:** see the [API bug register](docs/bugs/README.md) for individual reports and current status.
+**Found bugs:** see the [API bug register](docs/bugs/api/README.md) for individual reports and current status.
 
 See [API Testing skill](.agents/skills/api-testing/SKILL.md) for the curl workflow, functional and Swagger checks, severity labels, and a reusable bug-report template. Findings are tracked in the bug register; the [OpenAPI snapshot](docs/exploratory-testing/openapi-2026-09-10.json) preserves the contract observed on September 10, 2026.
 
@@ -325,23 +325,25 @@ For more information on setting up and using the Dockerized environment, refer t
 
 `tests/api/users/signup.api.spec.ts` covers registration success, representative validation errors, and duplicate username/email rejection. Cases use given/when/then sections, are ordered by expected status (201, then 400), and keep parameter data immediately above each group. Sign-up tests do not log in newly registered users.
 
-Generate valid disposable data with `UserGenerator.generate()` from `generators/user-generator.ts`, using partial overrides for specific scenarios. Cleanup lives in `fixtures/signup-fixture.ts`: it authenticates an administrator and deletes only accounts created by the current test, even when an assertion fails. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` through the existing configuration and use a disposable local environment.
+Generate valid disposable data with `UserGenerator.generate()` from `generators/user-generator.ts`, using partial overrides for specific scenarios. Cleanup lives in `fixtures/shared/signup.ts`: it authenticates an administrator and deletes only accounts created by the current test, even when an assertion fails. Configure `ADMIN_USERNAME` and `ADMIN_PASSWORD` through the existing configuration and use a disposable local environment.
 
-Run `npm run test:api`. Known-defect regressions are proposed in the [bug reports](docs/bugs/README.md), not executed as expected failures. Detailed length and Unicode boundary matrices are candidates for backend validation/service tests; those tests have not been added in this repository. Role-assignment checks remain exploratory evidence rather than a registration-only API assertion.
+Run `npm run test:api`. Known-defect regressions are proposed in the [bug reports](docs/bugs/api/README.md), not executed as expected failures. Detailed length and Unicode boundary matrices are candidates for backend validation/service tests; those tests have not been added in this repository. Role-assignment checks remain exploratory evidence rather than a registration-only API assertion.
 
 
-### Authenticated API user fixture
+### Shared authenticated account fixture
 
-Import `test` from `fixtures/authenticated-user-fixture` and request `authenticatedUser`:
+See [fixture structure and lifecycle](fixtures/README.md) for the shared, API and UI entry points.
+
+Import `test` from `fixtures/shared/account` and request `account`:
 
 ```ts
 import { expect } from '@playwright/test';
-import { test } from './fixtures/authenticated-user-fixture';
-import { CurrentUserClient } from './clients/current-user-client';
+import { test } from './fixtures/shared/account';
+import { CurrentUserClient } from './clients/users/current-user-client';
 
-test('current user - 200', async ({ request, authenticatedUser }) => {
+test('current user - 200', async ({ request, account }) => {
   // given
-  const { token, user } = authenticatedUser;
+  const { token, user } = account;
   const client = new CurrentUserClient(request);
 
   // when
@@ -353,5 +355,5 @@ test('current user - 200', async ({ request, authenticatedUser }) => {
 });
 ```
 
-The example paths are relative to the repository root; specs under `tests/api` use `../../`.
+The example paths are relative to the repository root; endpoint specs under `tests/api/<endpoint>` use `../../../`.
 The fixture returns `{ token, refreshToken, user }`, where `user` contains the generated registration data, including credentials. Each requesting test gets a unique account. Tests that do not request it create no account. Setup performs one registration and one user login; it makes no user-info request. The existing `signup` fixture owns administrator authentication and deletion, including when user login or test assertions fail. Cleanup requires the configured `ADMIN_USERNAME` and `ADMIN_PASSWORD`; unsuccessful deletion fails the test. Accounts are isolated per test, so the fixture supports parallel execution and retries without sharing mutable user data.

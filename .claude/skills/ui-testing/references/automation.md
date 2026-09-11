@@ -1,6 +1,6 @@
 # Write readable UI tests
 
-Read `AGENTS.md` for required structure, selectors, lifecycle, viewport and commands. Inspect `pages/README.md`, neighboring specs, page objects and `fixtures/ui-fixture.ts` before implementing.
+Read `AGENTS.md` for required structure, selectors, lifecycle, viewport and commands. Inspect `pages/README.md`, neighboring specs, page objects and `fixtures/ui/pages.ts` before implementing.
 
 ## Keep business intent visible
 
@@ -14,7 +14,7 @@ Prefer a small live-backend suite covering meaningful user journeys and one repr
 - `pages/<screen>-page.ts` owns screen-specific locators, actions and explicit outcome assertions.
 - `pages/base-page.ts` owns common route/root mechanics. Keep screen-specific headers and toasts out of the base class.
 - `pages/components/` owns reusable widgets and their assertions. Compose them into relevant pages; retain visible component calls such as `loginPage.toast.expectError(message)`.
-- `fixtures/ui-fixture.ts` constructs test-scoped page objects. Keep scenario navigation/setup apparent in given. Use existing API clients and disposable fixtures for supporting state when appropriate, without replacing the UI action under test.
+- `fixtures/ui/pages.ts` constructs test-scoped page objects. Keep scenario navigation/setup apparent in given. Use existing API clients and disposable fixtures for supporting state when appropriate, without replacing the UI action under test.
 
 Name assertions precisely: `expectUrl()` checks navigation; title, authentication and toast checks are separate outcomes. Avoid vague `expectOpened()` methods that hide multiple conditions. Actions should not silently assert outcomes. Use Playwright auto-waiting and retrying assertions; avoid redundant readiness/visibility preflights and arbitrary sleeps. A visible-state assertion remains useful when visibility itself is the intended outcome.
 

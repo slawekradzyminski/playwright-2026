@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test, shippingAddress } from '../../../fixtures/commerce-fixture';
+import { test, shippingAddress } from '../../../fixtures/api/commerce';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 import { GetOrdersClient } from '../../../clients/orders/get-orders-client';
 

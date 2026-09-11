@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/signup-fixture';
+import { test } from '../../../fixtures/shared/signup';
 import { UserGenerator } from '../../../generators/user-generator';
 
 test.describe('/api/v1/users/signup API tests', () => {

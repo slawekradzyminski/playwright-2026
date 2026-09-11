@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 import { GetTrafficInfoClient } from '../../../clients/traffic/get-traffic-info-client';
 
@@ -15,9 +15,9 @@ test.describe('GET /api/v1/traffic/info', () => {
   });
 
   for (const role of ['admin', 'client'] as const) {
-    test(`should return websocket information for a ${role} - 200`, async ({ adminToken, authenticatedUser }) => {
+    test(`should return websocket information for a ${role} - 200`, async ({ adminToken, account }) => {
       // given
-      const token = role === 'admin' ? adminToken : authenticatedUser.token;
+      const token = role === 'admin' ? adminToken : account.token;
       const clientSessionId = sessionId();
 
       // when

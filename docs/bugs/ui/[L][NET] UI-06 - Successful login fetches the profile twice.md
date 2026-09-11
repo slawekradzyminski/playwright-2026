@@ -25,11 +25,13 @@ Reuse or deduplicate the profile fetch within one login transition unless a docu
 
 Each login performs one apparently unnecessary profile request. Local overhead is small; no user-visible slowdown or production load impact was demonstrated.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is limited in the observed local workflow; core credential login remains usable.
+The extra profile request adds small observed local overhead without demonstrated user-visible delay or production load impact. Successful login remains available. The evidence supports limited resource waste, not a performance outage.
 
 **Severity:** L
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

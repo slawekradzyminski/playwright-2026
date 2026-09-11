@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/account-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { ForgotPasswordClient } from '../../../clients/users/forgot-password-client';
 import { GetEmailEventsClient } from '../../../clients/users/get-email-events-client';
 import type { EmailEventDto } from '../../../types/account';

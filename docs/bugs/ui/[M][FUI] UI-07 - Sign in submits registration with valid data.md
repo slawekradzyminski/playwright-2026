@@ -42,9 +42,13 @@ Sign in navigates to login without sending signup or creating an account. Its la
 
 Users leaving a populated registration form can accidentally create an account and transmit registration data despite intending only to navigate. The correct destination masks the side effect. The header Login link avoided the mutation in the observed control. No production data or external email delivery was investigated.
 
-## Severity decision
+## Severity rationale and decision
 
-**Severity:** M. Confirmed unintended persistent account creation, with normal registration and a navigation workaround available in this training environment.
+Choosing sign-in navigation with valid unsaved registration data persists an account, despite the user intending to leave the form. The correct destination masks this unintended mutation. A header navigation workaround exists; broader production or email-delivery consequences were not investigated.
+
+**Severity:** M
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

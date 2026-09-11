@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { ChatClient } from '../../../clients/ollama/chat-client';
 import { expectChatAnswer, expectJsonError } from '../../../validators/ollama-validator';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
@@ -12,25 +12,25 @@ test.describe('POST /api/v1/ollama/chat', () => {
   });
 
   for (const think of [false, true]) {
-    test(`should stream the complete assistant response with thinking ${think} - 200`, async ({ authenticatedUser }) => {
+    test(`should stream the complete assistant response with thinking ${think} - 200`, async ({ account }) => {
       // given
       const payload = { model, messages: [{ role: 'user', content: status.prompt }], think };
 
       // when
-      const response = await client.chat(payload, authenticatedUser.token);
+      const response = await client.chat(payload, account.token);
 
       // then
       expectChatAnswer(response, { model, text: status.text, thinking: think ? status.thinking : '' });
     });
   }
 
-  test('should not reuse conversation history from a previous request - 200', async ({ authenticatedUser }) => {
+  test('should not reuse conversation history from a previous request - 200', async ({ account }) => {
     // given
-    const previous = await client.chat({ model, messages: [{ role: 'user', content: status.prompt }] }, authenticatedUser.token);
+    const previous = await client.chat({ model, messages: [{ role: 'user', content: status.prompt }] }, account.token);
     expectChatAnswer(previous, { model, text: status.text, thinking: '' });
 
     // when
-    const response = await client.chat({ model, messages: [{ role: 'user', content: 'And what else?' }] }, authenticatedUser.token);
+    const response = await client.chat({ model, messages: [{ role: 'user', content: 'And what else?' }] }, account.token);
 
     // then
     expectChatAnswer(response, { model, thinking: '', text: [
@@ -49,33 +49,33 @@ test.describe('POST /api/v1/ollama/chat', () => {
     { name: 'tool result without a tool name', messages: [{ role: 'tool', content: '{}' }], error: { 'messages[0].toolNamePresentForToolRole': 'Tool messages must include tool_name' } },
   ];
   for (const { name, messages, error } of invalidCases) {
-    test(`should reject ${name} before streaming - 400`, async ({ authenticatedUser }) => {
+    test(`should reject ${name} before streaming - 400`, async ({ account }) => {
       // given
       const payload = { model, messages };
 
       // when
-      const response = await client.chat(payload, authenticatedUser.token);
+      const response = await client.chat(payload, account.token);
 
       // then
       expectJsonError(response, 400, error);
     });
   }
 
-  test('should reject a missing model and history - 400', async ({ authenticatedUser }) => {
+  test('should reject a missing model and history - 400', async ({ account }) => {
     // given
     const payload = {};
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectJsonError(response, 400, { model: 'must not be blank', messages: 'At least one message is required' });
   });
 
-  test('should reject unauthorized chat - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized chat - 401', async ({ account }) => {
     // given
     const payload = { model, messages: [{ role: 'user', content: status.prompt }] };
-    for (const { name, token, message } of unauthorizedCases(authenticatedUser.token)) {
+    for (const { name, token, message } of unauthorizedCases(account.token)) {
       await test.step(name, async () => {
         // when
         const response = await client.chat(payload, token);

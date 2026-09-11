@@ -29,11 +29,13 @@ Provide a focus indicator with at least 3:1 against adjacent colors. Basis: [WCA
 
 Keyboard users with low vision have difficulty identifying the active credential field. Tab order works and a visual ring exists, but its contrast is substantially below the target.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is a material accessibility impairment; core credential login remains usable.
+The low-contrast custom ring replaces the native outline, making the active credential field difficult to identify for keyboard users with low vision. Working tab order does not restore that visual orientation. This materially impairs access to the form without establishing that all users are blocked.
 
 **Severity:** M
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

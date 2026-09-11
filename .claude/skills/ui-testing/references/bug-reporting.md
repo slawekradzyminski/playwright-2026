@@ -2,6 +2,8 @@
 
 Read `docs/bugs/ui/README.md` and relevant reports before creating a finding. Extend an existing report when it describes the same independently fixable problem.
 
+Write the severity rationale before the decision in every new or reassessed report and conversational finding. Explain the demonstrated consequence, affected scope, practical workaround and uncertainty in neutral terms first; do not open that explanation with “Low because”, “Medium is retained” or an equivalent verdict. End with a separate `**Severity:** H / M / L` line, marked provisional when needed. Reconsider the existing label from the evidence rather than using it as the premise. Historical evidence may remain, but avoid duplicate current verdicts. Filename prefixes and register severity columns are indexing metadata assigned after this assessment, not substitutes for it.
+
 Use the [template](bug-report-template.md). It defines categories, impact-based H/M/L criteria, evidence fields and retest requirements. Allocate the next unused UI-NN ID and retain it when status or severity changes. Save reports in `docs/bugs/ui/` with `[severity][type] ID - Short description.md` filenames. Present the observed failure, expected behavior and demonstrated impact before selecting severity. Keep register links, severity and status consistent with the report.
 
 Report clear functional, visual and accessibility failures with reproducible evidence. For subjective UX changes or uncertain requirements use **Needs clarification**, show the relevant screenshot and seek the user's decision while continuing independent work. Separate suspected causes and possible consequences from observations. Network duplication and slow timings need context and repeat measurements before claims about impact.

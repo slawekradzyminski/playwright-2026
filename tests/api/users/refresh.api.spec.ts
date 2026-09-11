@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { RefreshClient } from '../../../clients/users/refresh-client';
 import { CurrentUserClient } from '../../../clients/users/current-user-client';
 import { expectLoginJwt } from '../../../validators/jwt-validator';
@@ -15,9 +15,9 @@ test.describe('POST /api/v1/users/refresh', () => {
     currentUserClient = new CurrentUserClient(request);
   });
 
-  test('should rotate tokens without requiring an access token - 200', async ({ authenticatedUser }) => {
+  test('should rotate tokens without requiring an access token - 200', async ({ account }) => {
     // given
-    const { refreshToken, user } = authenticatedUser;
+    const { refreshToken, user } = account;
 
     // when
     const response = await client.refresh(refreshToken);
@@ -60,9 +60,9 @@ test.describe('POST /api/v1/users/refresh', () => {
     });
   }
 
-  test('should reject invalid, wrong-type and consumed tokens - 401', async ({ authenticatedUser }) => {
+  test('should reject invalid, wrong-type and consumed tokens - 401', async ({ account }) => {
     // given
-    const { refreshToken, token } = authenticatedUser;
+    const { refreshToken, token } = account;
     expect((await client.refresh(refreshToken)).status()).toBe(200);
     const cases = [
       { name: 'unknown token', value: 'invalid' },

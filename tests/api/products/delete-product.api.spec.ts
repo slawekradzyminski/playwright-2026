@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/product-fixture';
+import { test } from '../../../fixtures/api/product';
 import { DeleteProductClient } from '../../../clients/products/delete-product-client';
 import { GetProductByIdClient } from '../../../clients/products/get-product-by-id-client';
 import { GetProductsClient } from '../../../clients/products/get-products-client';
@@ -67,9 +67,9 @@ test.describe('DELETE /api/v1/products/{id}', () => {
     expect(await stored.json()).toEqual(product);
   });
 
-  test('should forbid a regular client without changing the catalog - 403', async ({ product, authenticatedUser, adminToken }) => {
+  test('should forbid a regular client without changing the catalog - 403', async ({ product, account, adminToken }) => {
     // given
-    const token = authenticatedUser.token;
+    const token = account.token;
 
     // when
     const response = await client.delete(product.id, token);

@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { GetTrafficInfoClient } from '../../../clients/traffic/get-traffic-info-client';
 import { GetTrafficLogsClient } from '../../../clients/traffic/get-traffic-logs-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
@@ -17,9 +17,9 @@ test.describe('GET /api/v1/traffic/logs', () => {
   });
 
   for (const role of ['admin', 'client'] as const) {
-    test(`should filter and paginate the isolated session as ${role} - 200`, async ({ adminToken, authenticatedUser }) => {
+    test(`should filter and paginate the isolated session as ${role} - 200`, async ({ adminToken, account }) => {
       // given
-      const token = role === 'admin' ? adminToken : authenticatedUser.token;
+      const token = role === 'admin' ? adminToken : account.token;
       const sessionId = `traffic-logs-${randomUUID()}`;
       for (let index = 0; index < 3; index++) {
         expect((await infoClient.get(token, sessionId)).status()).toBe(200);

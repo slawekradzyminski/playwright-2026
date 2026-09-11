@@ -29,11 +29,13 @@ Give the icon link an accessible name such as Cart, retained when the item count
 
 Screen-reader users cannot identify the icon link purpose. Mobile has a named menu alternative; sighted users recognize the cart icon.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is a material accessibility impairment; core credential login remains usable.
+The cart shortcut has no accessible name, so its purpose is unavailable from the link to screen-reader users. A named mobile-menu alternative limits scope there, but does not name the desktop shortcut. The evidence supports material navigation accessibility impairment, not failure of the cart operation itself.
 
 **Severity:** M
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/commerce-fixture';
+import { test } from '../../../fixtures/api/commerce';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 import { ClearCartClient } from '../../../clients/cart/clear-cart-client';
 import { AddCartItemClient } from '../../../clients/cart/add-cart-item-client';

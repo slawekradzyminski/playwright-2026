@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { UserByUsernameClient } from '../../../clients/users/user-by-username-client';
 import { UserGenerator } from '../../../generators/user-generator';
 import { expectRegisteredUser } from '../../../validators/user-response-validator';
@@ -13,9 +13,9 @@ test.describe('GET /api/v1/users/{username}', () => {
     client = new UserByUsernameClient(request);
   });
 
-  test('should return the requested account - 200', async ({ authenticatedUser }) => {
+  test('should return the requested account - 200', async ({ account }) => {
     // given
-    const { token, user } = authenticatedUser;
+    const { token, user } = account;
 
     // when
     const response = await client.getByUsername(user.username, token);
@@ -25,14 +25,14 @@ test.describe('GET /api/v1/users/{username}', () => {
     expectRegisteredUser(await response.json(), user);
   });
 
-  test('should reject unauthorized requests - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized requests - 401', async ({ account }) => {
     // given
-    const cases = unauthorizedCases(authenticatedUser.token);
+    const cases = unauthorizedCases(account.token);
 
     for (const { name, token, message } of cases) {
       await test.step(name, async () => {
         // when
-        const response = await client.getByUsername(authenticatedUser.user.username, token);
+        const response = await client.getByUsername(account.user.username, token);
 
         // then
         expect.soft(response.status()).toBe(401);
@@ -41,12 +41,12 @@ test.describe('GET /api/v1/users/{username}', () => {
     }
   });
 
-  test('should report an unknown username - 404', async ({ authenticatedUser }) => {
+  test('should report an unknown username - 404', async ({ account }) => {
     // given
     const username = UserGenerator.generate().username;
 
     // when
-    const response = await client.getByUsername(username, authenticatedUser.token);
+    const response = await client.getByUsername(username, account.token);
 
     // then
     expect(response.status()).toBe(404);

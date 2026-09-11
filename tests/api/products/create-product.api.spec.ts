@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/product-fixture';
+import { test } from '../../../fixtures/api/product';
 import { CreateProductClient } from '../../../clients/products/create-product-client';
 import { GetProductByIdClient } from '../../../clients/products/get-product-by-id-client';
 import { ProductGenerator } from '../../../generators/product-generator';
@@ -83,12 +83,12 @@ test.describe('POST /api/v1/products', () => {
     }
   });
 
-  test('should forbid product creation as a regular client - 403', async ({ authenticatedUser }) => {
+  test('should forbid product creation as a regular client - 403', async ({ account }) => {
     // given
     const payload = ProductGenerator.generate();
 
     // when
-    const response = await client.create(payload, authenticatedUser.token);
+    const response = await client.create(payload, account.token);
 
     // then
     expect(response.status()).toBe(403);

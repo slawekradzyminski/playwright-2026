@@ -31,11 +31,13 @@ Expose invalid state and associate each field with its own error; preserve the w
 
 Assistive-technology users returning to a field cannot retrieve its error through the field description or invalid state. Visual users can read adjacent messages; the login happy path works.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is a material accessibility impairment; core credential login remains usable.
+Returning to an invalid field does not expose its error through the field description or invalid state, materially impairing form correction through assistive technology. Live alerts and visual messages still exist, so total loss of feedback is not claimed. The defect affects both login and registration.
 
 **Severity:** M
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

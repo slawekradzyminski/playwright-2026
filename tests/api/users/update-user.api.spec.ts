@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/account-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { UpdateUserClient } from '../../../clients/users/update-user-client';
 import { LoginClient } from '../../../clients/users/login-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';

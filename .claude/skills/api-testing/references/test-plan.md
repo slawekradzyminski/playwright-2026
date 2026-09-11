@@ -6,4 +6,4 @@ Retain only the last verified date/build/command/result, a small coverage-by-are
 
 Count coverage by HTTP method + path in the retained OpenAPI contract, with a dedicated active spec asserting that operation. Helper, fixture and cleanup calls do not count. Recount when operation coverage changes; endpoint breadth does not imply exhaustive scenario or schema coverage.
 
-Keep detailed reproduction and dispositions in `docs/bugs/`, procedures in this skill, and scratch exploration in ignored `exploration/`. Preserve dated contract evidence. Do not copy the bug register, scenario catalog, implementation rules or agent-session history into the plan. Update other reports only when requested; clearly label an older report as historical.
+Keep detailed reproduction and dispositions in `docs/bugs/api/`, procedures in this skill, and scratch exploration in ignored `exploration/`. Preserve dated contract evidence. Do not copy the bug register, scenario catalog, implementation rules or agent-session history into the plan. Update other reports only when requested; clearly label an older report as historical.

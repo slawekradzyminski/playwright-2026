@@ -1,4 +1,4 @@
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { GenerateClient } from '../../../clients/ollama/generate-client';
 import { expectGeneratedAnswer, expectJsonError } from '../../../validators/ollama-validator';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
@@ -12,24 +12,24 @@ test.describe('POST /api/v1/ollama/generate', () => {
   });
 
   for (const think of [false, true]) {
-    test(`should stream the complete release summary with thinking ${think} - 200`, async ({ authenticatedUser }) => {
+    test(`should stream the complete release summary with thinking ${think} - 200`, async ({ account }) => {
       // given
       const payload = { model, prompt: release.prompt, think, options: { temperature: 0 } };
 
       // when
-      const response = await client.generate(payload, authenticatedUser.token);
+      const response = await client.generate(payload, account.token);
 
       // then
       expectGeneratedAnswer(response, { model, text: release.text, thinking: think ? release.thinking : '' });
     });
   }
 
-  test('should preserve Unicode in the assembled quote with thinking omitted - 200', async ({ authenticatedUser }) => {
+  test('should preserve Unicode in the assembled quote with thinking omitted - 200', async ({ account }) => {
     // given
     const payload = { model, prompt: 'Provide a motivational quote' };
 
     // when
-    const response = await client.generate(payload, authenticatedUser.token);
+    const response = await client.generate(payload, account.token);
 
     // then
     expectGeneratedAnswer(response, {
@@ -43,9 +43,9 @@ test.describe('POST /api/v1/ollama/generate', () => {
     { name: 'blank prompt', payload: { model, prompt: ' ' }, error: { prompt: 'must not be blank' } },
   ];
   for (const { name, payload, error } of invalidCases) {
-    test(`should reject ${name} before streaming - 400`, async ({ authenticatedUser }) => {
+    test(`should reject ${name} before streaming - 400`, async ({ account }) => {
       // given
-      const token = authenticatedUser.token;
+      const token = account.token;
 
       // when
       const response = await client.generate(payload, token);
@@ -55,10 +55,10 @@ test.describe('POST /api/v1/ollama/generate', () => {
     });
   }
 
-  test('should reject unauthorized generation - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized generation - 401', async ({ account }) => {
     // given
     const payload = { model, prompt: release.prompt };
-    for (const { name, token, message } of unauthorizedCases(authenticatedUser.token)) {
+    for (const { name, token, message } of unauthorizedCases(account.token)) {
       await test.step(name, async () => {
         // when
         const response = await client.generate(payload, token);

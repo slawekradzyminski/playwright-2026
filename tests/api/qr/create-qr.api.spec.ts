@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { CreateQrClient } from '../../../clients/qr/create-qr-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 import type { CreateQrDto } from '../../../types/qr';
@@ -28,9 +28,9 @@ test.describe('POST /api/v1/qr/create', () => {
   ];
 
   for (const { name, payload } of validCases) {
-    test(`should generate a PNG for ${name} - 200`, async ({ authenticatedUser }) => {
+    test(`should generate a PNG for ${name} - 200`, async ({ account }) => {
       // given
-      const token = authenticatedUser.token;
+      const token = account.token;
 
       // when
       const response = await client.create(payload, token);
@@ -44,35 +44,35 @@ test.describe('POST /api/v1/qr/create', () => {
     });
   }
 
-  test('should reject blank text - 400', async ({ authenticatedUser }) => {
+  test('should reject blank text - 400', async ({ account }) => {
     // given
     const payload = { text: '   ' };
 
     // when
-    const response = await client.create(payload, authenticatedUser.token);
+    const response = await client.create(payload, account.token);
 
     // then
     expect(response.status()).toBe(400);
     expect(await response.json()).toEqual({ text: 'Text is required' });
   });
 
-  test('should reject a missing text property - 400', async ({ authenticatedUser }) => {
+  test('should reject a missing text property - 400', async ({ account }) => {
     // given
     const payload = {};
 
     // when
-    const response = await client.create(payload, authenticatedUser.token);
+    const response = await client.create(payload, account.token);
 
     // then
     expect(response.status()).toBe(400);
     expect(await response.json()).toEqual({ text: 'Text is required' });
   });
 
-  test('should reject unauthorized requests - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized requests - 401', async ({ account }) => {
     // given
     const payload: CreateQrDto = { text: 'Training QR' };
 
-    for (const { name, token, message } of unauthorizedCases(authenticatedUser.token)) {
+    for (const { name, token, message } of unauthorizedCases(account.token)) {
       await test.step(name, async () => {
         // when
         const response = await client.create(payload, token);

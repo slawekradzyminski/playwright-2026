@@ -16,6 +16,57 @@ export class AuthenticatedHeader {
     await expect(this.root.getByTestId('login-link')).toBeHidden();
   }
 
+  async expectUser(firstName: string, lastName: string) {
+    await expect(this.root.getByTestId('username-profile-link')).toHaveText(`${firstName} ${lastName}`);
+  }
+
+  async goToProducts() {
+    await this.root.getByTestId('desktop-menu-products').click();
+  }
+
+  async goToSendEmail() {
+    await this.root.getByTestId('desktop-menu-send-email').click();
+  }
+
+  async goToQrCode() {
+    await this.root.getByTestId('desktop-menu-qr-code').click();
+  }
+
+  async goToLlm() {
+    await this.root.getByTestId('desktop-menu-llm').click();
+  }
+
+  async goToTrafficMonitor() {
+    await this.root.getByTestId('desktop-menu-traffic-monitor').click();
+  }
+
+  async goToAdmin() {
+    await this.root.getByTestId('desktop-menu-admin').click();
+  }
+
+  async expectAdminLinkVisible() {
+    await expect(this.root.getByTestId('desktop-menu-admin')).toBeVisible();
+    await expect(this.root.getByTestId('desktop-menu-admin')).toHaveAttribute('href', '/admin');
+  }
+
+  async expectAdminLinkAbsent() {
+    // The populated profile and role links render from the same loaded user data.
+    await this.expectVisible();
+    await expect(this.root.locator('a[href="/admin"]')).toHaveCount(0);
+  }
+
+  async goToProfile() {
+    await this.root.getByTestId('username-profile-link').click();
+  }
+
+  async goToCart() {
+    await this.root.getByTestId('desktop-cart-icon').click();
+  }
+
+  async goHome() {
+    await this.root.getByTestId('brand-link').click();
+  }
+
   async logout() {
     await this.root.getByTestId('logout-button').click();
   }

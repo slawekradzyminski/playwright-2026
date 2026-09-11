@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { LogoutClient } from '../../../clients/users/logout-client';
 import { RefreshClient } from '../../../clients/users/refresh-client';
 import { LoginClient } from '../../../clients/users/login-client';
@@ -17,9 +17,9 @@ test.describe('POST /api/v1/users/logout', () => {
     loginClient = new LoginClient(request);
   });
 
-  test('should revoke refresh tokens from every session - 200', async ({ authenticatedUser }) => {
+  test('should revoke refresh tokens from every session - 200', async ({ account }) => {
     // given
-    const { token, refreshToken, user } = authenticatedUser;
+    const { token, refreshToken, user } = account;
     const secondLogin = await loginClient.login({ username: user.username, password: user.password });
     expect(secondLogin.status()).toBe(200);
     const secondSession = await secondLogin.json();
@@ -43,9 +43,9 @@ test.describe('POST /api/v1/users/logout', () => {
     expect((await refreshClient.refresh(newSession.refreshToken)).status()).toBe(200);
   });
 
-  test('should reject unauthorized requests - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized requests - 401', async ({ account }) => {
     // given
-    const cases = unauthorizedCases(authenticatedUser.token);
+    const cases = unauthorizedCases(account.token);
 
     for (const { name, token, message } of cases) {
       await test.step(name, async () => {
@@ -57,7 +57,7 @@ test.describe('POST /api/v1/users/logout', () => {
         expect.soft(await response.json()).toEqual({ message });
       });
     }
-    const refresh = await refreshClient.refresh(authenticatedUser.refreshToken);
+    const refresh = await refreshClient.refresh(account.refreshToken);
     expect(refresh.status(), 'Unauthorized logout must not revoke the session').toBe(200);
   });
 });

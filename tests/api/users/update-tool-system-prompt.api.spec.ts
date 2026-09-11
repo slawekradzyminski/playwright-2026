@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { UpdateToolSystemPromptClient } from '../../../clients/users/update-tool-system-prompt-client';
 import { GetToolSystemPromptClient } from '../../../clients/users/get-tool-system-prompt-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
@@ -20,9 +20,9 @@ test.describe('PUT /api/v1/users/tool-system-prompt', () => {
   ];
 
   for (const { name, prompt } of validCases) {
-    test(`should persist ${name} - 200`, async ({ authenticatedUser }) => {
+    test(`should persist ${name} - 200`, async ({ account }) => {
       // given
-      const { token } = authenticatedUser;
+      const { token } = account;
 
       // when
       const response = await client.update(prompt, token);
@@ -36,9 +36,9 @@ test.describe('PUT /api/v1/users/tool-system-prompt', () => {
     });
   }
 
-  test('should restore the default when the override is cleared - 200', async ({ authenticatedUser }) => {
+  test('should restore the default when the override is cleared - 200', async ({ account }) => {
     // given
-    const { token } = authenticatedUser;
+    const { token } = account;
     const initial = await getClient.get(token);
     expect(initial.status()).toBe(200);
     const defaultPrompt = await initial.json();
@@ -55,9 +55,9 @@ test.describe('PUT /api/v1/users/tool-system-prompt', () => {
     expect(await restored.json()).toEqual(defaultPrompt);
   });
 
-  test('should reject an overlong prompt without changing the stored value - 400', async ({ authenticatedUser }) => {
+  test('should reject an overlong prompt without changing the stored value - 400', async ({ account }) => {
     // given
-    const { token } = authenticatedUser;
+    const { token } = account;
     const prompt = 'Keep this override';
     expect((await client.update(prompt, token)).status()).toBe(200);
 
@@ -72,10 +72,10 @@ test.describe('PUT /api/v1/users/tool-system-prompt', () => {
     expect(await stored.json()).toEqual({ toolSystemPrompt: prompt });
   });
 
-  test('should reject unauthorized requests - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized requests - 401', async ({ account }) => {
     // given
-    const cases = unauthorizedCases(authenticatedUser.token);
-    const original = await getClient.get(authenticatedUser.token);
+    const cases = unauthorizedCases(account.token);
+    const original = await getClient.get(account.token);
     expect(original.status()).toBe(200);
     const originalPrompt = await original.json();
 
@@ -89,7 +89,7 @@ test.describe('PUT /api/v1/users/tool-system-prompt', () => {
         expect.soft(await response.json()).toEqual({ message });
       });
     }
-    const stored = await getClient.get(authenticatedUser.token);
+    const stored = await getClient.get(account.token);
     expect(stored.status()).toBe(200);
     expect(await stored.json()).toEqual(originalPrompt);
   });

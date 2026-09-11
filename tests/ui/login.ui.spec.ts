@@ -1,4 +1,4 @@
-import { test } from '../../fixtures/ui-fixture';
+import { test } from '../../fixtures/ui/pages';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
 
 const admin = { username: ADMIN_USERNAME, password: ADMIN_PASSWORD };

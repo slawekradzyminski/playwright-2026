@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { GetTrafficInfoClient } from '../../../clients/traffic/get-traffic-info-client';
 import { GetTrafficLogsClient } from '../../../clients/traffic/get-traffic-logs-client';
 import { GetTrafficLogClient } from '../../../clients/traffic/get-traffic-log-client';
@@ -34,9 +34,9 @@ test.describe('GET /api/v1/traffic/logs/{correlationId}', () => {
   }
 
   for (const role of ['admin', 'client'] as const) {
-    test(`should return the captured log to the same session as ${role} - 200`, async ({ adminToken, authenticatedUser }) => {
+    test(`should return the captured log to the same session as ${role} - 200`, async ({ adminToken, account }) => {
       // given
-      const token = role === 'admin' ? adminToken : authenticatedUser.token;
+      const token = role === 'admin' ? adminToken : account.token;
       const sessionId = `traffic-log-${randomUUID()}`;
       const entry = await captureLog(token, sessionId);
 

@@ -46,9 +46,9 @@ State the expected behavior and its requirement/design/WCAG basis. For subjectiv
 
 Who is affected, which task is disrupted, scope, consequence, workaround and uncertainties?
 
-## Severity decision
+## Severity rationale and decision
 
-Explain the classification after assessing impact.
+Explain the consequence, scope, workaround and uncertainty in neutral terms before naming the classification. Do not start with the rating or justify an existing label by default.
 
 **Severity:** H / M / L (provisional when needed)
 

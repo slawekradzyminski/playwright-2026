@@ -1,6 +1,6 @@
 import { DeleteProductClient } from '../../../clients/products/delete-product-client';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/product-fixture';
+import { test } from '../../../fixtures/api/product';
 import { GetProductByIdClient } from '../../../clients/products/get-product-by-id-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 
@@ -15,9 +15,9 @@ test.describe('GET /api/v1/products/{id}', () => {
   });
 
   for (const role of ['admin', 'client'] as const) {
-    test(`should read the product as ${role} - 200`, async ({ product, adminToken, authenticatedUser }) => {
+    test(`should read the product as ${role} - 200`, async ({ product, adminToken, account }) => {
       // given
-      const token = role === 'admin' ? adminToken : authenticatedUser.token;
+      const token = role === 'admin' ? adminToken : account.token;
 
       // when
       const response = await client.get(product.id, token);

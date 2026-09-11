@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/authenticated-user-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { ChatToolsClient } from '../../../clients/ollama/chat-tools-client';
 import { ToolDefinitionsClient } from '../../../clients/ollama/tool-definitions-client';
 import { GetProductByIdClient } from '../../../clients/products/get-product-by-id-client';
@@ -20,15 +20,15 @@ test.describe('POST /api/v1/ollama/chat/tools', () => {
     products = new GetProductByIdClient(request);
   });
 
-  test('should execute a catalog lookup and stream the canned assistant answer - 200', async ({ authenticatedUser }) => {
+  test('should execute a catalog lookup and stream the canned assistant answer - 200', async ({ account }) => {
     // given
-    const available = await definitions.get(authenticatedUser.token);
+    const available = await definitions.get(account.token);
     expect(available.status()).toBe(200);
     const tools: ToolDefinition[] = await available.json();
     const payload = { model, messages: [{ role: 'user', content: beauty.prompt }], tools, think: true };
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectCompletedStream(response, model, 'chat');
@@ -42,18 +42,18 @@ test.describe('POST /api/v1/ollama/chat/tools', () => {
     expectNoChatThinking(response);
   });
 
-  test('should execute two tools in order and return the real backend snapshot - 200', async ({ authenticatedUser }) => {
+  test('should execute two tools in order and return the real backend snapshot - 200', async ({ account }) => {
     // given: the fixed mock scenario requests seeded product 1; read its current values.
-    const available = await definitions.get(authenticatedUser.token);
+    const available = await definitions.get(account.token);
     expect(available.status()).toBe(200);
     const tools: ToolDefinition[] = await available.json();
-    const product = await products.get(1, authenticatedUser.token);
+    const product = await products.get(1, account.token);
     expect(product.status(), 'Mock iphone scenario requires seeded product 1').toBe(200);
     const expectedProduct = await product.json();
     const payload = { model, messages: [{ role: 'user', content: iphone.prompt }], tools };
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectCompletedStream(response, model, 'chat');
@@ -65,43 +65,43 @@ test.describe('POST /api/v1/ollama/chat/tools', () => {
     expectAssistantAnswerAfterTools(response, iphone.text);
   });
 
-  test('should reject an empty tool list before streaming - 400', async ({ authenticatedUser }) => {
+  test('should reject an empty tool list before streaming - 400', async ({ account }) => {
     // given
     const payload = { model, messages: [{ role: 'user', content: beauty.prompt }], tools: [] };
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectJsonError(response, 400, { error: 'At least one tool definition is required' });
   });
 
-  test('should reject missing model and history - 400', async ({ authenticatedUser }) => {
+  test('should reject missing model and history - 400', async ({ account }) => {
     // given
     const payload = {};
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectJsonError(response, 400, { model: 'must not be blank', messages: 'At least one message is required' });
   });
 
-  test('should reject an invalid message role - 400', async ({ authenticatedUser }) => {
+  test('should reject an invalid message role - 400', async ({ account }) => {
     // given
     const payload = { model, messages: [{ role: 'invalid', content: beauty.prompt }] };
 
     // when
-    const response = await client.chat(payload, authenticatedUser.token);
+    const response = await client.chat(payload, account.token);
 
     // then
     expectJsonError(response, 400, { 'messages[0].role': "Role must be either 'system', 'user', 'assistant' or 'tool'" });
   });
 
-  test('should reject unauthorized tool chat - 401', async ({ authenticatedUser }) => {
+  test('should reject unauthorized tool chat - 401', async ({ account }) => {
     // given
     const payload = { model, messages: [{ role: 'user', content: beauty.prompt }] };
-    for (const { name, token, message } of unauthorizedCases(authenticatedUser.token)) {
+    for (const { name, token, message } of unauthorizedCases(account.token)) {
       await test.step(name, async () => {
         // when
         const response = await client.chat(payload, token);

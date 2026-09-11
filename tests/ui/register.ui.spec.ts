@@ -1,7 +1,7 @@
-import { test } from '../../fixtures/registration-ui-fixture';
+import { test } from '../../fixtures/ui/registration';
 
 test.describe('Registration screen', () => {
-  test('creates an account that can sign in', async ({ registerPage, loginPage, homePage, registrationUser }) => {
+  test('creates an account that can sign in', async ({ registerPage, loginPage, registrationUser }) => {
     // given
     await registerPage.open();
     await registerPage.fillDetails(registrationUser);

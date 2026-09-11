@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/account-fixture';
+import { test } from '../../../fixtures/shared/account';
 import { RightToBeForgottenClient } from '../../../clients/users/right-to-be-forgotten-client';
 import { UserByUsernameClient } from '../../../clients/users/user-by-username-client';
 import { RefreshClient } from '../../../clients/users/refresh-client';

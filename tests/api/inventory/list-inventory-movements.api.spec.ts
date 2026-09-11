@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/inventory-fixture';
+import { test } from '../../../fixtures/api/inventory';
 import { AdjustInventoryClient } from '../../../clients/inventory/adjust-inventory-client';
 import { ListInventoryMovementsClient } from '../../../clients/inventory/list-inventory-movements-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
@@ -73,9 +73,9 @@ test.describe('GET /api/v1/admin/inventory/{productId}/movements', () => {
     }
   });
 
-  test('should forbid a regular client - 403', async ({ inventoryProduct, authenticatedUser }) => {
+  test('should forbid a regular client - 403', async ({ inventoryProduct, account }) => {
     // given
-    const token = authenticatedUser.token;
+    const token = account.token;
 
     // when
     const response = await client.list(inventoryProduct.id, token);

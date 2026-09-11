@@ -29,11 +29,13 @@ Use at least 4.5:1 for this normal-sized text. Basis: [WCAG contrast minimum](ht
 
 Low-vision users may struggle to read placeholders. Persistent darker labels repeat their meaning, so the immediate information loss is limited.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is limited in the observed local workflow; core credential login remains usable.
+Placeholder contrast impairs readability, but persistent darker labels repeat the same meaning. That alternative limits information loss in the observed form. No inability to understand or complete the fields was demonstrated.
 
 **Severity:** L
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 

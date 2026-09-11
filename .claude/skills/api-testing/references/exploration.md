@@ -4,7 +4,7 @@ Exploration means following questions and investigating unexpected behavior, rat
 
 ## Start here
 
-- [API bug register — individual findings and status](../../../../docs/bugs/README.md)
+- [API bug register — individual findings and status](../../../../docs/bugs/api/README.md)
 
 - [Copyable bug-report template](bug-report-template.md)
 - [Swagger UI](http://localhost:8081/swagger-ui/index.html)

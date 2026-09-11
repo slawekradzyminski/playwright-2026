@@ -1,5 +1,5 @@
 import { expect } from '@playwright/test';
-import { test } from '../../../fixtures/inventory-fixture';
+import { test } from '../../../fixtures/api/inventory';
 import { ListInventoryClient } from '../../../clients/inventory/list-inventory-client';
 import { unauthorizedCases } from '../test-data/unauthorized-cases';
 
@@ -93,9 +93,9 @@ test.describe('GET /api/v1/admin/inventory', () => {
     }
   });
 
-  test('should forbid a regular client - 403', async ({ authenticatedUser }) => {
+  test('should forbid a regular client - 403', async ({ account }) => {
     // given
-    const token = authenticatedUser.token;
+    const token = account.token;
 
     // when
     const response = await client.list(token);

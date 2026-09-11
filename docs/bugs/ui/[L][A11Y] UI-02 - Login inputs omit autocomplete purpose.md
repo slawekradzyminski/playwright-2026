@@ -31,11 +31,13 @@ Registration also reproduces missing autocomplete metadata (2026-09-11, reposito
 
 Users relying on autofill and cognitive assistance receive less reliable input-purpose metadata. Actual password-manager failure was not tested; manual login remains available.
 
-## Severity decision
+## Severity rationale and decision
 
-The impact described above is limited in the observed local workflow; core credential login remains usable.
+Missing autocomplete purpose reduces explicit autofill metadata, but actual password-manager failure was not tested and users can still enter credentials. The demonstrated scope is incomplete input-purpose support, without established loss of the login workflow.
 
 **Severity:** L
+
+**Severity reviewed on:** 2026-09-11, using the recorded evidence and its limits. No new live reproduction or fixed-build verification was performed for this review.
 
 ## Acceptance criteria and retest
 
