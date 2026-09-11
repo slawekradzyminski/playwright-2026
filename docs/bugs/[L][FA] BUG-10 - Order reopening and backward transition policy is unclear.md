@@ -15,3 +15,9 @@
 **Impact assessment:** Admin can reopen cancelled orders without reserving stock again; intended workflow and downstream impact need clarification.
 
 **Severity:** Low (provisional). The expected transition policy is unresolved.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+A fresh order consumed 2 of 5 units; CANCELLED restored stock to 5, then PAID succeeded while stock remained 5. Reopening semantics are still undefined. Retain Needs clarification and provisional Low. This session did not demonstrate overselling, double-restocking, or the full backward-transition matrix.

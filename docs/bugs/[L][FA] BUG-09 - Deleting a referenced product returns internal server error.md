@@ -13,3 +13,9 @@
 **Impact assessment:** Admin product removal fails with an opaque server error when orders reference it; ordinary unreferenced cleanup works.
 
 **Severity:** Low. Demonstrated impact is limited to diagnostics or integration guidance; no broad outage or authorization bypass was shown.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Deleting a newly created product referenced by an order still returned 500 with Internal server error. Deleting the disposable order owner and then the product returned 204 for each. Retain Low on current evidence: the dependent-data restriction may be legitimate; the opaque server error is the confirmed defect.

@@ -1,4 +1,4 @@
-# [D] PUT user system prompts — Successful response contains undocumented null
+# [D] User prompts and password recovery — successful responses contain undocumented null
 
 Status: Open. Observed and reproduced on 2026-09-10 through http://localhost:8081, using disposable ROLE_CLIENT users without MFA. Running image/source revision was not identified. Both exploratory accounts were removed with verified 204 responses after each session.
 
@@ -21,3 +21,9 @@ Severity: Medium. Category: Documentation, consistent with DOC-02's successful-r
 ## Expected behavior and retest
 
 Clarify reset semantics and align the request and response schemas with the agreed behavior. If null is intended, explicitly allow and describe it; otherwise return a contract-compliant result or validation error. After that decision, retest null, omitted, empty and nonempty fields on both endpoints. Active automation covers strings and empty-string reset; it does not bless the undocumented null branch.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Both prompt PUT operations with an omitted field again returned 200 with the corresponding null field; their schemas still require a string when that property is present. Extended scope: an unknown forgot-password identifier returns 202 with token null, although ForgotPasswordResponseDto.token declares only string. Its description limits token exposure to local/testing profiles, but does not make a present null schema-valid. Retain Medium for successful-response type contradictions; production consumer impact remains unverified.

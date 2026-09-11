@@ -22,3 +22,9 @@ Document 401 bodies using ErrorDto, with examples for missing credentials and in
 ## Scope extension — username lookup, 2026-09-10
 
 GET `/api/v1/users/{username}` without Authorization also returns `401 {"message":"Unauthorized"}` while Swagger uses UserResponseDto. Reproduced using a disposable existing username during two subsequent exploratory sessions. The same impact, severity and proposed ErrorDto correction apply. Its 404 branch already uses ErrorDto and returned `{"message":"The user doesn't exist"}` as documented.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Unauthenticated list, me and username lookups returned 401 error maps. Their unchanged Swagger responses still reference UserResponseDto. Retain Low; no claim is made that public-directory visibility is an authorization defect.

@@ -1,4 +1,4 @@
-# [D] User prompt and refresh operations — Error schemas misdescribe responses
+# [D] User mutation, prompt and session endpoints — error contracts misdescribe responses
 
 Status: Open. Observed and reproduced on 2026-09-10 at http://localhost:8081. Deployed build identity and effective rate-limit configuration were not identified. Tests used disposable ROLE_CLIENT accounts without MFA; administrator cleanup returned 204.
 
@@ -19,3 +19,9 @@ Severity: Low. Category: Documentation.
 ## Expected behavior and retest
 
 Use ErrorDto for message errors and a validation-error map for field errors. Retest each operation/status with the requests above and compare the generated schema, descriptions and examples against actual bodies.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Unauthenticated prompt reads still returned JSON message errors. Passing refresh tests reconfirm invalid-token error bodies. Extended scope: profile PUT 400/401/403 reference UserEntity although actual responses are field maps or message errors; forgot-password 400 references ForgotPasswordResponseDto although an empty identifier returns an identifier field error. Both DELETE routes return JSON 401/403 errors without corresponding body schemas. These are related user error-contract gaps, not additional functional failures. Retain Low.

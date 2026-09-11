@@ -21,3 +21,9 @@ Severity: **Low**. Category: Documentation.
 ## Expected correction and retest
 
 Declare message errors and field validation maps on their actual branches. Describe DELETE's empty 404 response, or agree to return ErrorDto consistently. Repeat the requests and compare each status, body and media type with the updated contract. Keep runtime rejection tests active; do not use ProductDto to validate errors.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+An unauthenticated product GET returned the documented observed 401 message error while the unchanged specification still advertises a product model. Existing representative product mutation/error tests also pass. Retain Low; this reassessment did not rerun every original parsing boundary.

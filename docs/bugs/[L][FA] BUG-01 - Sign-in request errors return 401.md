@@ -71,3 +71,9 @@ Discovered during sign-in exploration on 2026-09-10. The reproduction and saniti
 ## Side effects / cleanup
 
 Successful login reproduction issues access/refresh tokens. Redact them from evidence. Do not use global logout on shared accounts; it can revoke other sessions. The original session did not change MFA or account profiles.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Fresh malformed sign-in JSON still returned 401 with Unauthorized. Related parsing symptom: an authenticated inventory adjustment with delta 2147483648 returned the same 401 twice; this value exceeds int32 and should be rejected as input, not treated as an authentication failure. This is recorded as a related manifestation, not an additional independently counted bug or a proven shared root cause. No authentication bypass was demonstrated. Low remains appropriate.

@@ -1,35 +1,42 @@
 # API bug register
 
-This is the central place to find and track API bugs discovered in this repository. Each finding has its own report with severity, environment, reproduction, actual/expected behavior, impact, and retest criteria.
+The individual reports contain reproduction evidence, expected behavior, impact, severity and retest criteria. Existing IDs are preserved. No finding is closed merely because the API suite passes.
 
-**Current register:** 21 findings — 19 Open and 2 Needs clarification; 10 functional API and 11 documentation; 5 Medium and 16 Low (including two provisional Low). No High-severity impact is demonstrated in the recorded evidence. All findings were reassessed on 2026-09-10; original observations concern sign-in and sign-up on that date.
+| ID | Observed impact | Severity | Status |
+|---|---|---|---|
+| [BUG-01](%5BL%5D%5BFA%5D%20BUG-01%20-%20Sign-in%20request%20errors%20return%20401.md) | Request/protocol errors give misleading authentication guidance; related inventory overflow parsing behaves similarly. | Low | Open |
+| [BUG-02](%5BL%5D%5BFA%5D%20BUG-02%20-%20Sign-in%20missing%20credentials%20bypass%20validation.md) | Missing credentials get generic rejection; the proposed validation policy is unagreed, with no bypass. | Low (provisional) | Needs clarification |
+| [BUG-03](%5BL%5D%5BFA%5D%20BUG-03%20-%20Sign-in%20maximum-length%20error%20mentions%20minimum.md) | Maximum-length input gets minimum-length guidance. | Low | Open |
+| [BUG-04](%5BM%5D%5BFA%5D%20BUG-04%20-%20Sign-up%20accepts%20empty%20email.md) | Historical empty-email acceptance creates invalid account data; current retest is blocked by an existing duplicate. | Medium | Open |
+| [BUG-05](%5BL%5D%5BFA%5D%20BUG-05%20-%20Sign-up%20parsing%20errors%20return%20401.md) | Malformed registration input gets misleading authentication guidance. | Low | Open |
+| [BUG-06](%5BM%5D%5BFA%5D%20BUG-06%20-%20Sign-up%20password%20limit%20contradicts%20contract.md) | Contract-valid passwords above 72 bytes cannot register. | Medium | Open |
+| [BUG-07](%5BL%5D%5BFA%5D%20BUG-07%20-%20Sign-up%20maximum%20errors%20mention%20minimum.md) | Registration maximum-length errors describe minimum length. | Low | Open |
+| [BUG-08](%5BL%5D%5BFA%5D%20BUG-08%20-%20Invalid%20order%20status%20returns%20unauthorized.md) | Invalid order status gets misleading authentication guidance. | Low | Open |
+| [BUG-09](%5BL%5D%5BFA%5D%20BUG-09%20-%20Deleting%20a%20referenced%20product%20returns%20internal%20server%20error.md) | Referenced-product deletion fails with an opaque server error; the underlying deletion restriction may be legitimate. | Low | Open |
+| [BUG-10](%5BL%5D%5BFA%5D%20BUG-10%20-%20Order%20reopening%20and%20backward%20transition%20policy%20is%20unclear.md) | Cancelled orders can reopen without reacquiring stock; intended transition policy is unresolved. | Low (provisional) | Needs clarification |
+| [BUG-11](%5BM%5D%5BFA%5D%20BUG-11%20-%20QR%20codes%20silently%20replace%20Unicode%20characters.md) | Decoded QR content silently replaces Polish characters and emoji. | Medium | Open |
+| [DOC-01](%5BL%5D%5BD%5D%20DOC-01%20-%20Swagger%20sign-in%20errors%20use%20success%20schema.md) | Login error consumers receive misleading success models; no outage demonstrated. | Low | Open |
+| [DOC-02](%5BM%5D%5BD%5D%20DOC-02%20-%20Swagger%20sign-in%20schema%20rejects%20null%20challenge%20fields.md) | Normal login null challenge fields contradict declared string types. | Medium | Open |
+| [DOC-03](%5BL%5D%5BD%5D%20DOC-03%20-%20Swagger%20sign-in%20contract%20omits%20401.md) | Conditional sign-in 401 is omitted from the contract. | Low | Open |
+| [DOC-04](%5BL%5D%5BD%5D%20DOC-04%20-%20Swagger%20sign-up%20omits%20error%20response%20schemas.md) | Registration error bodies lack documented models. | Low | Open |
+| [DOC-05](%5BL%5D%5BD%5D%20DOC-05%20-%20User%20GET%20errors%20use%20success%20schemas.md) | User GET errors use public-user success models. | Low | Open |
+| [DOC-06](%5BL%5D%5BD%5D%20DOC-06%20-%20Prompt%20and%20refresh%20error%20schemas%20misdescribe%20responses.md) | User mutation, prompt and session error models misdescribe actual field/message errors. | Low | Open |
+| [DOC-07](%5BM%5D%5BD%5D%20DOC-07%20-%20Prompt%20update%20returns%20undocumented%20null%20values.md) | Prompt reset and unknown-account recovery return null values excluded by successful-response types. | Medium | Open |
+| [DOC-08](%5BL%5D%5BD%5D%20DOC-08%20-%20Product%20error%20schemas%20misdescribe%20responses.md) | Product error responses use success models. | Low | Open |
+| [DOC-09](%5BM%5D%5BD%5D%20DOC-09%20-%20Product%20success%20schema%20excludes%20returned%20values.md) | Ordinary product responses violate nullable and timestamp types. | Medium | Open |
+| [DOC-10](%5BL%5D%5BD%5D%20DOC-10%20-%20Product%20creation%20omits%20nonempty%20description%20constraint.md) | Empty product descriptions satisfy the schema but fail creation. | Low | Open |
+| [DOC-11](%5BL%5D%5BD%5D%20DOC-11%20-%20Commerce%20errors%20omit%20stock%20conflicts%20and%20use%20success%20schemas.md) | Commerce stock conflicts and error bodies lack accurate models. | Low | Open |
+| [DOC-12](%5BM%5D%5BD%5D%20DOC-12%20-%20Inventory%20response%20schemas%20and%20error%20branches%20are%20incomplete.md) | Routine inventory values violate success types; error and conflict branches are incomplete. | Medium | Open |
+| [DOC-13](%5BL%5D%5BD%5D%20DOC-13%20-%20QR%20error%20responses%20are%20documented%20as%20PNG%20images.md) | QR errors are JSON although the contract advertises PNG. | Low | Open |
+| [DOC-14](%5BL%5D%5BD%5D%20DOC-14%20-%20Traffic%20authentication%20session%20and%20error%20contracts%20are%20incomplete.md) | Traffic secured-profile setup and error/empty-body branches are incomplete. | Low | Open |
 
-| ID | Finding title | Status |
-|---|---|---|
-| [BUG-01](%5BL%5D%5BFA%5D%20BUG-01%20-%20Sign-in%20request%20errors%20return%20401.md) | [L][FA] POST /api/v1/users/signin — Request/protocol errors are reported as unauthorized | Open |
-| [BUG-02](%5BL%5D%5BFA%5D%20BUG-02%20-%20Sign-in%20missing%20credentials%20bypass%20validation.md) | [L][FA] POST /api/v1/users/signin — Required login credentials lack presence validation | Needs clarification |
-| [BUG-03](%5BL%5D%5BFA%5D%20BUG-03%20-%20Sign-in%20maximum-length%20error%20mentions%20minimum.md) | [L][FA] POST /api/v1/users/signin — Maximum-length violations show a minimum-length error | Open |
-| [BUG-04](%5BM%5D%5BFA%5D%20BUG-04%20-%20Sign-up%20accepts%20empty%20email.md) | [M][FA] POST /api/v1/users/signup — Empty email addresses create accounts | Open |
-| [BUG-05](%5BL%5D%5BFA%5D%20BUG-05%20-%20Sign-up%20parsing%20errors%20return%20401.md) | [L][FA] POST /api/v1/users/signup — Malformed JSON is reported as unauthorized | Open |
-| [BUG-06](%5BM%5D%5BFA%5D%20BUG-06%20-%20Sign-up%20password%20limit%20contradicts%20contract.md) | [M][FA] POST /api/v1/users/signup — Documented valid passwords fail above 72 bytes | Open |
-| [BUG-07](%5BL%5D%5BFA%5D%20BUG-07%20-%20Sign-up%20maximum%20errors%20mention%20minimum.md) | [L][FA] POST /api/v1/users/signup — Maximum-length violations describe the minimum | Open |
-| [DOC-01](%5BL%5D%5BD%5D%20DOC-01%20-%20Swagger%20sign-in%20errors%20use%20success%20schema.md) | [L][D] POST /api/v1/users/signin — Error responses are documented as successful login objects | Open |
-| [DOC-02](%5BM%5D%5BD%5D%20DOC-02%20-%20Swagger%20sign-in%20schema%20rejects%20null%20challenge%20fields.md) | [M][D] POST /api/v1/users/signin — Successful response schema does not represent nullable fields correctly | Open |
-| [DOC-03](%5BL%5D%5BD%5D%20DOC-03%20-%20Swagger%20sign-in%20contract%20omits%20401.md) | [L][D] POST /api/v1/users/signin — Invalid-Bearer failure is missing from the sign-in contract | Open |
-| [DOC-04](%5BL%5D%5BD%5D%20DOC-04%20-%20Swagger%20sign-up%20omits%20error%20response%20schemas.md) | [L][D] POST /api/v1/users/signup — Validation response bodies have no documented schema | Open |
-| [DOC-05](%5BL%5D%5BD%5D%20DOC-05%20-%20User%20GET%20errors%20use%20success%20schemas.md) | User GET error models mislead consumers; authentication remains enforced. Severity: Low. | Open |
-| [DOC-06](%5BL%5D%5BD%5D%20DOC-06%20-%20Prompt%20and%20refresh%20error%20schemas%20misdescribe%20responses.md) | Prompt/refresh errors give consumers misleading models; rejection works. Severity: Low. | Open |
-| [DOC-07](%5BM%5D%5BD%5D%20DOC-07%20-%20Prompt%20update%20returns%20undocumented%20null%20values.md) | Valid omitted-field requests produce success values incompatible with declared string types. Severity: Medium. | Open |
-| [DOC-08](%5BL%5D%5BD%5D%20DOC-08%20-%20Product%20error%20schemas%20misdescribe%20responses.md) | Product error models mislead consumers; tested rejections work. Severity: Low. | Open |
-| [DOC-09](%5BM%5D%5BD%5D%20DOC-09%20-%20Product%20success%20schema%20excludes%20returned%20values.md) | Normal product responses contradict nullable and timestamp types. Severity: Medium. | Open |
-| [DOC-10](%5BL%5D%5BD%5D%20DOC-10%20-%20Product%20creation%20omits%20nonempty%20description%20constraint.md) | Empty descriptions satisfy the schema but fail creation; nonempty text works. Severity: Low. | Open |
-
+**Current register: 25 findings — 23 Open, 2 Needs clarification; 11 functional API, 14 documentation; 7 Medium, 18 Low (including two provisional Low).** No High impact or production security compromise has been demonstrated. The latest supervisor assessment distinguishes fresh reproductions, reviewed historical evidence and blocked prerequisites.
 
 ## How to maintain the register
 
 1. Copy the [bug-report template](../exploratory-testing/bug-report-template.md) into this folder. Use the next unused `BUG-NN` for FA or `DOC-NN` for D; keep the ID stable. Name the file `[severity][category] ID - Short description.md`, for example `[L][FA] BUG-01 - Sign-in request errors return 401.md`. Keep filename prefixes aligned with severity/category changes and update links when renaming.
 2. Start new report headings with `[FA/D]`, followed by the method, path, and observable problem. Present evidence and an impact assessment before assigning severity, following the [classification guide](../exploratory-testing/README.md#classify-findings). Add severity prefixes to filenames and register entries only after completing the assessment. When reassessing an existing report, move its severity decision below its impact assessment.
-3. Add the report to the table above using its full title, including the severity and category prefixes. Update its status here and in the report together; keep the counts current.
+3. Add the report to the table above with observed impact before the separate severity and status columns. Update its status here and in the report together; keep the counts current.
 4. Record fixes as **Fixed, awaiting retest**. Use **Verified** only after recording the retest date, build, and evidence. Keep closed reports for history.
 
 The individual reports are the authoritative place for status and retest updates. Keep reproduction evidence in each bug report; separate per-endpoint exploration reports are not maintained. These are repository records; no GitHub issues have been published.
@@ -44,14 +51,15 @@ The 2026-09-10 session used a 20-minute timebox to investigate account creation,
 
 Whitespace-only username/password/names and numeric username/names were accepted. Their normalization, coercion and nonblank policies need clarification; these are not counted as confirmed defects. Concurrent duplicate creation, email case sensitivity, verification delivery, abuse/rate limiting, other HTTP media types/methods, and broader Unicode normalization were not tested. This session is not a release-readiness declaration.
 
-## Reassessment — 2026-09-10
+## Supervisor reassessment — 2026-09-10
 
-All 11 reports now present the impact assessment before the severity decision. The review uses existing evidence; it is not a new runtime test or confirmation of fixes. Claims about client outages, recovery loops and downstream security consequences have been qualified where they were not demonstrated.
+All 21 existing reports were reviewed; representative live reproductions and the unchanged live contract support the dispositions in each report. This was not a complete rerun of every historical boundary matrix or a fixed-build verification. The configured backend is `slawekradzyminski/backend:3.7.16`; local source may differ from the deployed revision. The full API suite passes independently of these unresolved findings.
 
-Misleading rejection responses and incomplete error documentation currently show diagnostic or integration effort, without demonstrated material consumer failure. Consequently BUG-01, BUG-05, DOC-01 and DOC-04 move from Medium to Low. BUG-02 likewise moves to provisional Low and Needs clarification because the proposed missing-credential policy is not an agreed requirement.
+BUG-02 and BUG-10 remain policy questions, not confirmed security/state-machine violations. BUG-04 could not be freshly reproduced because an existing account occupies the empty email; that does not prove a fix, and no unrelated account was changed to enable the test. BUG-01/05/08 share a symptom class, but a common root cause was not established. Do not add their severities together or infer an outage from their combined count.
 
-Persisted invalid account data, rejection of contract-valid passwords, and a type contradiction on a normal successful response have stronger direct consequences. BUG-04, BUG-06 and DOC-02 therefore remain Medium. BUG-03, BUG-07 and DOC-03 remain Low because their demonstrated effects concern corrective guidance or an undocumented conditional failure with a workaround. Each report records its own limitations and reassessment triggers.
+The substantive new functional finding is BUG-11: native barcode decoding, repeated independently by the QR worker and supervisor, proves Unicode content loss despite a valid PNG. DOC-12/13/14 cover observed inventory, QR and traffic contract gaps. Existing DOC-06/07 were extended for related profile/password-recovery responses instead of creating duplicate findings for each field or status.
 
+The proposed traffic page-size failure was rejected after an independent probe confirmed correct clamping. Inventory underflow/conflicting replay 409 responses protect stock and are covered as valid runtime behavior; missing Swagger entries are documentation defects. Numeric QR coercion, directory visibility, order reopening policy and untested production behavior remain questions, not confirmed additional bugs. Local reset-token exposure is an explicit training feature; it is not evidence of production token leakage or account-enumeration resistance.
 
 ## User GET exploration — 2026-09-10
 
@@ -94,11 +102,4 @@ Clients manage their own carts, create orders and list their own orders. Only GE
 
 Cleanup order was investigated explicitly: product deletion before dependent order removal returned 500. All exploratory accounts and products were ultimately removed with 204, including the product retained by the failed deletion attempt. The isolated commerce fixture deletes account-owned orders before products and asserts cleanup responses.
 
-| ID | Observed impact | Severity | Status |
-|---|---|---|---|
-| [DOC-11](%5BL%5D%5BD%5D%20DOC-11%20-%20Commerce%20errors%20omit%20stock%20conflicts%20and%20use%20success%20schemas.md) | Error consumers lack documented stock-conflict handling and receive misleading models; no consumer outage demonstrated. | Low | Open |
-| [BUG-08](%5BL%5D%5BFA%5D%20BUG-08%20-%20Invalid%20order%20status%20returns%20unauthorized.md) | A valid administrator gets misleading authentication guidance for invalid input; valid status changes remain usable. | Low | Open |
-| [BUG-09](%5BL%5D%5BFA%5D%20BUG-09%20-%20Deleting%20a%20referenced%20product%20returns%20internal%20server%20error.md) | Admin product removal fails with an opaque server error when orders reference it; ordinary unreferenced cleanup works. | Low | Open |
-| [BUG-10](%5BL%5D%5BFA%5D%20BUG-10%20-%20Order%20reopening%20and%20backward%20transition%20policy%20is%20unclear.md) | Admin can reopen cancelled orders without reserving stock again; intended workflow and downstream impact need clarification. | Low (provisional) | Needs clarification |
-
-New findings: four Low (one provisional), three Open and one Needs clarification. These remain unresolved despite the passing suite. Uncovered: simultaneous checkout/stock races, multi-product atomic rollback, full null/type/overflow/address matrices, price-change policy, real expiry/MFA, rate-limit quotas and the complete order transition matrix. Quantity and pagination limits here are business-input boundaries; API throttling policy remains untested. Inventory endpoint automation remains a separate plan item.
+Commerce findings are indexed in the central table above. Uncovered: simultaneous checkout/stock races, multi-product atomic rollback, full null/type/overflow/address matrices, price-change policy, real expiry/MFA, rate-limit quotas and the complete order transition matrix. Quantity and pagination limits here are business-input boundaries; API throttling policy remains untested. Inventory endpoint automation remains a separate plan item.

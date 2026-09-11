@@ -54,3 +54,9 @@ Discovered during sign-in exploration on 2026-09-10. The reproduction and saniti
 ## Side effects / cleanup
 
 The shown failing requests returned no login tokens. No account edits or cleanup actions were performed for this finding.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+A 256-character username with an otherwise ordinary password returned 400 and Minimum username length: 4 characters. The misleading guidance is reproduced; retain Low.

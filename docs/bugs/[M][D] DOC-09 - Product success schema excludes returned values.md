@@ -17,3 +17,9 @@ Severity: **Medium**. Category: Documentation.
 ## Expected correction and retest
 
 Declare imageUrl nullable. Agree whether timestamps should carry an offset (preferred for an absolute instant) or be explicitly documented as local date-times with their timezone semantics. Verify POST, GET list/by-ID and PUT against the agreed schema after correction. Do not add a regression asserting the current timezone omission as desirable behavior.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Fresh product creation again returned imageUrl null and createdAt/updatedAt without an offset or UTC designator. The live ProductDto still declares a non-null string and date-time formats. The product was removed with 204. Retain Medium for response-contract incompatibility, not a demonstrated catalog outage.

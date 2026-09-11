@@ -58,3 +58,9 @@ Exploration preceded automation. Raw requests and scratch drivers remain in igno
 ## Side effects / cleanup
 
 Successful exploratory accounts were deleted with the administrator-only DELETE /api/v1/users/{username} endpoint, checking 204. Automated sign-up fixtures also delete only accounts created by their own test, including unexpected successful registrations. No existing user accounts were deleted.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Fresh registrations accepted 72 ASCII bytes, rejected 73 ASCII bytes, rejected 37 copies of ą (74 UTF-8 bytes), and rejected 255 ASCII characters with password cannot be more than 72 bytes. The live schema still advertises maxLength 255. The accepted account was deleted with 204. Retain Medium; silent truncation and authentication bypass were not demonstrated.

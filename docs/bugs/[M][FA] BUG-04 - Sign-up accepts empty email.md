@@ -58,3 +58,9 @@ Exploration preceded automation. Raw requests and scratch drivers remain in igno
 ## Side effects / cleanup
 
 Successful exploratory accounts were deleted with the administrator-only DELETE /api/v1/users/{username} endpoint, checking 204. Automated sign-up fixtures also delete only accounts created by their own test, including unexpected successful registrations. No existing user accounts were deleted.
+
+## Supervisor reassessment — 2026-09-10
+
+Gateway: `http://localhost:8081`; deployed backend image: `slawekradzyminski/backend:3.7.16`. The live OpenAPI was compared structurally with the retained September 10 snapshot and matched exactly. Local source HEAD is `8cb264a24ef997d635210bc5d0152363f78f8486`; deployed source revision remains unverified. This is a current-build reproduction/evidence review, not a fixed-build verification.
+
+Both new empty-email attempts returned 400 with Email is already in use. An existing account already occupies that value, preventing this reproduction precondition. No unrelated account was changed or deleted to free it. Historical successful reproductions still support Open/Medium, but this session did not reconfirm acceptance and does not establish a fix. Repeat on an isolated database with the empty email unused.
