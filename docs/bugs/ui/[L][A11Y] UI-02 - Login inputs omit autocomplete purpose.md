@@ -1,4 +1,4 @@
-# [A11Y] Login — Login inputs omit autocomplete purpose
+# [A11Y] Login and registration — Inputs omit autocomplete purpose
 
 **ID:** UI-02  
 **Status:** Open  
@@ -24,6 +24,8 @@ Local evidence is ignored; the observations above remain reproducible without it
 ## Expected result and basis
 
 Set autocomplete="username" and autocomplete="current-password". Basis: [WCAG input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html). Browser heuristics are not an explicit purpose declaration.
+
+Registration also reproduces missing autocomplete metadata (2026-09-11, repository `0a79eb8`, Chromium 152.0.7977.84): inspect all five inputs on `/register`; each has no `autocomplete` attribute. Extend the fix to use `username`, `email`, `new-password`, `given-name`, and `family-name` respectively. No password-manager or screen-reader behavior was tested.
 
 ## Impact assessment
 

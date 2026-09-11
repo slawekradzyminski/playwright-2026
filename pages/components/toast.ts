@@ -21,6 +21,13 @@ export class Toast {
     await expect(notification.getByTestId('toast-description')).toHaveText(message);
   }
 
+  async expectSuccess(message: string) {
+    const notification = this.notification(message);
+    await expect(notification).toBeVisible();
+    await expect(notification.getByTestId('toast-title')).toHaveText('Success');
+    await expect(notification.getByTestId('toast-description')).toHaveText(message);
+  }
+
   async dismiss(message: string) {
     await this.notification(message).getByTestId('toast-close').click();
   }

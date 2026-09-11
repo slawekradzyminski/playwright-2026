@@ -1,6 +1,55 @@
 # Exploratory UI testing
 
-Explore the deployed screen before designing tests. Existing tests are hints, not a specification. Use the global **playwright-cli** skill and CLI browser sessions, including `run-code` for measurements and controlled experiments.
+Explore to discover consequential bugs and challenge assumptions about the requested UI. Existing tests and the ideas below are starting points, not a specification or a checklist to exhaust. Use the global **playwright-cli** skill for live browser exploration, including `run-code` for measurements and controlled experiments.
+
+## Choose the investigation
+
+Form a brief testing objective from the user's request, the screen's purpose, existing coverage and known findings. Identify what users should achieve, what must remain true, and where failure would matter. Keep this lightweight: a sentence or short scratch note is enough, not a plan that needs approval.
+
+Choose your own experiments, order, data, and depth. Draw on your testing knowledge and invent probes beyond these examples. Follow surprising behavior, weak feedback, inconsistent state and suspicious traffic; change direction when evidence suggests a better hypothesis. Routine exploratory choices within the authorized scope do not require confirmation. Investigate adjacent behavior when it explains a finding, without turning that into an unrelated screen's test suite.
+
+For a useful experiment, ask: what might be wrong, what observation would distinguish it from correct behavior, and what would change my mind? Observe the result, update the hypothesis, and choose the next probe. Try a contrasting case or alternative explanation before diagnosing a cause. Record concise observations and decisions that help reproduce or assess a finding; do not narrate every click or write an exhaustive reasoning diary.
+
+Prioritize likely or high-impact failures and uncertain transitions over repeating familiar happy paths. A promising anomaly deserves follow-up even if it interrupts the initial plan. Conversely, leave an unproductive line of investigation when new probes add little information. Do not equate creativity with random input, huge boundary matrices, or a required number of novel tests.
+
+## Lenses to draw from
+
+Select and combine these where they help; they are neither ordered phases nor mandatory cases for every screen.
+
+- **Intent and side effects:** Does an action do only what its label promises? Compare visible success with HTTP and persisted state. Think about cancel, back, navigation and other secondary actions as well as submit.
+- **State and sequence:** What changes if a user edits, retries, leaves and returns, refreshes, or acts after an error? Probe combinations and transitions that isolated controls would miss.
+- **Timing and concurrency:** Where could a delayed response, repeated action, interrupted request, stale tab or changed session produce conflicting state? Use controlled experiments when they test a concrete hypothesis; label injected conditions.
+- **Data and rules:** Which meaningful boundaries, relationships between fields, roles or existing records could contradict the apparent rules? Choose representative inputs rather than mechanically enumerating values.
+- **Perception and access:** Can users perceive, reach and recover from the action with different viewports, keyboard use or assistive semantics? Inspect screenshots and DOM properties as appropriate; measure suspected contrast failures.
+- **Feedback and cost:** Are errors useful, inputs preserved, loading states understandable and requests proportionate? Investigate surprising latency, duplication, failures or console exceptions rather than assuming they are defects.
+
+For example, a secondary action inside a form may behave differently once data is valid: empty-form validation can hide accidental submission. Testing navigation with valid unsaved data and checking for forbidden mutations is a high-value probe here. Use empty or invalid states as contrasting cases when informative, not as a universal three-state matrix for every control. Inspect effective button type and form ownership if the evidence points toward unintended submission. Apply the broader lesson—combine action, state and side effects—to other screens instead of merely replaying the registration example.
+
+## Evidence that makes exploration credible
+
+Freedom to choose experiments does not relax evidence, scope or cleanup requirements.
+
+Record enough environment context to reproduce findings: URL, date, browser/version, build (or unknown), repository revision, role, fake data, viewport/emulation and relevant zoom/cache/throttling settings. Use a named CLI session and keep scratch scripts, screenshots and sanitized measurements in ignored `exploration/ui/<screen>-YYYY-MM-DD/`. Use API setup/cleanup as directed by `AGENTS.md`; clean up disposable data and sessions even after failures.
+
+For a screen exploration, capture and **open screenshots** at the desktop, tablet and mobile baselines below. Choose states and viewport/full-page captures that answer actual layout questions; a gallery of every state at every size is unnecessary. Wait for meaningful readiness and distinguish animation from persistent clipping. A focused reproduction needs only the visual evidence relevant to the suspected defect. Resized desktop screenshots do not establish real-device or screen-reader correctness. Subjective design concerns belong under **Needs clarification**, not invented requirements.
+
+Capture HTTP traffic before the actions under investigation and actually review it against user intent, including successful responses and actions expected to send no mutation. Keep a compact, sanitized record linking meaningful actions and form/session state to expected and forbidden effects, observed method/path/count/status, and resulting UI/backend state. JSON, CSV, text, or annotated request snapshots are all acceptable; no entry for every keystroke is needed. Include duration, failed or pending requests and observation bounds when relevant to the claim. A log that was saved but not reviewed does not establish network analysis.
+
+CLI `requests` snapshots before/after an action can establish the delta by request ID; preserve both if cumulative. Inspect relevant details locally. Do not stop at the destination URL: requests can complete later. Observe pending requests through completion/failure and use a bounded window for suspected delayed work; absence claims apply only to that window. Verify suspected mutations through a read API where possible. Redact credentials, cookies, tokens, personal data and sensitive query parameters. HAR/traces are optional local diagnostics and can contain secrets; prefer sanitized evidence for review.
+
+Collect console/page errors around investigated actions and distinguish expected negative responses, injected failures and tooling problems from application defects. For performance findings, report sample counts and conditions and repeat suspicious measurements. Requests over 1 s or a usable screen taking over 2.5 s are investigation hints, not SLAs; user-visible delay or unusual behavior can justify investigation below those values too. Flag material delays promptly. Do not generalize local timing to field performance.
+
+If tooling fails, recover or state which observations are missing. Separate observed behavior, inferred cause and untested consequences. A correct URL, a quiet console or a passing regression suite cannot substitute for checking the relevant business effect.
+
+## Decide when to finish
+
+Finish when the requested scope has a credible evidence-based assessment: important user outcomes and plausible failure modes have been explored, promising anomalies have been reproduced or clearly left unresolved, and additional probes are yielding little useful information. Respect explicit time or scope limits. No fixed number of probes, bugs or completed checklist items establishes completeness.
+
+Before closing, challenge your own coverage: what important behavior have I only assumed, which states or side effects might hide a defect, and would one contrasting experiment materially improve confidence? Choose the answer from the screen and observations. State meaningful gaps and unresolved risks rather than claiming exhaustive coverage.
+
+Use [bug reporting](bug-reporting.md) for actionable findings, preserving essential sanitized evidence in individual reports and the UI register. Keep scratch investigation notes local; do not create separate per-screen reports or screenshot galleries. Explain findings, coverage and limits briefly to the user. Lead with the observed impact and supporting evidence; use plain prose and only as much structure as the result needs.
+
+If automation is requested, then use [automation](automation.md) to select a small set of valuable business regressions from what was learned. Its small-suite constraint does not limit exploratory breadth. Document proposed regressions for open defects, including forbidden side effects; do not encode a defect as expected behavior. Follow [review and improvement](review-and-improvement.md) for code verification and closeout.
 
 ## Viewport baseline
 
@@ -13,35 +62,3 @@ Selected on 2026-09-11 from Statcounter worldwide **August 2026** data:
 | Mobile, portrait | 414 × 896 | 13.63% | [Mobile](https://gs.statcounter.com/screen-resolution-stats/mobile/worldwide) |
 
 These are the leading reported sizes in each category, used as representative CSS viewport targets. Screen resolution is not available browser content height: browser chrome, zoom, DPR and the software keyboard change the usable area. Global traffic is a starting point; revisit with product analytics. Configuration lives in `ui-viewports.ts`. Automated UI tests run on desktop only (1920 × 1080), per the product decision on 2026-09-11. Tablet/mobile sizes are exploratory targets, not test projects. Resizing a CLI desktop session only checks responsive layout and does not replace real-device Safari, keyboard, or screen-reader testing.
-
-## Session process
-
-1. Record URL, date, browser/version, app build (or unknown), test repository revision, role, data, viewport, device emulation, zoom, and network/CPU settings. Review existing bugs and requirements.
-2. Create `exploration/ui/<screen>-YYYY-MM-DD/` (already ignored). Open a named CLI session. Capture the initial accessibility snapshot, discover test IDs, and inventory actions and states.
-3. Inspect initial, validation, rejected, loading, successful, and recovery states. Exercise keyboard Tab/Shift+Tab/Enter/Escape, boundaries, navigation, refresh, and relevant session transitions. Use fake data. Clean up sessions/fixtures afterwards.
-4. At all three baseline viewports capture both the visible viewport and, when useful, the full page. Name files `<profile>-<state>.png`. Wait for meaningful UI readiness; disable animations for settled screenshots, but inspect the real transition separately. Do not mistake an animation frame for clipping.
-5. **Open and visually inspect the screenshots yourself.** Accessibility snapshots cannot establish visual correctness. Look for clipping, horizontal scrolling, wrapping, overlap, spacing, hierarchy, touch targets, focus, toasts covering actions, and responsive menus. Share inline images or absolute clickable file paths during the session. Keep screenshots together in the session folder; do not generate an HTML gallery.
-6. For subsequent sessions compare the same state/data/viewport against previously reviewed evidence. Record changes and ask the user about subjective design differences. First-session screenshots are a candidate baseline, not an approved golden image. Agent visual review is not pixel-diff regression or a conformance certification.
-7. Accessibility: inspect accessible names, labels, headings/landmarks, error associations and invalid state, live announcements, focus order/visibility, keyboard traps, autofill purpose, contrast, reflow/zoom, and touch targets. Measure suspected contrast failures and document colors/backgrounds. Automated scanners may supplement this; explicitly list checks not performed.
-8. Console: collect `playwright-cli console`, page exceptions and failed resources from before the action. Separate expected negative-response logs, injected failures and tooling warnings from application defects.
-9. Network: use `playwright-cli requests`, request details, and response timing listeners. Correlate user intent with method/path/count/status and observable effects. Check duplicate calls, unnecessary fetches, retries, cancellations and leaks. Distinguish reloads, redirects, preflights and intentional polling from waste. Redact credentials, cookies, tokens, personal data and OAuth query parameters.
-10. Performance: record navigation and action-to-result timing plus request durations, sample counts, cache and throttling conditions. Notify the user immediately about a suspicious delay. As initial **investigation triggers**, use >1 s for an interactive API request or >2.5 s for a usable screen, unexplained repeated requests, or visibly blocked input. These are triage heuristics, not agreed SLAs. Repeat small samples and separate backend timing from rendering/network cost; do not claim a local sample represents field performance.
-11. UX: check loading feedback, prevention of duplicate submissions, error clarity/persistence, recovery without retyping, discoverability, back navigation and effort on smaller screens. Report clear failures directly. Record subjective improvements as **Needs clarification**, show evidence, and ask the user while continuing independent work.
-12. Do not create separate per-screen or per-endpoint exploration reports. Summarize outcomes briefly in the conversation; preserve actionable findings in individual bug reports. Write reproducible repository reports using the [UI template](bug-report-template.md) and its `[severity][type] ID - Short description.md` naming convention, with impact before severity. Keep one fixable issue per report. Add them to [the UI register](../../../../docs/bugs/ui/README.md). No external issue publication is implied. Preserve essential sanitized DOM/network evidence in committed reports; raw screenshots stay in exploration unless explicitly selected for durable inclusion.
-13. For implementation, follow [automation](automation.md). Only then automate a small set of business end-to-end flows. Keep one representative client-validation case; leave detailed boundary matrices to lower-level tests. Exploration coverage does not imply a separate UI test for every observation. Keep one spec per screen, assertions in page objects/components, and compose reusable headers/toasts. Use meaningful positive outcomes and precise negative messages. Keep known defects in reports; never bless defective behavior as the expected contract. Separate mocked resilience checks from live integration checks.
-14. Run `npm run test:ui`, TypeScript checking and `npm run test:api` as appropriate. Briefly state actual totals, limitations and cleanup in the conversation. Link the screenshot folder and bug findings.
-
-## CLI examples
-
-```sh
-mkdir -p exploration/ui/login-YYYY-MM-DD
-playwright-cli -s=login open http://localhost:8081/login
-playwright-cli -s=login resize 1920 1080
-playwright-cli -s=login snapshot --filename=exploration/ui/login-YYYY-MM-DD/desktop-initial.yaml
-playwright-cli -s=login screenshot --filename=exploration/ui/login-YYYY-MM-DD/desktop-initial.png
-playwright-cli -s=login console
-playwright-cli -s=login requests
-playwright-cli -s=login close
-```
-
-Repeat at 768 × 1024 and 414 × 896. For full-page settled screenshots use `page.screenshot({ path, fullPage: true, animations: 'disabled' })` through CLI `run-code`. Keep scenario scripts and sanitized raw measurements with the session.

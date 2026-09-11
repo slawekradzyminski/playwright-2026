@@ -13,6 +13,7 @@
 # UI test rules
 - Prefer `getByTestId` selectors whenever a stable data-testid is available
 - Use Page Object Model: one test file per screen, page objects in `pages/`, and reusable components in `pages/components/`.
+- setup and cleanup test data via API
 - Keep locators, UI actions, and all assertions in the relevant page object or component.
 - Add shared components to pages through composition
 - Initialize page objects in `beforeEach` or test-scoped fixtures

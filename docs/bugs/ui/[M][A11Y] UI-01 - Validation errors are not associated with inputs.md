@@ -1,4 +1,4 @@
-# [A11Y] Login — Validation errors are not associated with inputs
+# [A11Y] Login and registration — Validation errors are not associated with inputs
 
 **ID:** UI-01  
 **Status:** Open  
@@ -20,6 +20,8 @@ Both visible error paragraphs have role="alert" and test IDs login-username-erro
 ![Evidence](../../../exploration/ui/login-2026-09-11/mobile-empty.png)
 
 Local evidence is ignored; the observations above remain reproducible without it.
+
+Registration also reproduces this issue (2026-09-11, repository `0a79eb8`, Chromium 152.0.7977.84, same local environment): submit `/register` empty. All five `register-{username,email,password,firstname,lastname}-input` elements omit `aria-invalid` and `aria-describedby`, while adjacent `register-*-error` alerts show the required-field messages. Focus moves to Username. Desktop/tablet/mobile validation screenshots were visually reviewed in `exploration/ui/register-2026-09-11/`. Extend the fix and retest to all five registration fields.
 
 ## Expected result and basis
 
