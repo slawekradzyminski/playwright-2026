@@ -6,5 +6,5 @@
 - each endpoint should be tested in separate test file
 - order tests by status code ascending (200 -> 400 -> ...)
 - make sure tests keep passing - `npm run test:api`
-- before automating given tests perform exploratory testing session, see docs/
+- before automating given tests perform exploratory testing session, see .agents/skills/api-testing/SKILL.md
 - initialize clients in beforeEach

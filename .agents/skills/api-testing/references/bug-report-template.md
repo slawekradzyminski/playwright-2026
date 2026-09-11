@@ -1,6 +1,6 @@
 # Bug report template
 
-Copy the section below into an issue or a Markdown report. Replace placeholders and remove hints that do not apply. Use one independently fixable problem per report. See the [severity/category guide](README.md#classify-findings).
+Copy the section below into an issue or a Markdown report. Replace placeholders and remove hints that do not apply. Use one independently fixable problem per report. See the [severity/category guide](bug-reporting.md#classify-findings).
 
 ---
 

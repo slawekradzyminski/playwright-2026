@@ -4,15 +4,15 @@ Exploration means following questions and investigating unexpected behavior, rat
 
 ## Start here
 
-- [API bug register — individual findings and status](../bugs/README.md)
+- [API bug register — individual findings and status](../../../../docs/bugs/README.md)
 
 - [Copyable bug-report template](bug-report-template.md)
 - [Swagger UI](http://localhost:8081/swagger-ui/index.html)
 - [Live OpenAPI JSON](http://localhost:8081/v3/api-docs)
-- [Saved OpenAPI snapshot — 2026-09-10](openapi-2026-09-10.json)
+- [Saved OpenAPI snapshot — 2026-09-10](../../../../docs/exploratory-testing/openapi-2026-09-10.json)
 - [Backend repository](https://github.com/slawekradzyminski/test-secure-backend)
 
-The localhost links require the local stack to be running on your machine. The saved JSON is readable without the stack. It contains the full API; this exploration only covered sign-in and limited adjacent token checks.
+The localhost links require the local stack to be running on your machine. The saved JSON is readable without the stack. It contains the full API; consult the bug register and test plan for the scope actually explored.
 
 ## Prepare a session
 
@@ -87,44 +87,13 @@ For each observed response, compare the operation **and all referenced schemas**
 
 A documentation bug should identify the exact operation/schema/property, show the actual response, quote or summarize the conflicting declaration, and propose a concrete correction. If the implementation violates an agreed contract, file a functional bug rather than changing Swagger to bless the defect. When both need correction, link the findings and avoid double-counting impact.
 
-## Classify findings
-
-Assess and present impact before assigning severity. In reports and conversational findings, use this order:
-
-1. Describe the observed failure and the expected behavior, with evidence.
-2. Explain who is affected, which workflow is affected, how far the impact extends, and whether a practical workaround exists. Distinguish demonstrated consequences from plausible but unverified ones; state missing context.
-3. Write a concise impact assessment, then select H, M or L using the criteria below. If evidence is insufficient, mark the assessment provisional and identify what would settle it.
-
-Do not begin a finding with a severity label and then write a justification for that label. A schema mismatch or unexpected status code alone does not establish the scale of user impact. Examples below illustrate possible classifications; they are not automatic mappings from bug type to severity.
-
-Start new report headings with **`[category] Endpoint — observable problem`**, without severity. Place the severity decision after the impact assessment. Once that assessment is complete, retain **`[severity][category] ID - Short description.md`** filenames for indexing. Register entries must present impact before a separate severity column; put severity totals after the assessments. Existing reports may retain their historical headings; apply the new presentation order when reassessing them.
-
-| Severity | Meaning | Example |
-|---|---|---|
-| `[H]` High | Core workflow blocked, authentication bypass, privilege escalation, sensitive data exposure, or similarly serious demonstrated impact | Client receives usable admin privileges |
-| `[M]` Medium | Materially incorrect behavior or contract that disrupts error handling, integrations, or meaningful automated checks; core happy path remains usable | Malformed JSON returns 401; normal response contradicts its schema |
-| `[L]` Low | Limited impact on clarity or usability without changing the core outcome | Overlong input shows a minimum-length message |
-
-| Category | Use for |
-|---|---|
-| `[FA]` Functional API | Incorrect runtime behavior, validation, authorization, or HTTP handling |
-| `[D]` Documentation | Incorrect/incomplete Swagger contract, schema, example, or description |
-
-Examples: `[M][FA] POST /users/signin — malformed JSON returns 401`; `[M][D] POST /users/signin — 422 uses the success schema`; `[L][FA] POST /users/signin — maximum-length error mentions minimum`.
-
-Severity measures impact, not how soon the team schedules a fix. Explain the impact in each report; do not promote an unverified security suspicion to a confirmed High defect. Use **Needs clarification** when expected behavior is unresolved, **Open** for an actionable observed finding, **Fixed, awaiting retest** after a change, and **Verified** only after retesting the identified build. Keep stable IDs when severity or status changes. Existing report IDs remain BUG-01…BUG-03 and DOC-01…DOC-03.
-
-## Turn findings into automation
-
-Automate stable behavior and representative API validation cases. Keep detailed length, null/presence and Unicode boundary matrices in backend validation/service tests. Give each API test a clear oracle, isolated fixtures, and assertions on status plus meaningful response content. Keep proposed regressions for unresolved defects in their bug reports rather than adding expected-failure tests to the active suite. After a fix, add the agreed regression at the appropriate test layer and link its defect ID. Keep cleanup in fixtures and parameter data immediately above the relevant test group. Registration tests should focus on registration without a subsequent login. Do not snapshot dynamic tokens, exact timestamps, or map key ordering.
-
-Before calling the endpoint ready, check that the deployed build and specification agree, core flows pass, unresolved defects have an explicit disposition, and important uncovered branches are listed. “Ready to start writing tests” is different from “ready for release.”
+Use [bug reporting](bug-reporting.md) to classify and record findings, then [automation](automation.md) to select regressions.
 
 ## What belongs in Git
 
 Keep findings in the central bug register and individual bug reports. Do not create separate exploration reports for each endpoint; put reproduction evidence directly in the relevant bug report.
 
-**Commit:** this guide, the bug register and individual findings, the bug template, the dated OpenAPI snapshot, the root README link, and the `.gitignore` entry.
+**Keep tracked:** the skill and its references, bug register and individual findings, compact test plan, and dated OpenAPI snapshots.
 
 **Keep local:** root `exploration/`, including temporary Python curl drivers, raw responses, and scratch notes. It is ignored by `.gitignore`; these files are not part of the test framework and are not needed to read the report. They remain on the original workstation for reference and can be deleted later if no longer needed. Do not force-add the folder.
 

@@ -39,13 +39,15 @@ This repository contains automated API and UI tests for the local training envir
 └── package.json
 ```
 
-## Exploratory API testing
+## API Testing skill
 
-**Planning:** see the [short API test plan](docs/api-test-plan.md) for endpoint coverage, remaining work and parallel-work dependencies.
+**Planning:** see the [short API test plan](docs/api-test-plan.md) for endpoint coverage, remaining work and prerequisites.
 
 **Found bugs:** see the [API bug register](docs/bugs/README.md) for individual reports and current status.
 
-See [Exploratory testing documentation](docs/exploratory-testing/README.md) for the curl workflow, functional and Swagger checks, severity labels, and a reusable bug-report template. Findings are tracked in the bug register; the [OpenAPI snapshot](docs/exploratory-testing/openapi-2026-09-10.json) preserves the contract observed on September 10, 2026.
+See [API Testing skill](.agents/skills/api-testing/SKILL.md) for the curl workflow, functional and Swagger checks, severity labels, and a reusable bug-report template. Findings are tracked in the bug register; the [OpenAPI snapshot](docs/exploratory-testing/openapi-2026-09-10.json) preserves the contract observed on September 10, 2026.
+
+The canonical skill lives in `.agents/skills/api-testing`, with an identical copy in `.claude/skills/api-testing` for Claude Code. Copilot supports both locations. Edit the canonical files and synchronize the Claude copy. Shared rules remain in `AGENTS.md` (also imported by `CLAUDE.md`).
 
 ## 🚀 Getting Started
 

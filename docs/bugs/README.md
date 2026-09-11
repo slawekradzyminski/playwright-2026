@@ -32,14 +32,9 @@ The individual reports contain reproduction evidence, expected behavior, impact,
 
 **Current register: 25 findings — 23 Open, 2 Needs clarification; 11 functional API, 14 documentation; 7 Medium, 18 Low (including two provisional Low).** No High impact or production security compromise has been demonstrated. The latest supervisor assessment distinguishes fresh reproductions, reviewed historical evidence and blocked prerequisites.
 
-## How to maintain the register
+## Reporting workflow
 
-1. Copy the [bug-report template](../exploratory-testing/bug-report-template.md) into this folder. Use the next unused `BUG-NN` for FA or `DOC-NN` for D; keep the ID stable. Name the file `[severity][category] ID - Short description.md`, for example `[L][FA] BUG-01 - Sign-in request errors return 401.md`. Keep filename prefixes aligned with severity/category changes and update links when renaming.
-2. Start new report headings with `[FA/D]`, followed by the method, path, and observable problem. Present evidence and an impact assessment before assigning severity, following the [classification guide](../exploratory-testing/README.md#classify-findings). Add severity prefixes to filenames and register entries only after completing the assessment. When reassessing an existing report, move its severity decision below its impact assessment.
-3. Add the report to the table above with observed impact before the separate severity and status columns. Update its status here and in the report together; keep the counts current.
-4. Record fixes as **Fixed, awaiting retest**. Use **Verified** only after recording the retest date, build, and evidence. Keep closed reports for history.
-
-The individual reports are the authoritative place for status and retest updates. Keep reproduction evidence in each bug report; separate per-endpoint exploration reports are not maintained. These are repository records; no GitHub issues have been published.
+Use the [API Testing bug-reporting reference](../../.agents/skills/api-testing/references/bug-reporting.md) and its template. Individual reports remain authoritative for evidence and status.
 
 ## Open questions requiring investigation
 
