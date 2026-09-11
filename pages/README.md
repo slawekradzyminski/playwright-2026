@@ -1,6 +1,6 @@
 # UI page objects
 
-Automated paths are **desktop-only, 1920 × 1080**. Run `npm run test:ui`. Exploratory screenshot review still uses desktop/tablet/mobile; see [the workflow](../docs/ui/exploration-workflow.md).
+Automated paths are **desktop-only, 1920 × 1080**. Run `npm run test:ui`. Exploratory screenshot review still uses desktop/tablet/mobile; see [the workflow](../.codex/skills/ui-testing/references/exploration.md).
 
 - `BasePage` owns the route and root locator; it contains no screen-specific components.
 - Each screen owns its locators, actions and assertions. Specs contain scenarios and call these methods.

@@ -1,6 +1,6 @@
 # UI findings
 
-Login exploration, 2026-09-11. Repository reports; no external issues filed. See [workflow](../../ui/exploration-workflow.md) and [template](../../ui/bug-report-template.md).
+Login exploration, 2026-09-11. Repository reports; no external issues filed. See [workflow](../../../.codex/skills/ui-testing/references/exploration.md) and [template](../../../.codex/skills/ui-testing/references/bug-report-template.md).
 
 | Finding | Observed impact | Severity | Status |
 |---|---|---|---|

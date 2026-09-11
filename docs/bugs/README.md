@@ -114,4 +114,4 @@ Uncovered: controlled upstream 404/429/500 and mid-stream failures, disconnect p
 
 ## UI exploration
 
-UI findings are maintained in the [UI register](ui/README.md), with a separate [UI report template](../ui/bug-report-template.md). They are not included in the API counts above.
+UI findings are maintained in the [UI register](ui/README.md), with a separate [UI report template](../../.codex/skills/ui-testing/references/bug-report-template.md). They are not included in the API counts above.

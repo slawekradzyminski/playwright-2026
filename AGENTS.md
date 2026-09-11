@@ -16,6 +16,6 @@
 - Keep locators, UI actions, and all assertions in the relevant page object or component.
 - Add shared components to pages through composition
 - Initialize page objects in `beforeEach` or test-scoped fixtures
-- Before adding or changing UI tests, explore with the global Playwright CLI skill and follow `docs/ui/exploration-workflow.md`
+- Before adding or changing UI tests, explore with the global Playwright CLI skill and follow `.codex/skills/ui-testing/SKILL.md`
 - Automate UI paths on desktop only (1920 × 1080)
 - Verify changes with `npm run test:ui`
