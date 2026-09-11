@@ -1,6 +1,6 @@
 # UI findings
 
-Login, registration, homepage, header and products exploration, 2026-09-11. Repository reports; no external issues filed. See [workflow](../../../.codex/skills/ui-testing/references/exploration.md) and [template](../../../.codex/skills/ui-testing/references/bug-report-template.md).
+Login, registration, homepage, header, commerce, profile and admin exploration, 2026-09-11. Repository reports; no external issues filed. See [workflow](../../../.codex/skills/ui-testing/references/exploration.md) and [template](../../../.codex/skills/ui-testing/references/bug-report-template.md).
 
 Severity review on 2026-09-11 considered each report’s recorded consequence, scope, workaround and uncertainty before selecting its rating. UI-10 was subsequently raised to Medium using the user’s mobile-customer exposure context; this evidence review is not a live retest or fix verification. Each report contains its specific rationale before the decision.
 
@@ -17,11 +17,14 @@ Severity review on 2026-09-11 considered each report’s recorded consequence, s
 | [UI-09 — Mobile navigation toggle omits expanded state](%5BM%5D%5BA11Y%5D%20UI-09%20-%20Mobile%20navigation%20toggle%20omits%20expanded%20state.md) | Assistive-technology users cannot read the expanded state of primary navigation from its toggle. | M | Open |
 | [UI-10 — Expanded navigation has excessive visual weight and inconsistent alignment](%5BM%5D%5BUX%5D%20UI-10%20-%20Expanded%20navigation%20has%20excessive%20visual%20weight%20and%20inconsistent%20alignment.md) | A prominent account card and mixed alignment affect primary navigation; the user reports substantial mobile customer exposure. | M | Open |
 | [UI-11 — Product details cannot be opened using the keyboard](%5BM%5D%5BA11Y%5D%20UI-11%20-%20Product%20details%20cannot%20be%20opened%20using%20the%20keyboard.md) | Keyboard users cannot activate product detail navigation from catalog cards. | M | Open |
+| [UI-12 — Admin tables clip actions on narrow screens](%5BM%5D%5BVIS%5D%20UI-12%20-%20Admin%20tables%20clip%20actions%20on%20narrow%20screens.md) | Mobile admins cannot reach product edit/delete or order-detail links through the lists; product actions also clip at tablet width. | M | Open |
 
-Eleven open findings: seven Medium and four Low.
+Twelve open findings: eight Medium and four Low.
 
 Screenshots: `exploration/ui/login-2026-09-11/` (local, ignored). Mobile introduction height and toast overlap remain UX review items by product decision; they are not filed as bugs.
 
 Registration evidence: `exploration/ui/register-2026-09-11/` (local, ignored). UI-01 and UI-02 also affect registration. Registration exploration covered live creation/sign-in, duplicate rejection, required/minimum-length and email validation, keyboard field navigation, refresh and logout, and responsive screenshot review. The disposable account was deleted. No real-device, screen-reader, exhaustive boundary, or throttled performance audit was performed.
 
 Products exploration (2026-09-11): category/search combinations, empty-result recovery, four sort orders, pointer detail navigation, cart add/update/remove and reload persistence were checked. Desktop/tablet/mobile screenshots and expanded mobile navigation were reviewed. The user accepted the current mobile category layout. UI-11 records the new keyboard finding; shared header findings remain tracked separately. Cart writes were checked after response completion against API state; the disposable client was deleted (204). Five desktop Products scenarios now cover the main successful flows; UI-11 remains open. Cart feedback was subsequently checked and automated: exact add/update/remove messages and aggregate header quantities, including the empty state. A controlled update failure displayed an error and preserved backend state; removing the injected failure allowed retry. Stock clamping was explored. No real-device checks, screen-reader session, or performance audit.
+
+Commerce/profile/admin exploration (2026-09-11): all thirteen newly covered screens received desktop/tablet/mobile screenshot review and live interaction probes. HTTP and API-state checks covered cart mutations, checkout/cancellation, profile/prompts, catalog edits/deletion, order status, inventory adjustments and role denial. Stock-conflict and negative-inventory probes returned 409 with useful feedback. UI-12 records admin-list clipping; cart horizontal scrolling works. Disposable owner/orders/products and the CLI session were cleaned up; only the original four users/eight products remained. No real-device, screen-reader, exhaustive boundary or performance audit was performed.

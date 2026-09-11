@@ -1,38 +1,52 @@
 # UI page objects
 
-Automated paths are **desktop-only, 1920 × 1080**. Run `npm run test:ui`. Exploratory screenshot review still uses desktop/tablet/mobile; see [the workflow](../.codex/skills/ui-testing/references/exploration.md).
+Automated paths are **desktop-only, 1920 × 1080**, with the live local backend. Run `npm run test:ui`. The [test plan](../docs/ui-test-plan.md) tracks screen breadth and remaining scope; passing tests do not establish complete visual, accessibility or role coverage.
 
-- `BasePage` owns the route and root locator; it contains no screen-specific components.
-- Each screen owns its locators, actions and assertions. Specs contain scenarios and call these methods.
-- `LoggedOutHeader`, `AuthenticatedHeader` and `Toast` are composed into the screens that need them. They own their own assertions. The authenticated header currently models the automated desktop flow.
-- `fixtures/ui/pages.ts` constructs test-scoped objects. Each scenario opens its screen in its given section. Browser contexts are isolated and closed by Playwright.
-- Destination objects currently verify the navigation outcome only. Expand them when those screens are explored and automated; put their scenarios in separate screen-specific specs.
-- Stable data-testid selectors are preferred. Toast containers have generated IDs, so the component scopes a semantic list item by its stable description child.
-- Page actions do not assert outcomes implicitly. Actions use Playwright auto-waiting; explicit `expect...` methods verify outcomes rather than preflight readiness.
-- Keep UI coverage focused on business flows with the live backend. Use one representative client-validation case; detailed field boundaries belong in lower-level tests. Do not add separate keyboard, toast-dismissal or mocked loading cases by default.
+## Structure
 
-Known accessibility and duplicate-request defects are documented in [the UI register](../docs/bugs/ui/README.md); the suite does not assert those defects as expected behavior.
+- `BasePage` owns common route/root mechanics. Screen objects own locators, actions and outcome assertions, including supporting API persistence checks.
+- `LoggedOutHeader`, `AuthenticatedHeader`, `ProductCard` and `Toast` are composed into their host screens. Component checks remain explicit in specs.
+- `fixtures/ui/pages.ts` constructs test-scoped page objects. Specs show setup, action and outcome in given/when/then sections; navigation/setup remain visible at the call site.
+- Prefer stable data-testid selectors. Inventory fields without test IDs use their labels. Directory rows use stable test-ID patterns scoped to the exact disposable username. Toasts use stable description children inside generated containers.
+- Actions do not silently assert outcomes. URL, content, feedback and persistence checks have separate names. Use Playwright retrying assertions instead of fixed sleeps.
+- Add/edit product share `AdminProductFormPage`, matching the shared frontend form, while their screen scenarios live in separate spec files.
 
-The login screen sign-in scenario uses the configured demo admin. Home and client authenticated-header scenarios use `fixtures/ui/authenticated.ts`: it merges the shared account fixture with UI objects, registers/logs in a unique client, seeds `token`, `refreshToken`, and a unique `clientSessionId` through initial context storage state, and delegates account deletion to the shared cleanup tracker even after failures. No init script reinstalls credentials after logout. The separate `adminTest` composition authenticates the configured admin through the API, checks ROLE_ADMIN and seeds its own isolated browser context; it does not create a client or mutate admin account data.
+## Data and sessions
 
-Homepage coverage (`tests/ui/home.ui.spec.ts`): eight scenarios: exact user greeting/email after reload and all seven homepage shortcuts (Products, Users, Profile & Orders, AI Assistant, Traffic Monitor, QR Codes, Send Emails). Each shortcut has its own client navigation test with destination URL and visible screen-root assertions. Authenticated-header coverage (`tests/ui/authenticated-header.ui.spec.ts`), 12 scenarios: Products, Send Email, QR Code, LLM, Traffic Monitor, cart, profile, brand return, and logout with cleared tokens and rejected home revisit for the client only. Role-specific checks cover exact client identity, absence of the Admin link for clients after reload, and an admin scenario verifying the Admin link is visible and opens the dashboard. Shared navigation is not repeated for the admin. Logged-out-header coverage (`tests/ui/logged-out-header.ui.spec.ts`): guest home redirect, registration/login links, and brand navigation. Header specs exercise shared components through their host pages. Users, email, QR code, LLM, traffic monitor, profile, cart and admin dashboard objects verify destination URLs and visible screen roots only. Products has dedicated behavioral coverage described below. Header visibility tests do not establish backend authorization enforcement.
+`fixtures/ui/authenticated.ts` merges shared account fixtures with page objects. Each client context gets an API-created unique user and initial `token`, `refreshToken` and `clientSessionId` storage. No init script reinstalls credentials after logout. Shared cleanup tracks disposable users even after failures. Its `adminTest` logs in through the API, verifies ROLE_ADMIN and seeds an isolated context without modifying the shared admin account.
 
-Verified on 2026-09-11 with Chromium at desktop size. CLI exploration also reviewed tablet/mobile screenshots, all homepage shortcut destinations, reload, header navigation, logout storage and API traffic. Mobile welcome-panel clipping is tracked as UI-08; no automated mobile coverage or real-device testing is claimed.
+`fixtures/ui/registration.ts` tracks newly registered and duplicate-setup users. `fixtures/ui/products.ts` creates a unique three-product category and clears the client cart before deleting its products.
 
-Registration coverage (`tests/ui/register.ui.spec.ts`): account creation with success feedback, required fields, duplicate username rejection, and return to login. `fixtures/ui/registration.ts` supplies unique fake users and deletes them after success or failure; duplicate-account setup uses the shared signup fixture.
+`fixtures/ui/commerce.ts` supplies disposable products, multi-item carts, unavailable/deleted products and API-created orders. Its admin variant uses the configured admin session while keeping each record owner disposable. Cleanup deletes the disposable owner and dependent carts/orders before their products; the shared tracker accepts already-deleted users. Successful UI product creations are recovered for cleanup by an exact unique category even if a test fails before reading the creation response. Cleanup never selects shared records by a broad name/prefix. UI creation is the action under test on registration, add-product and checkout screens; supporting setup uses the API.
 
-The current registration navigation test starts empty and verifies the destination only. It does not cover leaving a valid populated form without creating an account; that confirmed defect and proposed regression are tracked as UI-07 in the UI register.
+## Current behavioral coverage
 
-Expanded mobile/tablet navigation was also explored: visible links fit, all destinations were reached, selection closes the menu, Enter/Space toggle it, and mobile logout clears credentials. Guest navigation uses inline Login/Register links. Missing expanded-state semantics are tracked as UI-09. Screenshots and sanitized HTTP notes are local under `exploration/ui/mobile-menu-2026-09-11/`; mobile behavior remains exploratory coverage.
+| Screen | Active tests | Main outcomes |
+|---|---:|---|
+| Login | 5 | Successful sign-in, invalid/required credentials, registration/recovery navigation |
+| Registration | 4 | Account creation, required fields, duplicate username, sign-in navigation |
+| Home | 8 | Exact client identity after reload and all seven shortcuts |
+| Products | 5 | Category/search, both price sorts, empty recovery, detail navigation, cart mutations with aggregate count/toasts/API persistence |
+| Product detail | 3 | Add/update/remove, zero stock, unavailable product recovery |
+| Cart | 3 | Multi-product quantity/totals/removal, confirmed clearing, checkout navigation |
+| Checkout | 4 | Order/address persistence, emptied cart and deducted stock; required address, empty-cart redirect, availability conflict preserving cart/address |
+| Order detail | 1 | Own contents/address, client controls, cancellation dismissal/acceptance, persisted status and stock restoration |
+| Profile & orders | 2 | Personal details and both prompts with feedback/reload; history filtering and matching order navigation |
+| Users | 2 | Client directory without admin controls; persisted deletion of a disposable user |
+| Edit user | 3 | Admin save, cancel valid unsaved changes, direct client denial |
+| Admin dashboard | 2 | Low-stock product/editor link, client denial |
+| Admin products | 2 | Row values, dismiss/confirm deletion, client denial |
+| Add product | 2 | UI creation, reset and catalog/API values; client denial |
+| Edit product | 2 | Details/price/stock persistence across reload; client denial |
+| Admin orders | 2 | Status filtering, correct detail navigation/status update/re-filter; client denial |
+| Admin inventory | 2 | Search/selection/stock adjustment/movement history; client denial for list and detail |
 
-Visual composition review of the expanded navigation identified excessive account-card prominence and inconsistent action alignment, accepted by the user and tracked as UI-10. Earlier fit/readability observations do not constitute visual-design acceptance.
+There are **52 screen tests + 16 shared-header tests = 68**. Shared-header coverage includes guest navigation, client destinations, exact identity, role-specific Admin link visibility, and logout with cleared storage and rejected protected-page revisit. Shared navigation runs once as the client; the admin checks its additional link. Email, QR, AI overview, traffic and forgot-password page objects remain navigation destinations only.
 
-The role coverage extension was explored with the CLI on 2026-09-11: both roles reached every desktop header destination; admin responsive screenshots were reviewed alongside the earlier client exploration. Read-only navigation produced successful GET requests, with no observed navigation-triggered mutation. Existing responsive findings remain open. Automation runs shared navigation once as the client; admin automation covers its additional link.
+## Verification and exploration
 
-Final verification after the homepage shortcut extension: 33 UI tests passed (including 8 homepage and 12 authenticated-header tests), 234 API tests passed, and TypeScript unused-symbol checks passed. All seven homepage shortcuts were re-explored through the CLI before automation; navigation remains client-only without repeating shared paths for admins.
+Verified on **2026-09-11** at `http://localhost:8081`: `npm run test:ui` — **68 passed (9.8s)**; `npm run test:api` — **234 passed (22.8s)**; `npx tsc --noEmit --noUnusedLocals --noUnusedParameters` passed. Frontend route source is pinned in the test plan; the deployed revision is unverified.
 
-`AuthenticatedHeader.expectAdminLinkAbsent()` waits for the populated authenticated header before checking absence. Username and role links render from the same loaded user data. A temporary mutation ran the client-negative scenario with an admin session and failed at the count assertion (expected 0, received 1); the mutation was removed. This guards initial rendering, not arbitrary future role changes.
+CLI exploration preceded the new screen automation. Product detail, cart, checkout, order detail, profile, directory/edit user, dashboard, catalog/create/edit product, orders and inventory were inspected at desktop 1920 × 1080, tablet 768 × 1024 and mobile 414 × 896, with screenshots opened for visual review. Successful mutations, required-field/no-mutation cases, cancellation, profile/prompt persistence, role denial, stock conflict and inventory rejection were checked against HTTP/UI/backend evidence. The cart's horizontal scrolling remains usable; admin list clipping is tracked as UI-12. Scratch evidence stays in ignored `exploration/ui/commerce-2026-09-11/`.
 
-Products coverage (`tests/ui/products.ui.spec.ts`): five desktop scenarios cover combined category/case-insensitive search, both price sort directions, no-results recovery, matching product-detail navigation, and cart add/update/remove with reload persistence and API-state assertions, exact cart toast titles/descriptions, and aggregate header counts including the empty state. The cart scenario starts with another product seeded through the API. `ProductCard` owns card actions/assertions; `ProductDetailsPage` verifies the selected destination only. `fixtures/ui/products.ts` creates three deterministic products in a unique category and clears the disposable client's cart before deleting products, including after failure; shared account fixtures delete the client. No admin catalog or detail-page action suite was added. UI-11 remains open; keyboard detail activation is not encoded as passing behavior. Mobile category layout was accepted by the user.
-
-Verification after products automation: **38 UI tests passed (7.1s)**, **234 API tests passed (25.2s)**, and TypeScript unused-symbol checks passed on 2026-09-11. CLI exploration preceded automation, including a headless recheck of detail selectors. Stock clamping and an injected update failure/retry were explored through the CLI: the failure displayed an error, preserved the saved cart and count, and retry succeeded. These probes are not automated regressions. No real-device or screen-reader coverage is claimed.
+Known [UI findings](../docs/bugs/ui/README.md) remain open and are not asserted as correct behavior. Registration's valid-form sign-in side effect (UI-07), catalog keyboard detail access (UI-11), shared accessibility issues and admin responsive clipping (UI-12) need fixes/retests. No real-device, screen-reader, exhaustive pagination/status/ownership matrix, MFA enrollment or performance audit is claimed. The existing accepted mobile catalog layout remains unchanged.

@@ -1,3 +1,10 @@
+import { EditUserPage } from '../../pages/edit-user-page';
+import { AdminInventoryPage } from '../../pages/admin-inventory-page';
+import { AdminOrdersPage } from '../../pages/admin-orders-page';
+import { AdminProductFormPage } from '../../pages/admin-product-form-page';
+import { AdminProductsPage } from '../../pages/admin-products-page';
+import { OrderDetailsPage } from '../../pages/order-details-page';
+import { CheckoutPage } from '../../pages/checkout-page';
 import { ProductDetailsPage } from '../../pages/product-details-page';
 import { UsersPage } from '../../pages/users-page';
 import { AdminDashboardPage } from '../../pages/admin-dashboard-page';
@@ -15,6 +22,13 @@ import { RegisterPage } from '../../pages/register-page';
 import { ForgotPasswordPage } from '../../pages/forgot-password-page';
 
 export const test = base.extend<{
+  editUserPage: EditUserPage;
+  adminInventoryPage: AdminInventoryPage;
+  adminOrdersPage: AdminOrdersPage;
+  adminProductFormPage: AdminProductFormPage;
+  adminProductsPage: AdminProductsPage;
+  orderDetailsPage: OrderDetailsPage;
+  checkoutPage: CheckoutPage;
   usersPage: UsersPage;
   emailPage: EmailPage;
   qrCodePage: QrCodePage;
@@ -30,6 +44,13 @@ export const test = base.extend<{
   registerPage: RegisterPage;
   forgotPasswordPage: ForgotPasswordPage;
 }>({
+  editUserPage: async ({ page }, use) => { await use(new EditUserPage(page)); },
+  adminInventoryPage: async ({ page }, use) => { await use(new AdminInventoryPage(page)); },
+  adminOrdersPage: async ({ page }, use) => { await use(new AdminOrdersPage(page)); },
+  adminProductFormPage: async ({ page }, use) => { await use(new AdminProductFormPage(page)); },
+  adminProductsPage: async ({ page }, use) => { await use(new AdminProductsPage(page)); },
+  orderDetailsPage: async ({ page }, use) => { await use(new OrderDetailsPage(page)); },
+  checkoutPage: async ({ page }, use) => { await use(new CheckoutPage(page)); },
   usersPage: async ({ page }, use) => { await use(new UsersPage(page)); },
   emailPage: async ({ page }, use) => { await use(new EmailPage(page)); },
   qrCodePage: async ({ page }, use) => { await use(new QrCodePage(page)); },
