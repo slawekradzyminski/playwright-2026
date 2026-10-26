@@ -13,6 +13,7 @@
     "playwright.config.ts",
     "test-config.ts",
     "http/**/*.ts",
+    "generators/**/*.ts",
     "tests/**/*.ts",
     "types/**/*.ts"
   ]

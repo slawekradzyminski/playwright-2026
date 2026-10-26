@@ -22,13 +22,18 @@ This repository contains automated API and UI tests for the local training envir
 .
 ├── tests/
 │   ├── api/
-│   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
+│   │   ├── login.api.spec.ts       # Login API tests
+│   │   └── registration.api.spec.ts # Registration API tests
 │   └── ui/
 │       └── login.ui.spec.ts        # UI tests for the login page
 ├── http/
-│   └── auth-client.ts              # HTTP requests using Playwright APIRequestContext
+│   ├── auth-client.ts              # Login requests
+│   └── users-client.ts             # Registration and test user cleanup
+├── generators/
+│   └── user-generator.ts           # Valid user data generated with Faker.js
 ├── types/
-│   └── auth.ts                     # TypeScript interfaces for authentication
+│   ├── auth.ts                     # Authentication types
+│   └── user.ts                     # Registration payload type
 ├── .nvmrc                          # Course Node.js major version
 ├── playwright.config.ts            # Playwright configuration
 ├── test-config.ts                  # .env-backed test configuration
@@ -171,6 +176,15 @@ These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ord
 
 Requests live in `http/auth-client.ts`. Each test initializes the client in
 `beforeEach` using Playwright's `request` context and configured `baseURL`.
+
+### Registration API Tests (`tests/api/registration.api.spec.ts`)
+
+Five scenarios cover registration followed by login, invalid email, duplicate
+username, duplicate email and invalid Bearer token. `generateUser()` uses Faker.js
+to create unique username/email pairs, a 16-character password and names meeting
+the API's 4–255 character limit. Tests track successfully registered accounts and remove only those accounts in
+`afterEach` using the configured administrator credentials. Tests that create no
+account skip administrator login and cleanup requests.
 
 ### UI Tests (`tests/ui/login.ui.spec.ts`)
 
