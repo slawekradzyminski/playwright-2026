@@ -71,7 +71,7 @@ For local Docker execution:
 # .env (local)
 APP_BASE_URL=http://localhost:8081
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=LocalDemoAdmin123!
+ADMIN_PASSWORD=PASSWORD_YOU_SHOULD_CHANGE
 ```
 
 For the shared AI Testers application (no Docker required):
@@ -80,7 +80,7 @@ For the shared AI Testers application (no Docker required):
 # .env (AI Testers)
 APP_BASE_URL=https://aitesters.byst.re
 ADMIN_USERNAME=admin
-ADMIN_PASSWORD=LocalDemoAdmin123!
+ADMIN_PASSWORD=PASSWORD_YOU_SHOULD_CHANGE
 ```
 
 Alternatively, copy the ready-to-use AI Testers template:
