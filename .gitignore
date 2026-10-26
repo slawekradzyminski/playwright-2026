@@ -17,3 +17,7 @@ artifacts
 .DS_Store
 
 .idea
+# Local environment (may contain secrets)
+.env
+.env.*
+!.env.example

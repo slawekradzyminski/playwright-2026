@@ -89,8 +89,19 @@ Alternatively, copy the ready-to-use AI Testers template:
 cp .env.example .env
 ```
 
-`.env` is ignored by git. Each participant can therefore keep their own URL
-and project credentials locally.
+`.env` is ignored by git (see `.gitignore`) and must never be committed. Only
+`.env.example` is tracked, and it must contain placeholders or non-secret
+shared training values, never real secrets. The tests fail fast with a clear
+message when `ADMIN_USERNAME` or `ADMIN_PASSWORD` is missing.
+
+The training password above is shared publicly, so it is not a secret. If you
+ever put a real secret in `.env`, also remember that:
+
+- secrets must not be pasted into `.env.example`, the README or test code;
+- in CI, inject them from the CI secret store (e.g. GitHub Actions
+  `secrets.*` mapped to environment variables) instead of creating a `.env` file;
+- a secret that was committed once stays in git history, so rotate it
+  rather than just deleting the file.
 
 If you use the local application, start the Dockerized environment:
 
