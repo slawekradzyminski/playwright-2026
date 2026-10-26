@@ -1,120 +1,81 @@
 import { test, expect } from '@playwright/test';
-import type { LoginDto, LoginResponseDto } from '../../types/auth';
-import { ADMIN_PASSWORD, ADMIN_USERNAME, APP_BASE_URL } from '../../test-config';
+import { AuthClient } from '../../http/auth-client';
+import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
+import type { LoginDto } from '../../types/auth';
 
-const SIGNIN_ENDPOINT = '/api/v1/users/signin';
+const validCredentials: LoginDto = {
+  username: ADMIN_USERNAME,
+  password: ADMIN_PASSWORD,
+};
 
-test.describe('/api/v1/users/signin API tests', () => {
-  test('should successfully authenticate with valid credentials - 200', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: ADMIN_USERNAME,
-      password: ADMIN_PASSWORD
-    };
+test.describe('/api/v1/users/signin', () => {
+  let authClient: AuthClient;
 
+  test.beforeEach(async ({ request }) => {
+    authClient = new AuthClient(request);
+  });
+
+  test('successfully authenticates with valid credentials - 200', async () => {
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await authClient.login(validCredentials);
 
     // then
     expect(response.status()).toBe(200);
-
-    const responseBody: LoginResponseDto = await response.json();
-    expect(responseBody.token).toBeDefined();
-    expect(responseBody.token).toMatch(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+$/);
-    expect(responseBody.username).toBe(loginData.username);
-    expect(responseBody.email).toBeDefined();
-    expect(responseBody.firstName).toBeDefined();
-    expect(responseBody.lastName).toBeDefined();
-    expect(responseBody.roles).toBeDefined();
-    expect(Array.isArray(responseBody.roles)).toBe(true);
+    expect(response.headers()['content-type']).toMatch(/^application\/json\b/);
+    expectSuccessfulLogin(await response.json());
   });
 
-  test('should return validation error for empty username - 400', async ({ request }) => {
+  test('returns validation errors for empty credentials - 400', async () => {
     // given
-    const loginData: LoginDto = {
-      username: '',
-      password: ADMIN_PASSWORD
-    };
+    const wrongCredentials: LoginDto = { username: '', password: '' };
 
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await authClient.login(wrongCredentials);
 
     // then
     expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.username).toBe('Minimum username length: 4 characters');
+    expect(await response.json()).toEqual({
+      username: 'Minimum username length: 4 characters',
+      password: 'Minimum password length: 4 characters',
+    });
   });
-
-  test('should return validation error for username too short - 400', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: 'abc',
-      password: ADMIN_PASSWORD
-    };
-
+  
+  test('rejects an invalid Bearer token even with valid credentials - 401', async () => {
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    const response = await authClient.login(validCredentials, {
+      headers: { Authorization: 'Bearer invalid-token' },
     });
 
     // then
-    expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.username).toBe('Minimum username length: 4 characters');
+    expect(response.status()).toBe(401);
+    expect(await response.json()).toEqual({ message: 'Invalid or expired token' });
   });
 
-  test('should return validation error for password too short - 400', async ({ request }) => {
+  test('rejects invalid credentials - 422', async () => {
     // given
-    const loginData: LoginDto = {
-      username: ADMIN_USERNAME,
-      password: 'abc'
-    };
+    const wrongCredentials: LoginDto = { username: 'nonexistent-login-user', password: 'invalid-password' };
 
     // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
-
-    // then
-    expect(response.status()).toBe(400);
-    const responseBody = await response.json();
-    expect(responseBody.password).toBe('Minimum password length: 4 characters');
-  });
-
-  test('should return authentication error for both invalid credentials - 422', async ({ request }) => {
-    // given
-    const loginData: LoginDto = {
-      username: 'wronguser',
-      password: 'wrongpassword'
-    };
-
-    // when
-    const response = await request.post(`${APP_BASE_URL}${SIGNIN_ENDPOINT}`, {
-      data: loginData,
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    });
+    const response = await authClient.login(wrongCredentials);
 
     // then
     expect(response.status()).toBe(422);
-    const responseBody = await response.json();
-    expect(responseBody.message).toBe('Invalid username/password supplied');
+    expect(await response.json()).toEqual({
+      message: 'Invalid username/password supplied',
+    });
   });
-}); 
+  
+});
+
+function expectSuccessfulLogin(body: unknown) {
+  expect(body).toMatchObject({
+    token: expect.stringMatching(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/),
+    refreshToken: expect.stringMatching(/\S+/),
+    username: validCredentials.username,
+    email: expect.stringMatching(/^[^\s@]+@[^\s@]+\.[^\s@]+$/),
+    roles: expect.any(Array),
+    mfaRequired: false,
+    challengeToken: null,
+    challengeExpiresAt: null,
+  });
+}

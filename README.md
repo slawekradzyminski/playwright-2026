@@ -25,6 +25,8 @@ This repository contains automated API and UI tests for the local training envir
 │   │   └── login.api.spec.ts       # API tests for /api/v1/users/signin endpoint
 │   └── ui/
 │       └── login.ui.spec.ts        # UI tests for the login page
+├── http/
+│   └── auth-client.ts              # HTTP requests using Playwright APIRequestContext
 ├── types/
 │   └── auth.ts                     # TypeScript interfaces for authentication
 ├── .nvmrc                          # Course Node.js major version
@@ -162,9 +164,13 @@ The `playwright.config.ts` file is configured to:
 
 These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ordered by response code:
 
-- **Successful Authentication (200)**: Valid credentials return a 200 status with a JWT token and complete user information
-- **Validation Errors (400)**: Tests for empty username, short username, and short password scenarios with appropriate error messages
-- **Authentication Errors (422)**: Invalid credentials result in 422 status codes with error messages
+- **Successful Authentication (200)**: Valid credentials return tokens and user information for an administrator account without MFA.
+- **Validation Errors (400)**: Empty credentials return errors for both fields.
+- **Authentication Errors (422)**: Invalid credentials are rejected.
+- **Authorization Errors (401)**: An invalid Bearer token is rejected even with valid credentials.
+
+Requests live in `http/auth-client.ts`. Each test initializes the client in
+`beforeEach` using Playwright's `request` context and configured `baseURL`.
 
 ### UI Tests (`tests/ui/login.ui.spec.ts`)
 
