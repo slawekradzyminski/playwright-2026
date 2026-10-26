@@ -1,22 +1,12 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { generateProduct } from '../../../generators/product-generator';
 import { CartClient } from '../../../http/cart-client';
-import { CartTestContext, expectCart } from './cart-test-context';
+import { expectCart } from './cart-test-context';
 
 const NON_EXISTENT_PRODUCT_ID = 999_999_999;
 
 test.describe('POST /api/v1/cart/items', () => {
-  let context: CartTestContext;
-
-  test.beforeEach(async ({ request }) => {
-    context = await CartTestContext.create(request);
-  });
-
-  test.afterEach(async () => {
-    await context.cleanup();
-  });
-
-  test('adds a product to the cart - 200', async () => {
+  test('adds a product to the cart - 200', async ({ cart: context }) => {
     // given
     const product = await context.createProduct();
 
@@ -28,7 +18,7 @@ test.describe('POST /api/v1/cart/items', () => {
     expectCart(await response.json(), context.user.username, [{ product, quantity: 2 }]);
   });
 
-  test('increases the quantity of a product already in the cart - 200', async () => {
+  test('increases the quantity of a product already in the cart - 200', async ({ cart: context }) => {
     // given
     const product = await context.createProduct();
     await context.addToCart(product, 2);
@@ -41,7 +31,7 @@ test.describe('POST /api/v1/cart/items', () => {
     expectCart(await response.json(), context.user.username, [{ product, quantity: 5 }]);
   });
 
-  test('rejects a quantity below one - 400', async () => {
+  test('rejects a quantity below one - 400', async ({ cart: context }) => {
     // given
     const product = await context.createProduct();
 
@@ -53,7 +43,7 @@ test.describe('POST /api/v1/cart/items', () => {
     expect(await response.json()).toEqual({ quantity: 'must be greater than or equal to 1' });
   });
 
-  test('rejects a request without a token - 401', async ({ request }) => {
+  test('rejects a request without a token - 401', async ({ request, cart: context }) => {
     // given
     const product = await context.createProduct();
 
@@ -65,7 +55,7 @@ test.describe('POST /api/v1/cart/items', () => {
     expect(await response.json()).toEqual({ message: 'Unauthorized' });
   });
 
-  test('rejects a non-existent product - 404', async () => {
+  test('rejects a non-existent product - 404', async ({ cart: context }) => {
     // when
     const response = await context.cartClient.addItem({ productId: NON_EXISTENT_PRODUCT_ID, quantity: 1 });
 
@@ -74,7 +64,7 @@ test.describe('POST /api/v1/cart/items', () => {
     expect(await response.json()).toEqual({ message: 'Product not found' });
   });
 
-  test('rejects a quantity exceeding the available stock - 409', async () => {
+  test('rejects a quantity exceeding the available stock - 409', async ({ cart: context }) => {
     // given
     const product = await context.createProduct({ ...generateProduct(), stockQuantity: 5 });
     await context.addToCart(product, 3);

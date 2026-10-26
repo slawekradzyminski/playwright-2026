@@ -16,8 +16,9 @@ Runtime observations: local stack, backend image 3.9.4, 2026-10-26.
 | Q4 | How strict should email validation be? | `a@b` (no top-level domain) is accepted | — |
 | Q5 | When stock drops below the quantity in a cart, may the user still reduce the quantity to any value above the new stock? | `PUT` 4 → 3 with stock 2 returns `409`; only ≤ stock or removal works | — |
 | Q6 | Should carts reserve stock? | Two users can each hold the full stock; the check happens per cart and at checkout | — |
-| Q7 | What happens to a product that is in someone's cart when an admin deletes it? | `409 Product is referenced by existing data` until every cart drops it | Admin product management |
+| Q7 | What happens to a product that is in someone's cart when an admin deletes it? | `409 Product is referenced by existing data` until every cart drops it; also confirmed for pending and cancelled order references on 2026-10-26 | Admin product management |
 | Q8 | When a user is deleted, should their orders be kept (accounting) and should stock of open orders be restored? | Code deletes orders without restoring stock ([`UserService.forget`](https://github.com/slawekradzyminski/test-secure-backend/blob/3152f6cc331940c6d89eb6eff8e4b5a7b820079e/src/main/java/com/awesome/testing/service/UserService.java#L108-L111)); found in code, not verified at runtime | — |
+| Q13 | Should product names be unique or trimmed/canonicalized, and should categories be normalized? Product owner should decide before adding such assertions. | Product POST accepts duplicate names; writes preserve whitespace/case. Catalogue product identity is the numeric ID; no uniqueness rule is documented. Verified 2026-10-26, backend 3.9.4 (`local`). | Product-name/category policy tests |
 
 ## Security and environment decisions
 

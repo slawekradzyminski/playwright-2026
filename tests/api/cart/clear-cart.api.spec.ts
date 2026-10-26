@@ -1,19 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { CartClient } from '../../../http/cart-client';
-import { CartTestContext, expectCart } from './cart-test-context';
+import { expectCart } from './cart-test-context';
 
 test.describe('DELETE /api/v1/cart', () => {
-  let context: CartTestContext;
-
-  test.beforeEach(async ({ request }) => {
-    context = await CartTestContext.create(request);
-  });
-
-  test.afterEach(async () => {
-    await context.cleanup();
-  });
-
-  test('removes all items from the cart - 204', async () => {
+  test('removes all items from the cart - 204', async ({ cart: context }) => {
     // given
     await context.addToCart(await context.createProduct(), 2);
     await context.addToCart(await context.createProduct(), 1);

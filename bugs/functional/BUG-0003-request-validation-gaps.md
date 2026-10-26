@@ -1,11 +1,11 @@
-# BUG-0003: User request DTOs accept blank values and report wrong validation messages
+# BUG-0003: Request DTOs accept blank required values and report wrong validation messages
 
 | Jira field / metadata | Value |
 | --- | --- |
-| Summary | [API][Users] Signup/login validation uses @NotNull/@Size instead of @NotBlank, and reuses "Minimum length" messages for the maximum |
+| Summary | [API] User and product DTOs omit nonblank constraints; user length messages describe the wrong bound |
 | Issue Type | Bug |
 | Priority | Medium (proposed) |
-| Component/s | API / Users |
+| Component/s | API / Users, API / Products |
 | Labels | api, registration, login, validation |
 | Environment | Local stack http://localhost:8081, backend image 3.9.4, profile `local` |
 | Backend revision | [`3152f6c`](https://github.com/slawekradzyminski/test-secure-backend/tree/3152f6cc331940c6d89eb6eff8e4b5a7b820079e) |
@@ -32,6 +32,7 @@ codebase already use `@NotBlank` (`UserEditDto`, `ResetPasswordRequestDto`,
 | 4 | Signup with `password` of 8 spaces | `400 {"password": ...}` | `201` |
 | 5 | Signup with `username`, `firstName` or `password` of 256 characters; signin with both fields at 256 | `400` "Maximum … length: 255" | `400` "Minimum … length: 4 characters" (or 8 for passwords) |
 | 6 | Signin with `{}`, `null` fields, or only one field | `400` with field errors | `422 Invalid username/password supplied` |
+| 7 | Admin `PUT /api/v1/products/{id}` with `{"name":"   "}`, `{"category":""}` or `{"category":" "}` | `400` field error, preserving valid required product data | `200`; subsequent GET confirms blank values persisted, although creation rejects them |
 
 ## Root cause
 
@@ -43,17 +44,32 @@ codebase already use `@NotBlank` (`UserEditDto`, `ResetPasswordRequestDto`,
   has `@Size` without `@NotNull`/`@NotBlank`, so null values skip validation
   and fail later in authentication (`422`).
 
+- [`ProductUpdateDto` lines 19–21 and 36–37](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/product/ProductUpdateDto.java#L19-L37)
+  checks name length but not blankness, and has no category validation. Create
+  requires both fields to be nonblank. Add a nullable nonblank constraint for
+  supplied update values, preserving null-as-unchanged behavior.
+
 ## Steps to reproduce
 
 Send `POST /api/v1/users/signup` with otherwise valid, unique data and the
 value from each row (rows 1–5), and `POST /api/v1/users/signin` with the
 bodies from row 6.
 
+For row 7, create an owned product as admin, PUT each listed value, then GET
+the product. Restore valid values and delete the product afterwards.
+
 ## Evidence
 
 Each row verified once on 2026-10-26 against the local API. Row 2 was first
 reported on 2026-10-26 with a separate confirmation attempt. Test accounts
 were deleted afterwards.
+
+Product row 7 was confirmed twice on 2026-10-26 with GET persistence checks.
+Running image revision: `fd4c015434dd573f26bf8ff6691ff14611e2f247`, backend
+3.9.4, profile `local`; reviewed product DTOs are unchanged at `3152f6c`.
+Evidence: `artifacts/products-exploration-2026-10-26/followup.jsonl`, labels
+`confirm persisted validation gap` / `read persisted validation gap`. Both
+temporary client accounts and all owned products were deleted.
 
 ## Suggested fix
 
@@ -66,5 +82,7 @@ and mark login fields as required. Align `UserRegisterDto` and `LoginDto` with
 
 - Every symptom row returns the expected `400` with a message for the field.
 - Valid data within the documented limits still registers and logs in.
+- Product updates reject supplied blank name/category values while omitted/null
+  fields remain unchanged; empty description/imageUrl remain supported.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).

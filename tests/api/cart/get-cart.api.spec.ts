@@ -1,19 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { CartClient } from '../../../http/cart-client';
-import { CartTestContext, expectCart } from './cart-test-context';
+import { expectCart } from './cart-test-context';
 
 test.describe('GET /api/v1/cart', () => {
-  let context: CartTestContext;
-
-  test.beforeEach(async ({ request }) => {
-    context = await CartTestContext.create(request);
-  });
-
-  test.afterEach(async () => {
-    await context.cleanup();
-  });
-
-  test('returns an empty cart for a new user - 200', async () => {
+  test('returns an empty cart for a new user - 200', async ({ cart: context }) => {
     // when
     const response = await context.cartClient.getCart();
 
@@ -22,7 +12,7 @@ test.describe('GET /api/v1/cart', () => {
     expectCart(await response.json(), context.user.username, []);
   });
 
-  test('returns cart items with calculated totals - 200', async () => {
+  test('returns cart items with calculated totals - 200', async ({ cart: context }) => {
     // given
     const firstProduct = await context.createProduct();
     const secondProduct = await context.createProduct();

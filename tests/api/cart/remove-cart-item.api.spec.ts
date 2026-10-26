@@ -1,19 +1,9 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../fixtures';
 import { CartClient } from '../../../http/cart-client';
-import { CartTestContext, expectCart } from './cart-test-context';
+import { expectCart } from './cart-test-context';
 
 test.describe('DELETE /api/v1/cart/items/{productId}', () => {
-  let context: CartTestContext;
-
-  test.beforeEach(async ({ request }) => {
-    context = await CartTestContext.create(request);
-  });
-
-  test.afterEach(async () => {
-    await context.cleanup();
-  });
-
-  test('removes only the given product from the cart - 200', async () => {
+  test('removes only the given product from the cart - 200', async ({ cart: context }) => {
     // given
     const removedProduct = await context.createProduct();
     const keptProduct = await context.createProduct();
@@ -28,7 +18,7 @@ test.describe('DELETE /api/v1/cart/items/{productId}', () => {
     expectCart(await response.json(), context.user.username, [{ product: keptProduct, quantity: 1 }]);
   });
 
-  test('rejects a request without a token - 401', async ({ request }) => {
+  test('rejects a request without a token - 401', async ({ request, cart: context }) => {
     // given
     const product = await context.createProduct();
 
@@ -40,7 +30,7 @@ test.describe('DELETE /api/v1/cart/items/{productId}', () => {
     expect(await response.json()).toEqual({ message: 'Unauthorized' });
   });
 
-  test('rejects a product that is not in the cart - 404', async () => {
+  test('rejects a product that is not in the cart - 404', async ({ cart: context }) => {
     // given
     const product = await context.createProduct();
 

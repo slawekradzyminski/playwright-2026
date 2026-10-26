@@ -5,7 +5,7 @@
 | Summary | [API] Global exception handling misses common failure types, producing 500s, Spring default bodies and leaked internal messages |
 | Issue Type | Bug |
 | Priority | Medium (proposed) |
-| Component/s | API (global), API / Users, API / Cart |
+| Component/s | API (global), API / Users, API / Cart, API / Products |
 | Labels | api, error-handling, contract |
 | Environment | Local stack http://localhost:8081, backend image 3.9.4, profile `local` |
 | Backend revision | [`3152f6c`](https://github.com/slawekradzyminski/test-secure-backend/tree/3152f6cc331940c6d89eb6eff8e4b5a7b820079e) |
@@ -28,8 +28,8 @@ counts client mistakes as server errors.
 | --- | --- | --- | --- |
 | 1 | Any authenticated request (e.g. `GET /api/v1/cart`) with a valid token of a **deleted** user | `401 Invalid or expired token` | `500 {"message": "Internal server error"}` |
 | 2 | `PUT /api/v1/users/{me}` with `email` equal to another user's email | `400 Email is already in use` | `500 {"message": "Internal server error"}` |
-| 3 | Malformed JSON, empty body, `[]`, `null`, an array/object for a string field, or an int32 overflow (signup, signin, cart) | `400` in `ValidationErrorsDto` format | `400 {"timestamp", "status", "error": "Bad Request", "path"}` |
-| 4 | `PUT`/`DELETE /api/v1/cart/items/abc` | `400` with a readable message | `400 {"error": "For input string: \"abc\""}` |
+| 3 | Malformed JSON, empty body, `[]`, `null`, an array/object for a string field, or an int32 overflow (signup, signin, cart, POST/PUT products) | `400` in `ValidationErrorsDto` format | `400 {"timestamp", "status", "error": "Bad Request", "path"}` |
+| 4 | `PUT`/`DELETE /api/v1/cart/items/abc`; `GET`/`PUT`/`DELETE /api/v1/products/abc` | `400` with a readable message | `400 {"error": "For input string: \"abc\""}` |
 | 5 | Password over 72 bytes (see [BUG-0004](BUG-0004-password-limit-ignores-bcrypt-72-bytes.md)) | Field error | `400 {"error": "password cannot be more than 72 bytes"}` |
 
 Row 6 of [BUG-0001](BUG-0001-identity-fields-not-canonicalized.md) (password
@@ -61,6 +61,16 @@ the listed requests.
 Rows 3–5 were verified on 2026-10-26 during exploration (cart and users).
 Rows 1–2 were verified once each on 2026-10-26 after the code review. Test
 accounts were deleted afterwards.
+
+Products extension confirmed on 2026-10-26 against backend 3.9.4, profile
+`local`, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`. All malformed
+root-body variants on POST/PUT and nonnumeric/fractional/overflow IDs on
+GET/PUT/DELETE were exercised. A whitespace ID (`%20`) also returns the default
+Spring body. Evidence: `artifacts/products-exploration-2026-10-26/evidence.jsonl`,
+`body ...` and `path ...` labels. The same
+[global handler](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/controller/exception/GlobalExceptionHandlerController.java#L44-L70)
+applies to products. The distinct missing DTO length checks behind product
+SQL failures are tracked in [BUG-0009](BUG-0009-product-field-lengths-exceed-storage-limits.md).
 
 ## Suggested fix
 

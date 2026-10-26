@@ -1,19 +1,42 @@
 import type { APIRequestContext } from '@playwright/test';
-import type { ProductCreateDto } from '../types/product';
+import type { ProductCreateDto, ProductUpdateDto } from '../types/product';
+
+export const PRODUCTS_ENDPOINT = '/api/v1/products';
 
 export class ProductsClient {
-  constructor(private readonly request: APIRequestContext) {}
+  constructor(private readonly request: APIRequestContext, private readonly token?: string) {}
 
-  create(product: ProductCreateDto, adminToken: string) {
-    return this.request.post('/api/v1/products', {
+  getAll() {
+    return this.request.get(PRODUCTS_ENDPOINT, { headers: this.authHeaders() });
+  }
+
+  getById(id: number | string) {
+    return this.request.get(this.productPath(id), { headers: this.authHeaders() });
+  }
+
+  create(product: ProductCreateDto) {
+    return this.request.post(PRODUCTS_ENDPOINT, {
       data: product,
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${adminToken}` },
+      headers: { 'Content-Type': 'application/json', ...this.authHeaders() },
     });
   }
 
-  delete(id: number, adminToken: string) {
-    return this.request.delete(`/api/v1/products/${id}`, {
-      headers: { Authorization: `Bearer ${adminToken}` },
+  update(id: number | string, product: ProductUpdateDto) {
+    return this.request.put(this.productPath(id), {
+      data: product,
+      headers: { 'Content-Type': 'application/json', ...this.authHeaders() },
     });
+  }
+
+  delete(id: number | string) {
+    return this.request.delete(this.productPath(id), { headers: this.authHeaders() });
+  }
+
+  private productPath(id: number | string): string {
+    return `${PRODUCTS_ENDPOINT}/${encodeURIComponent(id)}`;
+  }
+
+  private authHeaders(): Record<string, string> {
+    return this.token ? { Authorization: `Bearer ${this.token}` } : {};
   }
 }
