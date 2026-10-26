@@ -325,6 +325,28 @@ Add the following configuration:
 
 Restart Claude Desktop.
 
+## Project API testing skill
+
+The `api-testing` skill captures source-first exploration with curl, lean
+Playwright automation, and root-cause bug reporting. Both copies live in this
+repository: `.agents/skills/api-testing/` for Codex and
+`.claude/skills/api-testing/` for Claude Code. `AGENTS.md` routes API work to the
+skill; `CLAUDE.md` imports those shared project instructions.
+
+Invoke it with `$api-testing` in Codex or `/api-testing` in Claude Code, or ask
+for API testing naturally. The skill uses shared Agent Skills frontmatter and
+loads detailed references only for the work being performed. It has no model
+version dependency.
+
+Edit the `.agents` copy, then run `npm run skills:sync` and
+`npm run skills:check`. Sync copies source files without deleting extra files;
+if a reference was removed, explicitly remove its obsolete Claude copy too.
+The check fails on missing, extra, or different files.
+
+The layout follows the official [Codex skill guidance](https://learn.chatgpt.com/docs/build-skills),
+[Claude Code skill guidance](https://code.claude.com/docs/en/skills), and
+[Anthropic authoring practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices).
+
 ## 📝 License
 
 This project is licensed under the ISC License.

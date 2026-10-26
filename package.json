@@ -5,7 +5,9 @@
   "scripts": {
     "test": "playwright test",
     "test:api": "playwright test tests/api/",
-    "test:ui": "playwright test tests/ui/"
+    "test:ui": "playwright test tests/ui/",
+    "skills:check": "node scripts/api-testing-skill.mjs",
+    "skills:sync": "node scripts/api-testing-skill.mjs --sync"
   },
   "keywords": [
     "playwright",
