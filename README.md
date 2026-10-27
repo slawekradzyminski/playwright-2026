@@ -379,3 +379,36 @@ navigation and basic keyboard accessibility. Tests follow the login suite's
 explicit Given–When–Then style. The separate registration axe scans cover the
 initial page and validation state. Known defects remain in bug reports; their
 regression tests belong with the fixes.
+
+### Authenticated homepage and header
+
+`tests/ui/home.ui.spec.ts` covers all seven homepage shortcuts, personalized
+identity after reload, and keyboard activation. `tests/ui/logged-in-header.ui.spec.ts`
+covers desktop navigation, cart, profile, brand link, logout, and the admin link's
+presence for administrators and absence for clients. The focused mobile cases
+live in `tests/ui/mobile/logged-in-header.ui.spec.ts` and cover menu navigation,
+logout, and the separate mobile admin link. Run only those cases with
+`npx playwright test tests/ui/mobile/`. They use 402 × 874 Chromium emulation;
+the remaining cases retain the configured desktop viewport.
+
+Desktop and mobile header interactions live in separate components under
+`pages/components/`; mobile components are in its `mobile/` subfolder. The
+shared `HomePage` models homepage content, and header tests compose the
+appropriate component directly.
+
+Import `test` and `expect` from `tests/ui/fixtures.ts` to start a test signed in.
+Each test registers a fresh client over HTTP and logs in through the API. The
+fixture seeds `token`, `refreshToken`, and `clientSessionId` in origin-scoped
+localStorage using `context.setStorageState(...)` before yielding the browser
+context; `authenticatedUser` provides its generated identity. It reuses
+Playwright's standard `request` fixture and browser context, with Playwright
+managing their lifecycles. The inherited API fixture deletes the owned
+user during teardown, including after a failed test. No shared login file or
+global account is used. Keep login/registration tests on the unauthenticated
+fixtures so they can exercise those UI journeys.
+
+For read-only admin navigation, import `adminTest` from the same fixtures file.
+It reuses the authentication setup with configured administrator credentials
+and a fresh session per test. The API does not provide disposable admin creation
+or role promotion. These cases do not modify/delete the administrator or log it
+out; ordinary client tests still create and clean up their own users.

@@ -1,4 +1,4 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '../api/fixtures';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
 import { HomePage } from '../../pages/home.page';
 import { LoginPage } from '../../pages/login.page';
@@ -12,16 +12,18 @@ test.describe('Login UI', () => {
     await loginPage.goto();
   });
 
-  test('signs in with valid credentials', async ({ page }) => {
+  test('signs in with valid credentials', async ({ page, api }) => {
     // given
     const homePage = new HomePage(page);
+    const { user } = await api.createUser();
 
     // when
-    await loginPage.login(ADMIN_USERNAME, ADMIN_PASSWORD);
+    await loginPage.login(user.username, user.password);
 
     // then
     await homePage.expectUrl();
     await expect(homePage.root).toBeVisible();
+    await expect(homePage.userEmail).toHaveText(user.email);
   });
 
   test('shows a validation error for an empty password', async () => {

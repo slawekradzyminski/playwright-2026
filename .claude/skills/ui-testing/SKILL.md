@@ -13,6 +13,8 @@ All other project paths are relative to the repository root.
 - For new or changed tests, explore the relevant behavior and read
   [automation](references/automation.md), including the automated viewport,
   Given–When–Then, setup, page objects and accessibility checks.
+  For signed-in scenarios, follow its authenticated browser setup and per-test
+  user ownership standard; reuse `tests/ui/fixtures.ts` and the API cleanup lifecycle.
 - For findings, read [reporting](references/reporting.md), including when
   UI work reveals a backend defect.
 
