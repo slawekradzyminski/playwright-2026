@@ -1,42 +1,31 @@
 # Bug reports
 
-Write all content in this folder in English.
-
-## Structure
+Write all reports in English. Use [TEMPLATE.md](TEMPLATE.md) for both API and UI findings.
 
 | Location | Contents |
 | --- | --- |
-| `functional/` | Wrong behavior of the application: data, security, business rules, error handling |
-| `documentation/` | The OpenAPI contract or other documentation does not describe actual behavior |
-| `QUESTIONS.md` | Findings that need a product or project decision before they become a bug or are accepted |
-| `TEMPLATE.md` | Template for both report folders |
+| `api/functional/` | API behavior, including data, security and business rules |
+| `api/documentation/` | API contract and documentation mismatches |
+| `api/QUESTIONS.md` | API findings awaiting a product or project decision |
+| `ui/` | UI findings (create when the first report is needed) |
 
-`BUG-NNNN` numbers are shared across both folders. Choose the next available
-number and keep it after transferring the report to Jira.
+`BUG-NNNN` numbers are shared across all areas. Search existing reports and
+choose the next available number; retain it if the report is transferred to Jira.
+Group symptoms when evidence supports a shared root cause and fix. Link related
+API and UI findings rather than reporting the same cause twice. If the cause is
+unknown, describe observed behavior without guessing.
 
-## One report per root cause
-
-Report the cause, not each symptom. Before writing a report, analyze the
-backend code ([test-secure-backend](https://github.com/slawekradzyminski/test-secure-backend))
-and group symptoms that share one fix into a single report with a symptom
-table. Link the exact lines at a fixed commit. Create a separate report only
-when the fix is in a different place. If a symptom belongs to an existing
-report, add a row there instead of creating a new file. A documentation
-mismatch caused by a functional bug is a row in the documentation report that
-links to the functional one.
-
-Include a minimal reproduction, expected and actual results, and evidence with
-the verification date and environment. Distinguish runtime-confirmed behavior
-from findings in code only. Exclude real account passwords, tokens and
-personal data; use test data in examples.
+Include minimal reproduction steps, expected and actual behavior, and sanitized
+evidence with the date and environment. Record browser and viewport for UI
+issues when relevant; distinguish runtime observations from code-only analysis.
+Never include real passwords, tokens or personal data.
 
 ## Jira
 
-Copy the table values into the corresponding fields of a **Bug** issue and
-paste the sections from **Description** onward into its **Description**
-field. Adjust priority and component names to match the Jira project's
-configuration. After creating the issue, add its link to the report's **Jira**
-field. A file in this repository does not create a Jira issue automatically.
+Copy the metadata into the corresponding fields of a **Bug** issue and paste
+the sections from **Description** onward into its **Description** field.
+Adjust priority and component names to the Jira project. Add the issue link to
+the report after creation; a local file does not create a Jira issue.
 
 ## Renumbering on 2026-10-26
 

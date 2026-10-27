@@ -1,15 +1,15 @@
 # Findings and bug reports
 
-Read `bugs/README.md`, `bugs/TEMPLATE.md`, `bugs/QUESTIONS.md`, and relevant
+Read `bugs/README.md`, `bugs/TEMPLATE.md`, `bugs/api/QUESTIONS.md`, and relevant
 existing reports before writing. Use English throughout.
 
 ## Classify the evidence
 
 | Finding | Destination |
 | --- | --- |
-| Runtime-confirmed wrong application behavior | `bugs/functional/` |
-| Runtime-confirmed contract/documentation mismatch | `bugs/documentation/` |
-| Business rule, policy, or environment choice needing a decision | `bugs/QUESTIONS.md` |
+| Runtime-confirmed wrong application behavior | `bugs/api/functional/` |
+| Runtime-confirmed contract/documentation mismatch | `bugs/api/documentation/` |
+| Business rule, policy, or environment choice needing a decision | `bugs/api/QUESTIONS.md` |
 | Static suspicion without runtime confirmation | Explicitly labeled code-only finding in the task evidence/final response; not a confirmed bug report |
 
 Attempt a runtime check for every code suspicion. State why any check remains

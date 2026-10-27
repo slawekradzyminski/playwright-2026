@@ -96,4 +96,4 @@ changing the previously stored value. Four spaces persisted. The same missing
 nonblank constraint and minimum-only Size message occur in
 [UserEditDto lines 29–35](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/user/UserEditDto.java#L29-L35).
 Both owned accounts were deleted (204). Acceptance criteria also cover these
-profile-edit rows. [Increment evidence](../../docs/api-coverage-increment-2026-10-27.md).
+profile-edit rows. [Increment evidence](../../../docs/api-coverage-increment-2026-10-27.md).

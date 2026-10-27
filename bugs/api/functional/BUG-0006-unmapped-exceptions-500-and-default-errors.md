@@ -102,7 +102,7 @@ body once; the existing pending order remained unchanged after rejected status
 input. The area agent also verified an unknown enum status. These share the
 missing unreadable-body exception mapping, rather than a new root cause.
 Source: [global handler](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/controller/exception/GlobalExceptionHandlerController.java#L44-L70).
-Sanitized reproduction and limits: [increment evidence](../../docs/api-coverage-increment-2026-10-27.md).
+Sanitized reproduction and limits: [increment evidence](../../../docs/api-coverage-increment-2026-10-27.md).
 
 Duplicate-email profile edit (row 2) was reproduced again on 2026-10-27 using
 two disposable accounts: 500 `{"message":"Internal server error"}`. Both

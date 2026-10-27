@@ -1,54 +1,55 @@
-# BUG-NNNN: Short title naming the root cause, not a single symptom
+# BUG-NNNN: Short description of the problem
 
 | Jira field / metadata | Value |
 | --- | --- |
-| Summary | [Area] Root cause in one line |
+| Summary | [Area] What fails |
 | Issue Type | Bug |
 | Priority | To be determined: Highest / High / Medium / Low / Lowest |
 | Component/s | Application area |
-| Labels | api, registration (adjust as needed) |
-| Environment | URL, application version/build and other relevant conditions |
-| Backend revision | Repository commit the root-cause analysis is based on |
+| Labels | api or ui; add relevant area |
+| Environment | URL, application version/build, and relevant conditions |
+| Browser / viewport | For UI findings when relevant; otherwise N/A |
+| Source revision | Revision used for analysis, if known |
 | Verification date | YYYY-MM-DD |
 | Report status | New / Needs confirmation / Reported / Fixed |
 | Jira | Issue link once created |
 
 ## Description
 
-What fails, and how does it affect users or data? Name the shared root cause
-if several symptoms are covered.
-
-## Symptoms
-
-One row per observed, runtime-confirmed effect of the root cause.
-
-| # | Request | Expected | Actual |
-| --- | --- | --- | --- |
-| 1 | Minimal request | Correct behavior | Observed status and body |
-
-## Root cause
-
-Where and why the code behaves this way, with links to the exact lines at the
-backend revision above. Mark anything not confirmed in code as suspected.
+What fails, and how does it affect users or data? Explain the expected behavior
+and its basis. Group related symptoms only when a shared cause is supported.
 
 ## Steps to reproduce
 
-1. Use test data or placeholders.
-2. Reference the symptom rows instead of repeating every variant.
+1. State any necessary setup using test data or placeholders.
+2. Describe the smallest sequence of actions or requests that reproduces the issue.
+
+## Expected result
+
+Describe the behavior and its basis, such as a requirement or documented contract.
+
+## Actual result
+
+Describe the observed behavior. Use a symptom table if several related cases
+share a confirmed cause.
 
 ## Evidence
 
-Minimal request and sanitized response, log or attachment path.
-State the reproduction frequency if verified. Only report results of attempts
-that were actually performed.
+Include sanitized responses, screenshots, traces, logs or attachment paths as
+appropriate. State the reproduction frequency only if verified. Distinguish
+runtime observations from source-only findings.
+
+## Root cause
+
+If established, explain the cause and link to exact source lines at a fixed
+revision. Mark an unconfirmed explanation as suspected, or state that the cause
+is unknown.
 
 ## Suggested fix
 
-Optional. Fix the root cause in one place rather than each symptom.
+Optional; propose a fix only when supported by the evidence.
 
 ## Acceptance criteria
 
-- Specific, verifiable behavior after the fix, covering every symptom row.
-- A relevant regression scenario that must continue to work.
-- The fix includes an automated regression test for this scenario (unit or API
-  level, whichever fits the change best).
+- Specific, verifiable behavior covering the reported symptoms.
+- A relevant regression scenario, automated at an appropriate level where useful.

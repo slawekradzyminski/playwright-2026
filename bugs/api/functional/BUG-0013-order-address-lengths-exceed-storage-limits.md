@@ -72,7 +72,7 @@ Content-Type: application/json
 
 Sanitized local details: `artifacts/api-increment-2026-10-27/supervisor-boundary-evidence.json`,
 labels `address-*-length-*` and following cart/stock reads.
-[Tracked evidence summary](../../docs/api-coverage-increment-2026-10-27.md).
+[Tracked evidence summary](../../../docs/api-coverage-increment-2026-10-27.md).
 Both probe accounts and the product were deleted with 204.
 
 ## Suggested fix
