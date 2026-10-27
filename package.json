@@ -7,7 +7,8 @@
     "test:api": "playwright test tests/api/",
     "test:ui": "playwright test tests/ui/",
     "skills:check": "node scripts/api-testing-skill.mjs",
-    "skills:sync": "node scripts/api-testing-skill.mjs --sync"
+    "skills:sync": "node scripts/api-testing-skill.mjs --sync",
+    "test:a11y": "playwright test tests/accessibility/"
   },
   "keywords": [
     "playwright",
@@ -22,6 +23,7 @@
     "node": ">=24 <25"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.14.0",
     "@faker-js/faker": "^10.6.0",
     "@playwright/test": "^1.64.1",
     "@types/node": "^24.13.3",

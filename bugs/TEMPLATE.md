@@ -6,7 +6,7 @@
 | Issue Type | Bug |
 | Priority | To be determined: Highest / High / Medium / Low / Lowest |
 | Component/s | Application area |
-| Labels | api or ui; add relevant area |
+| Labels | api or ui; for UI add functional, accessibility, usability and/or visual, plus relevant area |
 | Environment | URL, application version/build, and relevant conditions |
 | Browser / viewport | For UI findings when relevant; otherwise N/A |
 | Source revision | Revision used for analysis, if known |
@@ -35,9 +35,13 @@ share a confirmed cause.
 
 ## Evidence
 
-Include sanitized responses, screenshots, traces, logs or attachment paths as
-appropriate. State the reproduction frequency only if verified. Distinguish
-runtime observations from source-only findings.
+Include evidence appropriate to the finding. Screenshots are recommended for
+visible UI or usability issues when they help demonstrate the problem; use
+`ui/screenshots/` and include the bug ID in the filename. For other issues use
+judgment and choose evidence such as DOM inspection, traces or logs; a screenshot
+is optional. Sanitize evidence and explain what it shows. State the reproduction
+frequency only if verified. Distinguish runtime observations from source-only
+findings.
 
 ## Root cause
 

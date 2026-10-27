@@ -7,7 +7,8 @@ Write all reports in English. Use [TEMPLATE.md](TEMPLATE.md) for both API and UI
 | `api/functional/` | API behavior, including data, security and business rules |
 | `api/documentation/` | API contract and documentation mismatches |
 | `api/QUESTIONS.md` | API findings awaiting a product or project decision |
-| `ui/` | UI findings (create when the first report is needed) |
+| `ui/` | UI findings and product questions |
+| `ui/screenshots/` | Screenshots attached to UI bug reports |
 
 `BUG-NNNN` numbers are shared across all areas. Search existing reports and
 choose the next available number; retain it if the report is transferred to Jira.
@@ -19,6 +20,23 @@ Include minimal reproduction steps, expected and actual behavior, and sanitized
 evidence with the date and environment. Record browser and viewport for UI
 issues when relevant; distinguish runtime observations from code-only analysis.
 Never include real passwords, tokens or personal data.
+
+Screenshots are recommended when they help demonstrate a visible UI, visual or
+usability issue. For other issues, choose evidence suited to the behavior, such
+as a DOM inspection, trace, logs or a screenshot when useful. Save screenshots
+in `ui/screenshots/` using the bug ID in the filename; sanitize them and explain
+what they show. Evidence must support the reported claim.
+
+## UI categories
+
+Keep UI reports in `ui/` and add one or more labels: `functional` (behavior or
+integration), `accessibility` (barriers for people using assistive technology or
+alternative input), `usability` (difficulty completing or understanding a task),
+and `visual` (layout, rendering, readability or design inconsistency). A single
+issue can have multiple labels; group by evidence and root cause, not by label.
+Use `QUESTIONS.md` for subjective concerns or behavior awaiting product/design
+agreement. Describe the user impact and the requirement, design reference or
+other basis for the expected behavior.
 
 ## Jira
 

@@ -144,6 +144,17 @@ npm run test:ui
 npx playwright test tests/ui/login.ui.spec.ts
 ```
 
+**Accessibility scans**
+
+```bash
+npm run test:a11y
+```
+
+The separate axe proof of concept scans the initial login page and its validation
+state. It currently fails on [BUG-0016](bugs/ui/BUG-0016-login-sso-divider-contrast.md).
+Automated scans catch only some accessibility problems; manual checks remain
+necessary. `npm test` also includes this suite.
+
 **All Tests**
 
 ```bash
