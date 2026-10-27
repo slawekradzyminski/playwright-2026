@@ -1,3 +1,4 @@
+import { expectContentType } from '../support/content-type';
 import { test, expect } from '../fixtures';
 import { ProductsClient } from '../../../http/products-client';
 
@@ -12,7 +13,7 @@ test.describe('GET /api/v1/products', () => {
 
     // then
     expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toMatch(/^application\/json\b/);
+    expectContentType(response, 'application/json');
     expect(await response.json()).toEqual(expect.arrayContaining([product]));
   });
 

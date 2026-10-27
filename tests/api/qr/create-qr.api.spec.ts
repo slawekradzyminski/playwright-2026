@@ -1,3 +1,4 @@
+import { expectContentType } from '../support/content-type';
 import jsQR from 'jsqr';
 import { PNG } from 'pngjs';
 import { QrClient } from '../../../http/qr-client';
@@ -15,7 +16,7 @@ test.describe('POST /api/v1/qr/create', () => {
 
     // then
     expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toMatch(/^image\/png\b/);
+    expectContentType(response, 'image/png');
     const image = PNG.sync.read(await response.body());
     const decoded = jsQR(new Uint8ClampedArray(image.data), image.width, image.height);
     expect(decoded?.data).toBe(payload.text);
@@ -31,7 +32,7 @@ test.describe('POST /api/v1/qr/create', () => {
 
     // then
     expect(response.status()).toBe(400);
-    expect(response.headers()['content-type']).toMatch(/^application\/json\b/);
+    expectContentType(response, 'application/json');
     expect(await response.json()).toEqual({ text: 'Text is required' });
   });
 
@@ -45,7 +46,7 @@ test.describe('POST /api/v1/qr/create', () => {
 
     // then
     expect(response.status()).toBe(401);
-    expect(response.headers()['content-type']).toMatch(/^application\/json\b/);
+    expectContentType(response, 'application/json');
     expect(await response.json()).toEqual({ message: 'Unauthorized' });
   });
 });

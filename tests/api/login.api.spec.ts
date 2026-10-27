@@ -1,3 +1,4 @@
+import { expectContentType } from './support/content-type';
 import { test, expect } from '@playwright/test';
 import { AuthClient } from '../../http/auth-client';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
@@ -21,7 +22,7 @@ test.describe('/api/v1/users/signin', () => {
 
     // then
     expect(response.status()).toBe(200);
-    expect(response.headers()['content-type']).toMatch(/^application\/json\b/);
+    expectContentType(response, 'application/json');
     expectSuccessfulLogin(await response.json());
   });
 
