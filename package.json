@@ -6,8 +6,8 @@
     "test": "playwright test",
     "test:api": "playwright test tests/api/",
     "test:ui": "playwright test tests/ui/",
-    "skills:check": "node scripts/api-testing-skill.mjs",
-    "skills:sync": "node scripts/api-testing-skill.mjs --sync",
+    "skills:check": "node scripts/testing-skills.mjs",
+    "skills:sync": "node scripts/testing-skills.mjs --sync",
     "test:a11y": "playwright test tests/accessibility/"
   },
   "keywords": [

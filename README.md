@@ -336,7 +336,7 @@ Add the following configuration:
 
 Restart Claude Desktop.
 
-## Project API testing skill
+## Project testing skills
 
 The `api-testing` skill captures source-first exploration with curl, lean
 Playwright automation, and root-cause bug reporting. Both copies live in this
@@ -349,7 +349,13 @@ for API testing naturally. The skill uses shared Agent Skills frontmatter and
 loads detailed references only for the work being performed. It has no model
 version dependency.
 
-Edit the `.agents` copy, then run `npm run skills:sync` and
+The `ui-testing` skill covers frontend source analysis, exploratory testing,
+Playwright UI and accessibility automation, and reporting UI findings. Its
+copies live in `.agents/skills/ui-testing/` and `.claude/skills/ui-testing/`.
+Invoke it with `$ui-testing` in Codex or `/ui-testing` in Claude Code, or ask
+for UI testing naturally. `AGENTS.md` routes relevant work to the skill.
+
+Edit the relevant `.agents` copy, then run `npm run skills:sync` and
 `npm run skills:check`. Sync copies source files without deleting extra files;
 if a reference was removed, explicitly remove its obsolete Claude copy too.
 The check fails on missing, extra, or different files.
