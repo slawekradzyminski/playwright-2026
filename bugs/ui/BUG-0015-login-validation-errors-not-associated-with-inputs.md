@@ -1,12 +1,12 @@
-# BUG-0015: Login validation errors are not associated with their inputs
+# BUG-0015: Login and registration validation errors are not associated with their inputs
 
 | Jira field / metadata | Value |
 | --- | --- |
-| Summary | [UI] Login fields lack programmatic invalid state and error association |
+| Summary | [UI] Login and registration fields lack programmatic invalid state and error association |
 | Issue Type | Bug |
 | Priority | To be determined |
-| Component/s | Login, accessibility |
-| Labels | ui, accessibility, login |
+| Component/s | Login, registration, accessibility |
+| Labels | ui, accessibility, login, registration |
 | Environment | Local gateway `http://localhost:8081`, frontend image 3.9.1 |
 | Browser / viewport | Playwright Chromium, 402 × 874 CSS px; errors also observed at other sampled sizes |
 | Source revision | Runtime image revision not established; local source checkout `7392a3a` inspected separately |
@@ -72,3 +72,21 @@ invalid state while the error is present.
 - Each invalid field exposes its invalid state and corresponding message to assistive technology.
 - Correcting the value clears or updates the state and association appropriately.
 - Cover the behavior with an appropriate regression check and verify with a screen reader.
+
+## Registration scope confirmed on 2026-10-27
+
+The same defect also affects all five registration inputs. At `/register`, submit
+an empty form: Username, Email, Password, First Name and Last Name each display a
+required-field alert, but all five inputs lack `aria-invalid`, `aria-describedby`
+and `aria-errormessage`. Their visible alerts have no IDs. Labels work, and focus
+moves to Username, but revisiting a field cannot expose its associated error.
+This extends the existing report rather than introducing a duplicate root cause.
+
+Verified in Chromium 156.0.8078.48 at 1920 × 1080, 402 × 874, 820 × 1180 and
+1180 × 820, with touch emulation for phone/tablet. Frontend image remains 3.9.1;
+inspected frontend revision is `7392a3a935b373f3160c5a3ae4162c5b2f310624`, with
+runtime revision match unknown. `registerPage.tsx` and the shared Input have the
+same missing association pattern described above. Correcting Username clears
+its visible error; assistive-technology testing was not performed.
+
+Acceptance criteria above apply to registration as well as login.

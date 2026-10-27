@@ -42,8 +42,13 @@ export class ApiTestContext {
 
   async registerUser(user: UserRegisterDto, options?: Parameters<UsersClient['register']>[1]) {
     const response = await new UsersClient(this.request).register(user, options);
-    if (response.status() === 201) this.usernames.add(user.username);
+    if (response.status() === 201) this.trackUser(user.username);
     return response;
+  }
+
+  // Register ownership after a confirmed UI signup so the same HTTP cleanup applies.
+  trackUser(username: string): void {
+    this.usernames.add(username);
   }
 
   async createUser() {

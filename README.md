@@ -150,8 +150,9 @@ npx playwright test tests/ui/login.ui.spec.ts
 npm run test:a11y
 ```
 
-The separate axe proof of concept scans the initial login page and its validation
-state. It currently fails on [BUG-0016](bugs/ui/BUG-0016-login-sso-divider-contrast.md).
+The separate axe proof of concept scans the initial login and registration pages
+and their validation states. Registration scans pass; login scans currently fail
+on the known divider contrast defect. See [BUG-0016](bugs/ui/BUG-0016-login-sso-divider-contrast.md).
 Automated scans catch only some accessibility problems; manual checks remain
 necessary. `npm test` also includes this suite.
 
@@ -369,3 +370,12 @@ The layout follows the official [Codex skill guidance](https://learn.chatgpt.com
 This project is licensed under the ISC License.
 
 For more information on setting up and using the Dockerized environment, refer to the awesome-localstack repository.
+
+### Registration UI coverage
+
+`tests/ui/registration.ui.spec.ts` covers successful registration with HTTP cleanup,
+required fields, invalid email, short username/password, duplicate username/email,
+navigation and basic keyboard accessibility. Tests follow the login suite's
+explicit Given–When–Then style. The separate registration axe scans cover the
+initial page and validation state. Known defects remain in bug reports; their
+regression tests belong with the fixes.

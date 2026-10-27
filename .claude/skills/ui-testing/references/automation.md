@@ -5,6 +5,17 @@ project using the Desktop Chrome device profile (currently 1280 × 720 CSS pixel
 does not automatically run the three exploratory viewport targets. Check
 `playwright.config.ts` for the current configuration.
 
+Use `tests/ui/login.ui.spec.ts` as the style reference: short, explicit scenarios
+with one action and a clear user-visible outcome. Keep interactions in page
+objects. Prefer representative coverage over exhaustive field/boundary matrices;
+avoid generated test loops, request counters, and mock orchestration unless the
+scenario specifically needs them.
+
+Do not add bug-reproduction tests that are expected to fail, including `test.fail`
+or skipped known-defect cases. Do not assert a known defect as correct behavior.
+Keep reproduction evidence in bug reports and the future regression in the
+fix's acceptance criteria; add the regression when the fix is available.
+
 - Prefer existing `data-testid` attributes with `getByTestId`. If no suitable test ID exists, use a stable accessible role or label; avoid brittle CSS and positional selectors.
 - Put reusable page interactions and locators in `pages/`; model shared interface areas as components in `pages/components/` and compose them into page objects (for example, `loginPage.toast.expectDescription(...)`). Keep the shared base page small and add abstractions only when useful.
 - Keep scenarios and expected outcomes explicit in tests. Assert visible, meaningful feedback (including inline validation and toast messages) and the destination page when relevant; a URL alone rarely proves the behavior.

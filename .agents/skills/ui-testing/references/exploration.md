@@ -43,7 +43,10 @@ locators; inspect viewport and full-page screenshots when layout matters, and
 record console errors and relevant network failures. Check for clipping,
 horizontal overflow, readable feedback, reachable controls and focus order.
 Use disposable data and avoid secrets in evidence. Record environment, browser,
-viewport, scenarios, observations, untested areas and links to findings. Use [reporting](reporting.md) to triage and document findings.
+viewport, scenarios, observations, untested areas and links to findings in the
+chat and relevant bug reports. Do not create separate exploration/session
+documents (for example, date-stamped registration reports) unless the user
+explicitly requests one. Use [reporting](reporting.md) to triage and document findings.
 
 Automate stable, valuable regressions, not every exploratory step;
 run affected automated tests and investigate failures without weakening expected
