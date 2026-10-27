@@ -2,6 +2,7 @@ import { expect, type APIRequestContext } from '@playwright/test';
 import { generateProduct } from '../../../generators/product-generator';
 import { generateUser } from '../../../generators/user-generator';
 import { AuthClient } from '../../../http/auth-client';
+import { OrdersClient } from '../../../http/orders-client';
 import { ProductsClient } from '../../../http/products-client';
 import { UsersClient } from '../../../http/users-client';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../../test-config';
@@ -27,6 +28,14 @@ export class ApiTestContext {
     return this.adminToken ??= this.login(ADMIN_USERNAME, ADMIN_PASSWORD);
   }
 
+  async adminUsers(): Promise<UsersClient> {
+    return new UsersClient(this.request, await this.getAdminToken());
+  }
+
+  async adminOrders(): Promise<OrdersClient> {
+    return new OrdersClient(this.request, await this.getAdminToken());
+  }
+
   async adminProducts(): Promise<ProductsClient> {
     return new ProductsClient(this.request, await this.getAdminToken());
   }
@@ -43,6 +52,10 @@ export class ApiTestContext {
     expect(response.status(), 'Registration of a test user').toBe(201);
     const token = await this.login(user.username, user.password);
     return { user, token };
+  }
+
+  forgetUser(username: string): void {
+    this.usernames.delete(username);
   }
 
   trackProduct(product: ProductDto): void {

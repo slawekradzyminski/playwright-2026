@@ -35,6 +35,9 @@ bug's behavior is accepted as intended.
 | 10 | QR `400` response | `ValidationErrorsDto` | Malformed JSON and object/array `text` return Spring default error body | [BUG-0006](../functional/BUG-0006-unmapped-exceptions-500-and-default-errors.md) |
 | 11 | QR `CreateQrDto.text` | String, no maximum | Numeric/boolean values accepted; 4,000 lowercase characters return `500` | [BUG-0005](../functional/BUG-0005-lenient-json-type-coercion.md), [BUG-0012](../functional/BUG-0012-qr-capacity-error.md) |
 | 9 | `ProductCreateDto` / `ProductUpdateDto` category and imageUrl | No maximum length | 255 accepted, 256 returns `500` on POST and PUT | [BUG-0009](../functional/BUG-0009-product-field-lengths-exceed-storage-limits.md) |
+| 12 | Order create/status `400` responses | `ValidationErrorsDto` / `ErrorDto` | Unreadable address/status input returns Spring default `{timestamp, status, error, path}` | [BUG-0006](../functional/BUG-0006-unmapped-exceptions-500-and-default-errors.md) |
+| 13 | Backend README `GET /api/v1/users` | ADMIN only | A disposable ROLE_CLIENT gets `200`; live OpenAPI describes access for authenticated callers | [Q16](../QUESTIONS.md) |
+| 14 | AddressDto street/city/state/country | No maximum length | 255 succeeds; 256 returns 500 | [BUG-0013](../functional/BUG-0013-order-address-lengths-exceed-storage-limits.md) |
 
 ## Root cause
 
@@ -73,3 +76,14 @@ are the schema source for row 9.
   level, whichever fits the change best).
 
 QR rows 10–11 were verified once per variant on 2026-10-27 against backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
+
+Rows 12–13 verified on 2026-10-27 at backend 3.9.4, OCI revision
+`fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
+Row 13 is a documentation inconsistency; the intended access policy remains
+unresolved. Fixed sources: [README](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/README.md#L272-L277),
+[user-list controller](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/controller/users/UserGetUsersController.java#L29-L39).
+Traffic `{error: string}` responses were reviewed and are compatible with
+`ValidationErrorsDto` (a string map whose documented invalid-argument key is
+`error`); they are not an additional mismatch.
+
+Row 14 verified once per boundary and field on 2026-10-27; environment and revision as rows 12–13.

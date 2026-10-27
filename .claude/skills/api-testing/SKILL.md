@@ -17,8 +17,11 @@ to the repository root.
   [automation](references/automation.md). Exploration determines what deserves
   automation; it does not require automating every probe. Update `API-TEST-PLAN.md`
   whenever added or removed tests change explicit endpoint coverage, using the
-  counting and evidence rules below; do this as part of the task without waiting
-  for a separate coverage request.
+  counting rules below. Keep this file generic: update the current coverage
+  counts, covered endpoints, remaining gaps, priorities and inventory basis only.
+  Do not add increment histories, run dates, test totals/results, environment
+  snapshots, findings, cleanup details or links to individual increment reports.
+  Put task-specific evidence in a separate evidence document and the final response.
 - **Change existing API tests:** read automation and re-explore behavior affected
   by the change. Update `API-TEST-PLAN.md` when the change adds or removes
   explicit endpoint coverage. Reuse recorded evidence only if the endpoint,
@@ -28,9 +31,11 @@ to the repository root.
   exploration uncovers a bug during another API task.
 - **Measure coverage or plan work:** update `API-TEST-PLAN.md` concisely. Count
   method + route against an identified backend inventory; count only endpoints
-  with explicit tests, list gaps and priorities, and state source, profile,
-  runtime and verification limits. Do not equate endpoint counts with scenario
-  coverage or passing tests. Reconcile with the live contract when available.
+  with explicit tests, list gaps and priorities, and identify the inventory basis.
+  Keep the plan a current generic coverage inventory, not an activity log.
+  Put profile, runtime, verification limits and run-specific evidence in a
+  separate document or the final response. Do not equate endpoint counts with
+  scenario coverage or passing tests. Reconcile with the live contract when available.
 
 For combined requests, follow source analysis → curl exploration → finding
 triage → representative automation → verification. An exploration-only request

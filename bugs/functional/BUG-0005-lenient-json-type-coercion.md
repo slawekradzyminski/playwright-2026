@@ -31,6 +31,7 @@ becomes `1`, and a first name of `true` becomes the string `"true"`.
 | 5 | Admin POST/PUT product with numeric/boolean name, description or category (e.g. `"name":true`) | `400` field error | `201` / `200`, value becomes text (e.g. `"true"`) |
 | 6 | Admin PUT product with `"price":""` or `"stockQuantity":" "` | `400` field error | `200`, coerced to null and silently ignored |
 | 7 | Admin POST/PUT product with `"price":"12.34"` or `"stockQuantity":"10"` | `400` for a JSON type inconsistent with the schema | `201` / `200`, converted to numbers |
+| 9 | Client PUT profile with numeric firstName or lastName `1234` | 400 for non-string name | 200; GET me returns the string `"1234"` |
 
 ## Root cause
 
@@ -67,10 +68,16 @@ map the resulting errors to field messages.
 
 ## Acceptance criteria
 
-- Rows 1–8 return `400` with an error for the offending field, and nothing is
+- All listed symptom rows return `400` with an error for the offending field, and nothing is
   stored.
 - Correctly typed requests are unaffected.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).
 
 QR row 8 was verified once per value on 2026-10-27 against backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`. The [QR DTO](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/qr/CreateQrDto.java#L14-L17) declares a string. PNGs were decoded with ZXing.
+
+Profile numeric-name coercion verified once per field on 2026-10-27 at backend
+3.9.4, revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
+[UserEditDto](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/user/UserEditDto.java#L29-L35)
+declares String fields; GET me confirmed stored text. Both owned accounts were
+deleted (204). Evidence: `artifacts/api-increment-2026-10-27/supervisor-boundary-evidence.json`.

@@ -30,6 +30,7 @@ counts client mistakes as server errors.
 | 2 | `PUT /api/v1/users/{me}` with `email` equal to another user's email | `400 Email is already in use` | `500 {"message": "Internal server error"}` |
 | 3 | Malformed JSON, empty body, `[]`, `null`, an array/object for a string field, or an int32 overflow (signup, signin, cart, POST/PUT products; malformed JSON and object/array string fields also verified for QR) | `400` in `ValidationErrorsDto` format | `400 {"timestamp", "status", "error": "Bad Request", "path"}` |
 | 4 | `PUT`/`DELETE /api/v1/cart/items/abc`; `GET`/`PUT`/`DELETE /api/v1/products/abc` | `400` with a readable message | `400 {"error": "For input string: \"abc\""}` |
+| 6 | `POST /api/v1/orders` with an object-valued address field; `PUT /api/v1/orders/{id}/status` with JSON `null` or an unknown enum | `400` in `ValidationErrorsDto` format | Spring default `{timestamp, status, error, path}` body |
 | 5 | Password over 72 bytes (see [BUG-0004](BUG-0004-password-limit-ignores-bcrypt-72-bytes.md)) | Field error | `400 {"error": "password cannot be more than 72 bytes"}` |
 
 Row 6 of [BUG-0001](BUG-0001-identity-fields-not-canonicalized.md) (password
@@ -93,3 +94,17 @@ validation errors.
   level, whichever fits the change best).
 
 QR malformed JSON and object/array `text` each returned the default `400` body once on 2026-10-27, backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
+
+Orders extension verified on 2026-10-27 against backend 3.9.4, OCI revision
+`fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`. An object-valued
+`city` and literal JSON `null` status each returned the Spring default `400`
+body once; the existing pending order remained unchanged after rejected status
+input. The area agent also verified an unknown enum status. These share the
+missing unreadable-body exception mapping, rather than a new root cause.
+Source: [global handler](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/controller/exception/GlobalExceptionHandlerController.java#L44-L70).
+Sanitized reproduction and limits: [increment evidence](../../docs/api-coverage-increment-2026-10-27.md).
+
+Duplicate-email profile edit (row 2) was reproduced again on 2026-10-27 using
+two disposable accounts: 500 `{"message":"Internal server error"}`. Both
+accounts were deleted with 204; runtime revision/profile as in the Orders
+extension above. No known-failing regression was added to the current suite.

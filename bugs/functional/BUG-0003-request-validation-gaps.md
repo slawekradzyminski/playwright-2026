@@ -33,6 +33,8 @@ codebase already use `@NotBlank` (`UserEditDto`, `ResetPasswordRequestDto`,
 | 5 | Signup with `username`, `firstName` or `password` of 256 characters; signin with both fields at 256 | `400` "Maximum … length: 255" | `400` "Minimum … length: 4 characters" (or 8 for passwords) |
 | 6 | Signin with `{}`, `null` fields, or only one field | `400` with field errors | `422 Invalid username/password supplied` |
 | 7 | Admin `PUT /api/v1/products/{id}` with `{"name":"   "}`, `{"category":""}` or `{"category":" "}` | `400` field error, preserving valid required product data | `200`; subsequent GET confirms blank values persisted, although creation rejects them |
+| 8 | `PUT /api/v1/users/{username}` with firstName or lastName of four spaces | 400 name validation | 200; GET me confirms four spaces persisted |
+| 9 | Same PUT with firstName or lastName of 256 characters | 400 maximum-length message | 400 `Minimum firstName/lastName length: 4 characters` |
 
 ## Root cause
 
@@ -86,3 +88,12 @@ and mark login fields as required. Align `UserRegisterDto` and `LoginDto` with
   fields remain unchanged; empty description/imageUrl remain supported.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).
+
+Profile rows 8–9 verified once per field on 2026-10-27 at backend 3.9.4,
+OCI revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
+255-character names succeeded; 256-character names were rejected without
+changing the previously stored value. Four spaces persisted. The same missing
+nonblank constraint and minimum-only Size message occur in
+[UserEditDto lines 29–35](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/user/UserEditDto.java#L29-L35).
+Both owned accounts were deleted (204). Acceptance criteria also cover these
+profile-edit rows. [Increment evidence](../../docs/api-coverage-increment-2026-10-27.md).
