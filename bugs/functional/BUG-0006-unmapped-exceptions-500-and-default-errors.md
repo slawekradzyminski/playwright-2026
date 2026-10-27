@@ -28,7 +28,7 @@ counts client mistakes as server errors.
 | --- | --- | --- | --- |
 | 1 | Any authenticated request (e.g. `GET /api/v1/cart`) with a valid token of a **deleted** user | `401 Invalid or expired token` | `500 {"message": "Internal server error"}` |
 | 2 | `PUT /api/v1/users/{me}` with `email` equal to another user's email | `400 Email is already in use` | `500 {"message": "Internal server error"}` |
-| 3 | Malformed JSON, empty body, `[]`, `null`, an array/object for a string field, or an int32 overflow (signup, signin, cart, POST/PUT products) | `400` in `ValidationErrorsDto` format | `400 {"timestamp", "status", "error": "Bad Request", "path"}` |
+| 3 | Malformed JSON, empty body, `[]`, `null`, an array/object for a string field, or an int32 overflow (signup, signin, cart, POST/PUT products; malformed JSON and object/array string fields also verified for QR) | `400` in `ValidationErrorsDto` format | `400 {"timestamp", "status", "error": "Bad Request", "path"}` |
 | 4 | `PUT`/`DELETE /api/v1/cart/items/abc`; `GET`/`PUT`/`DELETE /api/v1/products/abc` | `400` with a readable message | `400 {"error": "For input string: \"abc\""}` |
 | 5 | Password over 72 bytes (see [BUG-0004](BUG-0004-password-limit-ignores-bcrypt-72-bytes.md)) | Field error | `400 {"error": "password cannot be more than 72 bytes"}` |
 
@@ -91,3 +91,5 @@ validation errors.
 - Unexpected server failures still return `500` without internal details.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).
+
+QR malformed JSON and object/array `text` each returned the default `400` body once on 2026-10-27, backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.

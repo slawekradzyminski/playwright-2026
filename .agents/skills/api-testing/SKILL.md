@@ -15,12 +15,22 @@ to the repository root.
 - **Explore an endpoint:** read [exploration](references/exploration.md).
 - **Add API tests:** complete exploration first, then read
   [automation](references/automation.md). Exploration determines what deserves
-  automation; it does not require automating every probe.
+  automation; it does not require automating every probe. Update `API-TEST-PLAN.md`
+  whenever added or removed tests change explicit endpoint coverage, using the
+  counting and evidence rules below; do this as part of the task without waiting
+  for a separate coverage request.
 - **Change existing API tests:** read automation and re-explore behavior affected
-  by the change. Reuse recorded evidence only if the endpoint, backend revision,
-  profile, configuration, and contract are unchanged and documented.
+  by the change. Update `API-TEST-PLAN.md` when the change adds or removes
+  explicit endpoint coverage. Reuse recorded evidence only if the endpoint,
+  backend revision, profile, configuration, and contract are unchanged and
+  documented.
 - **Report findings:** read [reporting](references/reporting.md), including when
   exploration uncovers a bug during another API task.
+- **Measure coverage or plan work:** update `API-TEST-PLAN.md` concisely. Count
+  method + route against an identified backend inventory; count only endpoints
+  with explicit tests, list gaps and priorities, and state source, profile,
+  runtime and verification limits. Do not equate endpoint counts with scenario
+  coverage or passing tests. Reconcile with the live contract when available.
 
 For combined requests, follow source analysis → curl exploration → finding
 triage → representative automation → verification. An exploration-only request

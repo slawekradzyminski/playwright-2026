@@ -67,8 +67,10 @@ map the resulting errors to field messages.
 
 ## Acceptance criteria
 
-- Rows 1–7 return `400` with an error for the offending field, and nothing is
+- Rows 1–8 return `400` with an error for the offending field, and nothing is
   stored.
 - Correctly typed requests are unaffected.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).
+
+QR row 8 was verified once per value on 2026-10-27 against backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`. The [QR DTO](https://github.com/slawekradzyminski/test-secure-backend/blob/fd4c015434dd573f26bf8ff6691ff14611e2f247/src/main/java/com/awesome/testing/dto/qr/CreateQrDto.java#L14-L17) declares a string. PNGs were decoded with ZXing.

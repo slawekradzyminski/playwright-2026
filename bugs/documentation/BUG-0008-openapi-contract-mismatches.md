@@ -32,6 +32,8 @@ bug's behavior is accepted as intended.
 | 6 | `200` responses of cart endpoints and signin | Media type `*/*` | `Content-Type: application/json` | — |
 | 7 | `PUT /api/v1/users/{username}` `404` | "The user doesn't exist" (implied: for anyone) | Returned to non-admins before authorization | [BUG-0007](../functional/BUG-0007-username-enumeration-via-preauthorize.md) |
 | 8 | Error responses of authenticated endpoints | No `500` documented | `500` for a deleted user's token and duplicate email on edit | [BUG-0006](../functional/BUG-0006-unmapped-exceptions-500-and-default-errors.md) |
+| 10 | QR `400` response | `ValidationErrorsDto` | Malformed JSON and object/array `text` return Spring default error body | [BUG-0006](../functional/BUG-0006-unmapped-exceptions-500-and-default-errors.md) |
+| 11 | QR `CreateQrDto.text` | String, no maximum | Numeric/boolean values accepted; 4,000 lowercase characters return `500` | [BUG-0005](../functional/BUG-0005-lenient-json-type-coercion.md), [BUG-0012](../functional/BUG-0012-qr-capacity-error.md) |
 | 9 | `ProductCreateDto` / `ProductUpdateDto` category and imageUrl | No maximum length | 255 accepted, 256 returns `500` on POST and PUT | [BUG-0009](../functional/BUG-0009-product-field-lengths-exceed-storage-limits.md) |
 
 ## Root cause
@@ -69,3 +71,5 @@ are the schema source for row 9.
 - `/v3/api-docs` passes a contract check against the automated API suite.
 - The fix includes an automated regression test for this scenario (unit or API
   level, whichever fits the change best).
+
+QR rows 10–11 were verified once per variant on 2026-10-27 against backend image 3.9.4, image revision `fd4c015434dd573f26bf8ff6691ff14611e2f247`, profile `local`.
