@@ -25,7 +25,12 @@ This repository contains automated API and UI tests for the local training envir
 │   │   ├── login.api.spec.ts       # Login API tests
 │   │   └── registration.api.spec.ts # Registration API tests
 │   └── ui/
-│       └── login.ui.spec.ts        # UI tests for the login page
+│       ├── fixtures.ts             # Shared authenticated fixtures
+│       ├── auth/                   # Login and registration
+│       ├── home/                   # Homepage
+│       ├── navigation/             # Desktop header navigation
+│       ├── products/               # Catalog tests and product fixtures
+│       └── mobile/                 # Focused mobile scenarios
 ├── http/
 │   ├── auth-client.ts              # Login requests
 │   └── users-client.ts             # Registration and test user cleanup
@@ -141,7 +146,7 @@ npx playwright test tests/api/login.api.spec.ts
 ```bash
 npm run test:ui
 # or
-npx playwright test tests/ui/login.ui.spec.ts
+npx playwright test tests/ui/auth/login.ui.spec.ts
 ```
 
 **Accessibility scans**
@@ -198,7 +203,7 @@ the API's 4–255 character limit. Tests track successfully registered accounts 
 `afterEach` using the configured administrator credentials. Tests that create no
 account skip administrator login and cleanup requests.
 
-### UI Tests (`tests/ui/login.ui.spec.ts`)
+### UI Tests (`tests/ui/auth/login.ui.spec.ts`)
 
 These tests validate the login page's functionality and user experience:
 
@@ -386,7 +391,7 @@ For more information on setting up and using the Dockerized environment, refer t
 
 ### Registration UI coverage
 
-`tests/ui/registration.ui.spec.ts` covers successful registration with HTTP cleanup,
+`tests/ui/auth/registration.ui.spec.ts` covers successful registration with HTTP cleanup,
 required fields, invalid email, short username/password, duplicate username/email,
 navigation and basic keyboard accessibility. Tests follow the login suite's
 explicit Given–When–Then style. The separate registration axe scans cover the
@@ -395,8 +400,8 @@ regression tests belong with the fixes.
 
 ### Authenticated homepage and header
 
-`tests/ui/home.ui.spec.ts` covers all seven homepage shortcuts, personalized
-identity after reload, and keyboard activation. `tests/ui/logged-in-header.ui.spec.ts`
+`tests/ui/home/home.ui.spec.ts` covers all seven homepage shortcuts, personalized
+identity after reload, and keyboard activation. `tests/ui/navigation/logged-in-header.ui.spec.ts`
 covers desktop navigation, cart, profile, brand link, logout, and the admin link's
 presence for administrators and absence for clients. The focused mobile cases
 live in `tests/ui/mobile/logged-in-header.ui.spec.ts` and cover menu navigation,
@@ -425,3 +430,25 @@ It reuses the authentication setup with configured administrator credentials
 and a fresh session per test. The API does not provide disposable admin creation
 or role promotion. These cases do not modify/delete the administrator or log it
 out; ordinary client tests still create and clean up their own users.
+
+### Product catalog UI coverage
+
+Run the focused catalog suite with:
+
+```bash
+npx playwright test tests/ui/products/products.ui.spec.ts
+```
+
+The suite covers category/search/stock filtering, empty-search recovery, numeric
+price sorting, quantity boundaries, and cart add/update/removal/persistence with
+update-failure recovery. It uses the configured desktop Chromium viewport.
+`tests/ui/products/products.fixtures.ts` extends the authenticated UI fixture with a unique
+four-product catalog per test and an HTTP cart client for that same disposable
+user. The inherited API lifecycle deletes the user and cart references before
+removing owned products, including after test failures. Successful journeys use
+the real backend; only the deliberate failed update is intercepted in-browser.
+
+Product interactions live in `pages/products.page.ts` and
+`pages/components/product-card.component.ts`. Catalog cart actions do not imply
+coverage of the separate cart or product-details pages. Known defects remain in
+`bugs/ui/`; their regression tests belong with the application fixes.

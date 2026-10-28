@@ -5,7 +5,7 @@ project using the Desktop Chrome device profile (currently 1280 × 720 CSS pixel
 does not automatically run the three exploratory viewport targets. Check
 `playwright.config.ts` for the current configuration.
 
-Use `tests/ui/login.ui.spec.ts` as the style reference: short, explicit scenarios
+Use `tests/ui/auth/login.ui.spec.ts` as the style reference: short, explicit scenarios
 with one action and a clear user-visible outcome. Keep interactions in page
 objects. Prefer representative coverage over exhaustive field/boundary matrices;
 avoid generated test loops, request counters, and mock orchestration unless the
@@ -27,6 +27,11 @@ for representative coverage, known defects and future regressions.
 - Use the configured `baseURL` and environment-backed credentials.
 - Run the affected UI tests against the intended application, following the shared verification rules.
 
+Organize UI specs by area under `tests/ui/` (for example `auth/`, `home/`,
+`navigation/` and `products/`), with area-specific fixtures beside their specs.
+Keep shared authenticated fixtures in `tests/ui/fixtures.ts` and focused mobile
+scenarios in `tests/ui/mobile/`.
+
 ## Given–When–Then and setup
 
 Structure each scenario with `// given`, `// when` and `// then` comments, as in
@@ -41,6 +46,30 @@ HTTP as well. Open the starting page in the browser as needed, and exercise the
 UI in When. Existing read-only accounts or purely local input data do not require
 an artificial HTTP setup request. Use UI setup only when it is itself necessary to
 the behavior being tested.
+
+## Verifying saved state through the API
+
+For UI actions that change server state, assert meaningful user-visible feedback
+and verify the relevant saved state through a separate API read when practical.
+Keep the action under test in the UI; reuse existing HTTP clients and the same
+test user's identity for verification. Keep HTTP access out of page objects.
+
+- Assert the read's status and the business outcome: the correct entity, changed
+  fields, quantities, totals or absence after deletion. A successful write
+  response or toast alone does not establish the resulting saved state.
+- For rejected writes, verify that the relevant pre-existing state remains
+  unchanged. If a request is intercepted to simulate failure, keep the
+  verification read real so it can detect unintended changes.
+- Keep API assertions focused on the scenario; do not duplicate the full API
+  contract suite or replace UI assertions. Local filtering, sorting and other
+  behavior without a server mutation do not need extra API reads by default.
+- Use bounded polling only when the application's contract is eventually
+  consistent; do not add fixed sleeps or retries to conceal a defect.
+
+See `tests/ui/products/products.ui.spec.ts` for cart add/update/removal and failed-update
+recovery examples, with the same-user HTTP client in `tests/ui/products/products.fixtures.ts`.
+These reads confirm API-visible saved state, not database durability beyond the
+application's contract.
 
 ## Authenticated browser setup and ownership
 

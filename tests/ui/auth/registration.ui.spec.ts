@@ -1,7 +1,7 @@
-import { test, expect } from '../api/fixtures';
-import { generateUser } from '../../generators/user-generator';
-import { LoginPage } from '../../pages/login.page';
-import { RegisterPage } from '../../pages/register.page';
+import { test, expect } from '../../api/fixtures';
+import { generateUser } from '../../../generators/user-generator';
+import { LoginPage } from '../../../pages/login.page';
+import { RegisterPage } from '../../../pages/register.page';
 
 test.describe('Registration UI', () => {
   let registerPage: RegisterPage;

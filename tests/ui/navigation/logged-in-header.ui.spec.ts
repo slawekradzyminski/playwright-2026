@@ -1,7 +1,7 @@
-import { test, adminTest, expect } from './fixtures';
-import { HomePage } from '../../pages/home.page';
-import { DesktopLoggedInHeader } from '../../pages/components/desktop-logged-in-header.component';
-import { LoginPage } from '../../pages/login.page';
+import { test, adminTest, expect } from '../fixtures';
+import { HomePage } from '../../../pages/home.page';
+import { DesktopLoggedInHeader } from '../../../pages/components/desktop-logged-in-header.component';
+import { LoginPage } from '../../../pages/login.page';
 
 test.describe('Logged-in header', () => {
   let home: HomePage;

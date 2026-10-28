@@ -1,8 +1,8 @@
-import { test, expect } from '../api/fixtures';
-import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
-import { HomePage } from '../../pages/home.page';
-import { LoginPage } from '../../pages/login.page';
-import { RegisterPage } from '../../pages/register.page';
+import { test, expect } from '../../api/fixtures';
+import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../../test-config';
+import { HomePage } from '../../../pages/home.page';
+import { LoginPage } from '../../../pages/login.page';
+import { RegisterPage } from '../../../pages/register.page';
 
 test.describe('Login UI', () => {
   let loginPage: LoginPage;
