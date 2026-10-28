@@ -47,9 +47,17 @@ Browser fault injection supplied the initial/read-after-write HTTP 500 responses
 
 The owned product and client were removed after exploration. This is a frontend failure-handling defect, not evidence of a spontaneous backend outage. Backend additive POST behavior matches `CartService.addToCart`.
 
+### GraphQL product-detail reproduction, 2026-10-28
+
+The same failure also occurs on `/products/:id` in GraphQL mode. On the same gateway/image versions, using a new owned client/product and Chromium at 1920 × 1080, the real cart contained one unit at 12.50. Intercepting only the `query Cart` operation with HTTP 200 and `{data:{cart:null},errors:[{message:"Injected cart read failure",extensions:{code:"FORBIDDEN"}}]}` left the product loaded and displayed **Add to Cart** rather than its existing quantity/update state. Login remained active. No additional add was submitted in this fault scenario.
+
+The standalone `/cart` screen showed its explicit error state for the same injected response and recovered through Try again after interception was removed. The problem is therefore the product surface's handling of unknown cart state, not the adapter failing to reject execution errors. The new owned accounts/product were deleted successfully after exploration.
+
 ## Root cause
 
 [ProductCard.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductCard.tsx#L23) reads only `data` from the cart query and ignores loading/error state. `cartItem?.quantity || 0` maps unavailable data to zero; the handler chooses POST rather than updating an existing item based on that value.
+
+[ProductDetails.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductDetails.tsx#L31-L39) uses the same data-only query and zero fallback. These lines match the reviewed frontend reference `7392a3a935b373f3160c5a3ae4162c5b2f310624`.
 
 ## Acceptance criteria
 
@@ -57,3 +65,4 @@ The owned product and client were removed after exploration. This is a frontend 
 - Failed reads expose recovery and do not silently present known-cart actions based on zero.
 - Recovery reconciles the real saved quantity without duplicate or unintended additions.
 - Add a regression covering a prepopulated cart with a failed read and subsequent recovery.
+- Cover catalog and product details, including GraphQL HTTP-200 execution errors; keep standalone cart error/retry behavior working.

@@ -37,9 +37,15 @@ The card's Add button is disabled, but the Shop API selector remains enabled. Se
 
 Runtime probe returned `addDisabled: true`, `selectorEnabled: true`, then observed navigation/reload and `transport: graphql` before releasing the held request. The probe deliberately aborted that held request afterward; it did not submit it to the backend and does not establish the outcome of a server-accepted request. Separate real GraphQL add/remove journeys succeeded.
 
+### GraphQL product-detail reproduction, 2026-10-28
+
+The same pending-write guard gap was confirmed on `/products/:id` in GraphQL mode, using a new owned client/product, the same gateway/images and Chromium at 1920 × 1080. After a real GraphQL add and saved-cart read, a route gate held only `mutation UpdateCartItem` before reaching the server. The detail action was disabled, while `commerce-transport` remained enabled (`actionDisabled: true`, `selectorEnabled: true`). The held request was then aborted; no switch or server-accepted write was attempted in this additional reproduction. Owned data was deleted after exploration.
+
 ## Root cause
 
 [CommerceTransportSelector.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/layout/CommerceTransportSelector.tsx) uses `useIsMutating()` and `queryClient.isMutating()` for the guard. [ProductCard.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductCard.tsx#L49) performs cart writes through direct API calls plus local `isLoading`, which do not register in the React Query mutation cache. [commerceTransport.ts](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/lib/commerceTransport.ts) explicitly rejects switches when pendingMutations is positive.
+
+[ProductDetails.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductDetails.tsx#L49-L67) also calls cart writes directly and tracks local loading flags. Relevant source matches reference `7392a3a935b373f3160c5a3ae4162c5b2f310624`. CartItem and CartSummary contain similar direct-call patterns; their pending-switch runtime behavior was not rechecked in this reproduction.
 
 ## Acceptance criteria
 
@@ -47,3 +53,4 @@ Runtime probe returned `addDisabled: true`, `selectorEnabled: true`, then observ
 - The selector is disabled and the click-time guard rejects changes while a write is pending.
 - Switching works again after both success and failure.
 - Add an integration regression using an actually pending product-card write.
+- Include actually pending product-detail writes in GraphQL mode and audit the remaining cart write entry points for the same guard gap.

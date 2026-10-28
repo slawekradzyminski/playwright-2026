@@ -64,3 +64,11 @@ Remaining priorities:
 For each group, inspect frontend routes/components, role checks, state/validation and HTTP integration, explore the real UI with Playwright CLI, triage findings, then add representative independent tests when requested. Include meaningful success, validation, loading/error/retry, keyboard and role scenarios according to risk. Use the UI skill's phone, tablet (both orientations) and desktop exploration targets, and functional, accessibility, usability and visual review aspects. Existing desktop automation and selected mobile header tests do not imply responsive coverage of every screen.
 
 Inventory basis: [frontend reference](https://github.com/slawekradzyminski/vite-react-frontend) commit `7392a3a935b373f3160c5a3ae4162c5b2f310624`, `src/AppRoutes.tsx`, `ProtectedRoute`, page-level role checks and the explicit test subjects above: 30 route patterns, 29 screens and one redirect alias. Reconcile source changes and the running application's available routes before extending coverage. Keep runtime checks, build-match uncertainty, findings and task-specific evidence outside this current coverage inventory.
+
+## Explicit GraphQL scenario gaps
+
+No active UI spec in this repository explicitly selects and verifies GraphQL. Transport scenarios do not change the 6 / 29 screen count; existing direct catalog/detail/cart coverage does not establish transport parity.
+
+Prioritize Shop API default/switch/reload and real commerce-request verification, representative GraphQL catalog/detail/cart actions, checkout/order/history/cancellation, and admin products/orders/inventory. Include HTTP-200 execution errors without commerce REST fallback or logout, read recovery, persisted state, refresh, pending writes and uncertain-write handling. Extend existing page objects and owned-data fixtures; do not duplicate all UI tests for both modes. Operation-specific interception is required because every commerce GraphQL operation shares one URL. Admin mutations need a fixture policy beyond the current read-only `adminTest`.
+
+Implementation scope and completion criteria: [GraphQL testing backlog](docs/GRAPHQL-TESTING-DISCOVERY.md#ui-scope). Update screen counts only when new direct functional tests of currently uncovered screens are implemented.
