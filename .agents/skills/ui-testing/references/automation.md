@@ -11,10 +11,8 @@ objects. Prefer representative coverage over exhaustive field/boundary matrices;
 avoid generated test loops, request counters, and mock orchestration unless the
 scenario specifically needs them.
 
-Do not add bug-reproduction tests that are expected to fail, including `test.fail`
-or skipped known-defect cases. Do not assert a known defect as correct behavior.
-Keep reproduction evidence in bug reports and the future regression in the
-fix's acceptance criteria; add the regression when the fix is available.
+Follow the [shared automation and verification rules](../../shared/testing.md)
+for representative coverage, known defects and future regressions.
 
 - Prefer existing `data-testid` attributes with `getByTestId`. If no suitable test ID exists, use a stable accessible role or label; avoid brittle CSS and positional selectors.
 - Put reusable page interactions and locators in `pages/`; model shared interface areas as components in `pages/components/` and compose them into page objects (for example, `loginPage.toast.expectDescription(...)`). Keep the shared base page small and add abstractions only when useful.
@@ -25,9 +23,9 @@ fix's acceptance criteria; add the regression when the fix is available.
   Share unchanged page content; compose the appropriate header in the tests
   instead of coupling the shared homepage to a desktop header.
 - Keep scenarios and expected outcomes explicit in tests. Assert visible, meaningful feedback (including inline validation and toast messages) and the destination page when relevant; a URL alone rarely proves the behavior.
-- Use Playwright's locator actions and auto-retrying assertions instead of fixed waits. Keep tests independent and safe to run in parallel; create and clean up any test data they own.
-- Use the configured `baseURL` and environment-backed credentials. Never commit secrets or rely on state left by another test.
-- Run the affected UI tests against the intended application and report failures or environment limitations. Investigate failures before changing expected behavior.
+- Use Playwright's locator actions and auto-retrying assertions instead of fixed waits. Keep tests safe to run in parallel under the shared data-ownership rules.
+- Use the configured `baseURL` and environment-backed credentials.
+- Run the affected UI tests against the intended application, following the shared verification rules.
 
 ## Given–When–Then and setup
 

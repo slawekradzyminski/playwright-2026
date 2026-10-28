@@ -38,13 +38,8 @@ Fetch the live OpenAPI document with curl and inspect the operations, parameters
 request/response schemas, security requirements, and documented status codes.
 Save only relevant sanitized evidence in the scratchpad.
 
-Keep routine exploration evidence in the final response and relevant bug
-reports. Do not create standalone exploration/session reports, evidence
-documents or increment summaries in `docs/` or elsewhere unless the user
-explicitly requests such a document, including when exploration accompanies
-test implementation. Temporary scratchpad data supports the checks; it is not
-a reporting deliverable. Keep `API-TEST-PLAN.md` a current coverage inventory,
-not an exploration log.
+Follow the [shared evidence and coverage-plan rules](../../shared/testing.md)
+when recording exploration results.
 
 ## 3. Probe with curl
 
@@ -83,8 +78,6 @@ Read [reporting](reporting.md) for each discovered defect or policy question.
 Check existing reports before creating another. Preserve the matrix's confirmed
 results and unverified gaps so automation can select representative scenarios.
 
-Clean up only resources created for this task, including unexpectedly successful
-negative requests. Respect dependency order (for example remove a user's cart/
-order references before deleting its products). Check cleanup responses; report
-any remaining owned resources and cleanup failures. Do not reset shared data,
-change protection settings, or patch the read-only backend to make checks pass.
+Follow the shared ownership and cleanup rules. For API resource dependencies,
+remove a user's cart/order references before deleting its products. Keep the
+reference backend read-only.

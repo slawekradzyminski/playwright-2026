@@ -3,7 +3,11 @@ import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
-const skillNames = ['api-testing', 'ui-testing'];
+const skillDirectories = [
+  { name: 'api-testing', requiredFile: 'SKILL.md' },
+  { name: 'ui-testing', requiredFile: 'SKILL.md' },
+  { name: 'shared', requiredFile: 'testing.md' },
+];
 const args = process.argv.slice(2);
 if (args.length > 1 || (args.length === 1 && args[0] !== '--sync')) {
   throw new Error('Usage: node scripts/testing-skills.mjs [--sync]');
@@ -20,11 +24,13 @@ async function files(directory, prefix = '') {
   return result.sort();
 }
 
-for (const skillName of skillNames) {
+for (const { name: skillName, requiredFile } of skillDirectories) {
   const source = join(root, '.agents/skills', skillName);
   const target = join(root, '.claude/skills', skillName);
   const sourceFiles = await files(source);
-  if (!sourceFiles.includes('SKILL.md')) throw new Error('Source skill is missing SKILL.md');
+  if (!sourceFiles.includes(requiredFile)) {
+    throw new Error(`${skillName} source is missing ${requiredFile}`);
+  }
 
   if (args[0] === '--sync') {
     for (const path of sourceFiles) {
@@ -51,7 +57,7 @@ for (const skillName of skillNames) {
     console.error('Edit the .agents copy, then run npm run skills:sync. Remove obsolete mirror files explicitly.');
     process.exitCode = 1;
   } else {
-    console.log(`${skillName} skill copies match (${sourceFiles.length} files in each of ${relative(root, source)} and ${relative(root, target)}).`);
+    console.log(`${skillName} copies match (${sourceFiles.length} files in each of ${relative(root, source)} and ${relative(root, target)}).`);
   }
 
 }

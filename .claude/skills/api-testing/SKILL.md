@@ -10,6 +10,10 @@ root-cause bug reports. Work from the repository root; resolve `references/`
 relative to this skill directory. All other project paths below are relative
 to the repository root.
 
+For every task, first read the [shared testing rules](../shared/testing.md).
+They define evidence/reporting, data ownership and cleanup, coverage-plan
+maintenance, verification and skill synchronization.
+
 ## Choose the requested work
 
 - **Explore an endpoint:** read [exploration](references/exploration.md).
@@ -17,12 +21,7 @@ to the repository root.
   [automation](references/automation.md). Exploration determines what deserves
   automation; it does not require automating every probe. Update `API-TEST-PLAN.md`
   whenever added or removed tests change explicit endpoint coverage, using the
-  counting rules below. Keep this file generic: update the current coverage
-  counts, covered endpoints, remaining gaps, priorities and inventory basis only.
-  Do not add increment histories, run dates, test totals/results, environment
-  snapshots, findings, cleanup details or links to individual increment reports.
-  Put task-specific evidence in the final response and relevant bug reports,
-  following the exploration evidence rule below.
+  counting rules below and the shared coverage-plan rules.
 - **Change existing API tests:** read automation and re-explore behavior affected
   by the change. Update `API-TEST-PLAN.md` when the change adds or removes
   explicit endpoint coverage. Reuse recorded evidence only if the endpoint,
@@ -33,28 +32,10 @@ to the repository root.
 - **Measure coverage or plan work:** update `API-TEST-PLAN.md` concisely. Count
   method + route against an identified backend inventory; count only endpoints
   with explicit tests, list gaps and priorities, and identify the inventory basis.
-  Keep the plan a current generic coverage inventory, not an activity log.
-  Put profile, runtime, verification limits and run-specific evidence in the
-  final response and relevant bug reports. Do not equate endpoint counts with
-  scenario coverage or passing tests. Reconcile with the live contract when available.
+  Reconcile with the live contract when available.
 
 For combined requests, follow source analysis → curl exploration → finding
-triage → representative automation → verification. An exploration-only request
-does not authorize adding a test suite or fixing the backend.
-
-## Exploration evidence and reports
-
-Do not create standalone exploration/session reports, evidence documents or
-increment summaries in `docs/` or elsewhere unless the user explicitly requests
-such a document. This applies to exploration performed before or during test
-implementation as well as exploration-only tasks. Put scenarios, observations,
-environment/revision details, verification results, limitations and cleanup
-status in the final response. Record confirmed defects and product/policy
-questions in the designated bug reports and questions files, following the
-reporting reference; attach sanitized reproduction artifacts when useful.
-Keep test plans as current coverage inventories, without turning them into
-exploration logs. Temporary scratchpad data for performing checks is allowed;
-it does not require a standalone report or committed evidence document.
+triage → representative automation → verification.
 
 ## Project context
 
@@ -75,19 +56,6 @@ it does not require a standalone report or committed evidence document.
 
 ## Evidence and completion
 
-Distinguish runtime-confirmed defects, code-only suspicions, contract mismatches,
-and unresolved product/environment decisions. Never invent a response, backend
-revision, active profile, or passing test result. If a dependency is unavailable,
-complete independent work and state the exact unverified remainder.
-
 Finish with the endpoint scope, observed revision/profile (or uncertainty),
 findings and report paths, tests added or deliberately omitted, verification
 commands/results, and cleanup status. Keep this proportional to the task.
-
-## Maintaining this skill
-
-The `.agents/skills/api-testing/` copy is the editing source;
-`.claude/skills/api-testing/` is an identical real copy for Claude Code.
-After edits run `npm run skills:sync`, then `npm run skills:check`.
-Use shared `name` and `description` frontmatter and portable shell/project tools;
-keep instructions independent of model names, versions, and host-specific APIs.

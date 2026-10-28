@@ -363,10 +363,16 @@ screens. Homepage/header navigation checks do not count as coverage of the
 destination screen; the plan counts screens with direct functional tests and
 tracks their remaining workflow scenarios.
 
+Both skills always load [shared testing rules](.agents/skills/shared/testing.md)
+for evidence/reporting, data ownership and cleanup, coverage-plan maintenance,
+and verification. API and UI exploration, automation and coverage-counting rules
+stay in their respective skills. The shared file has no `SKILL.md`; it is a
+reference, not a third independently invoked skill.
+
 Edit the relevant `.agents` copy, then run `npm run skills:sync` and
 `npm run skills:check`. Sync copies source files without deleting extra files;
 if a reference was removed, explicitly remove its obsolete Claude copy too.
-The check fails on missing, extra, or different files.
+The check includes the shared reference and fails on missing, extra, or different files.
 
 The layout follows the official [Codex skill guidance](https://learn.chatgpt.com/docs/build-skills),
 [Claude Code skill guidance](https://code.claude.com/docs/en/skills), and

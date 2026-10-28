@@ -13,20 +13,15 @@ existing reports before writing. Use English throughout.
 | Static suspicion without runtime confirmation | Explicitly labeled code-only finding in the final response; not a confirmed bug report |
 
 Attempt a runtime check for every code suspicion. State why any check remains
-unverified. Do not turn an undocumented preference into a bug or an automated
-assertion. For a question, record the observed behavior, evidence level, decision
+unverified. For a question, record the observed behavior, evidence level, decision
 needed, decision owner if known, and what it blocks.
 
 ## Consolidate by root cause
 
-Log every confirmed bug using `bugs/TEMPLATE.md`. Search all report folders for
-the root cause and the highest `BUG-NNNN` number. Numbers are shared across
-folders; allocate the next available number only when a new report is needed.
-
-One root cause and shared fix means one report. Add symptom rows to an existing
-report when the same fix addresses them; prefer a few actionable reports over
-one file per validation variant. Follow `bugs/README.md` for cross-linking a
-documentation mismatch that accompanies a functional defect.
+Apply the [shared reporting rules](../../shared/testing.md) for the template,
+cross-area search, numbering and root-cause consolidation. Add symptom rows to
+an existing report when the same fix addresses them. Follow `bugs/README.md` for
+cross-linking a documentation mismatch that accompanies a functional defect.
 
 Find the cause in backend code and link exact lines at the full fixed commit:
 `https://github.com/slawekradzyminski/test-secure-backend/blob/<full-sha>/<path>#Lx-Ly`.
@@ -45,5 +40,4 @@ out of evidence; use placeholders and disposable test data.
 Suggest a fix at the shared cause where supported. Acceptance criteria must
 cover the symptoms and require an automated regression test as part of the fix
 (unit or API level as appropriate). Do not add a known-failing regression to the
-current API suite. Creating a local report does not create or authorize a Jira
-issue or any other external message.
+current API suite.

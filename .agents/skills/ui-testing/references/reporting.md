@@ -15,9 +15,8 @@ bug. Investigate repetitions and establish the responsible layer where possible.
 Do not ignore backend defects discovered during UI work: use the project-local
 [api-testing skill](../../api-testing/SKILL.md) for API exploration, backend
 bug reports and API tests, and report backend findings under `bugs/api/`. Link
-related reports rather than duplicating a root cause. Search existing reports
-across areas and preserve shared `BUG-NNNN` numbering; group symptoms only when
-evidence supports a shared cause and fix.
+related reports according to the [shared reporting rules](../../shared/testing.md)
+for cross-area search, numbering and root-cause consolidation.
 
 ## Evidence and reproduction
 
@@ -31,4 +30,3 @@ Screenshots are recommended when they help demonstrate a visible UI or
 usability issue; for other issues choose the most informative evidence, such
 as DOM inspection, a trace or logs. Save screenshots in `bugs/ui/screenshots/`
 with the bug ID in the filename, sanitize them and explain what they show.
-A local report does not create or authorize an external issue or message.
