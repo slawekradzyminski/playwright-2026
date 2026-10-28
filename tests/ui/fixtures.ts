@@ -6,10 +6,15 @@ import type { LoginDto, LoginResponseDto } from '../../types/auth';
 import type { UserRegisterDto } from '../../types/user';
 import { ADMIN_USERNAME, ADMIN_PASSWORD } from '../../test-config';
 
+export type CommerceTransport = 'rest' | 'graphql';
+
 export const test = base.extend<{
   authenticatedUser: UserRegisterDto;
   loginCredentials: LoginDto;
+  commerceTransport: CommerceTransport | undefined;
 }>({
+  // Shop API mode for business scenarios; leave undefined to start on the application default.
+  commerceTransport: [undefined, { option: true }],
   authenticatedUser: async ({ api }, use) => {
     const user = generateUser();
     const response = await api.registerUser(user);
@@ -20,7 +25,7 @@ export const test = base.extend<{
     const { username, password } = authenticatedUser;
     await use({ username, password });
   },
-  context: async ({ context, request, baseURL, loginCredentials }, use) => {
+  context: async ({ context, request, baseURL, loginCredentials, commerceTransport }, use) => {
     if (!baseURL) throw new Error('Authenticated UI tests require baseURL');
     const clientSessionId = randomUUID();
     const response = await new AuthClient(request).login(loginCredentials, {
@@ -44,6 +49,14 @@ export const test = base.extend<{
         ],
       }],
     });
+    if (commerceTransport) {
+      // Seed the per-tab choice once, before the first load; never overwrite a later switch in the selector.
+      await context.addInitScript(transport => {
+        if (window.sessionStorage.getItem('commerceTransport') === null) {
+          window.sessionStorage.setItem('commerceTransport', transport);
+        }
+      }, commerceTransport);
+    }
     await use(context);
   },
 });

@@ -15,7 +15,8 @@ and future regressions.
 
 ## Follow the repository structure
 
-- One spec file per HTTP method + path in `tests/api/`, grouped by resource.
+- REST: one spec file per HTTP method + path in `tests/api/`, grouped by resource
+  (GraphQL uses domain-grouped files; see [GraphQL](graphql.md)).
   GET and DELETE of the same path belong in separate files. Name the describe
   block with the method and path; order tests by response code ascending.
 - Use `// given` for setup, `// when` for the tested action, `// then` for
@@ -31,6 +32,12 @@ and future regressions.
 
 For a concrete existing example, read
 `tests/api/products/create-product.api.spec.ts` and its client/assertion helpers.
+
+## Keep tests short
+
+Prefer short tests. Move repeated setup into fixtures and repeated groups of
+assertions or reads into named helpers, so each test shows its scenario and
+business outcome at a glance.
 
 ## Assert behavior and preserve independence
 

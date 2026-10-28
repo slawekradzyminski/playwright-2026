@@ -149,6 +149,15 @@ npm run test:ui
 npx playwright test tests/ui/auth/login.ui.spec.ts
 ```
 
+**GraphQL suites**
+
+```bash
+npm run test:graphql
+npm run test:ui:graphql
+```
+
+`npm run test:api` and `npm run test:ui` also include them.
+
 **Accessibility scans**
 
 ```bash
@@ -480,3 +489,26 @@ Shared toast assertions check an open toast's status and exact description:
 `expectNotice(message)`. They support concurrent messages. Notice corresponds
 to the application's neutral `default` variant; the application has no warning
 variant.
+
+### GraphQL API and Shop API UI coverage
+
+`tests/api/graphql/` covers all 20 commerce GraphQL root fields at
+`POST /api/v1/graphql`. Each domain has a queries spec and a mutations spec
+(`products-`, `cart-`, `orders-`, `inventory-queries/mutations.graphql.api.spec.ts`);
+`transport.graphql.api.spec.ts` covers introspection, HTTP/security errors,
+document validation, limits, partial results and multiple mutation roots.
+Documents live in `queries.ts` and `mutations.ts` with shared selections in
+`selections.ts`; wire types (string IDs, decimal-string money) are in
+`types/graphql.ts` and the raw client in `http/graphql-client.ts`. The `graphql`
+fixture provides a disposable customer, owned products and saved-state checks;
+`graphqlAdmin` is the administrator client. Money is compared in minor units.
+
+`tests/ui/graphql/` runs storefront, purchase and admin journeys with the Shop
+API selector set to GraphQL through the `commerceTransport` fixture option, plus
+selector scenarios that start on the REST default. `graphql-network.ts` observes
+and fault-injects single operations by name. `adminCommerceTest` uses the
+configured administrator only on test-owned products and disposable customers'
+orders. Phone and tablet (portrait/landscape) selector cases are in
+`tests/ui/mobile/commerce-transport.ui.spec.ts`.
+Known GraphQL-related UI defects are recorded in `bugs/ui/`; their regression
+tests belong with the application fixes.

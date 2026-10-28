@@ -21,6 +21,7 @@ maintenance, verification and skill synchronization.
   user ownership standard; reuse `tests/ui/fixtures.ts` and the API cleanup lifecycle.
 - For findings, read [reporting](references/reporting.md), including when
   UI work reveals a backend defect.
+- For Shop API (REST/GraphQL) scenarios, also read [GraphQL](references/graphql.md).
 
 Explore the real UI before writing tests; use Playwright CLI when useful and
 verify selectors and messages against the target application.

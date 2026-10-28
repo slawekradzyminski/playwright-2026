@@ -6,6 +6,8 @@
     "test": "playwright test",
     "test:api": "playwright test tests/api/",
     "test:ui": "playwright test tests/ui/",
+    "test:graphql": "playwright test tests/api/graphql/",
+    "test:ui:graphql": "playwright test tests/ui/graphql/ tests/ui/mobile/commerce-transport.ui.spec.ts",
     "skills:check": "node scripts/testing-skills.mjs",
     "skills:sync": "node scripts/testing-skills.mjs --sync",
     "test:a11y": "playwright test tests/accessibility/"

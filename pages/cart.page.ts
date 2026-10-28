@@ -10,6 +10,8 @@ export class CartPage extends BasePage {
   readonly checkoutButton: Locator;
   readonly clearButton: Locator;
   readonly browseProductsLink: Locator;
+  readonly loadError: Locator;
+  readonly retryButton: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -20,6 +22,8 @@ export class CartPage extends BasePage {
     this.checkoutButton = page.getByTestId('cart-checkout-button');
     this.clearButton = page.getByTestId('cart-clear-button');
     this.browseProductsLink = page.getByTestId('cart-browse-products');
+    this.loadError = page.getByText('Error loading cart');
+    this.retryButton = page.getByRole('button', { name: 'Try again' });
   }
 
   async goto() { await this.page.goto(this.path); }

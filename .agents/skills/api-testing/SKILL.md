@@ -1,6 +1,6 @@
 ---
 name: api-testing
-description: Explore this project's REST API with backend source analysis and curl, write or update Playwright API tests, and document confirmed API bugs. Use for endpoint testing, API coverage, regressions, and API bug reports; exclude UI-only testing and unrelated backend implementation.
+description: Explore this project's REST and GraphQL APIs with backend source analysis and curl, write or update Playwright API tests, and document confirmed API bugs. Use for endpoint and GraphQL field testing, API coverage, regressions, and API bug reports; exclude UI-only testing and unrelated backend implementation.
 ---
 
 # API testing
@@ -30,9 +30,11 @@ maintenance, verification and skill synchronization.
 - **Report findings:** read [reporting](references/reporting.md), including when
   exploration uncovers a bug during another API task.
 - **Measure coverage or plan work:** update `API-TEST-PLAN.md` concisely. Count
-  method + route against an identified backend inventory; count only endpoints
+  REST method + route against an identified backend inventory; count only endpoints
   with explicit tests, list gaps and priorities, and identify the inventory basis.
   Reconcile with the live contract when available.
+- **GraphQL:** read [GraphQL](references/graphql.md) for coverage counting,
+  exploration and the GraphQL suite conventions.
 
 For combined requests, follow source analysis → curl exploration → finding
 triage → representative automation → verification.

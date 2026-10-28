@@ -2,6 +2,7 @@ import { expect, type APIRequestContext } from '@playwright/test';
 import { generateProduct } from '../../../generators/product-generator';
 import { generateUser } from '../../../generators/user-generator';
 import { AuthClient } from '../../../http/auth-client';
+import { GraphQlClient } from '../../../http/graphql-client';
 import { OrdersClient } from '../../../http/orders-client';
 import { ProductsClient } from '../../../http/products-client';
 import { UsersClient } from '../../../http/users-client';
@@ -40,6 +41,10 @@ export class ApiTestContext {
     return new ProductsClient(this.request, await this.getAdminToken());
   }
 
+  async adminGraphql(): Promise<GraphQlClient> {
+    return new GraphQlClient(this.request, await this.getAdminToken());
+  }
+
   async registerUser(user: UserRegisterDto, options?: Parameters<UsersClient['register']>[1]) {
     const response = await new UsersClient(this.request).register(user, options);
     if (response.status() === 201) this.trackUser(user.username);
@@ -63,8 +68,9 @@ export class ApiTestContext {
     this.usernames.delete(username);
   }
 
-  trackProduct(product: ProductDto): void {
-    this.productIds.add(product.id);
+  // Accepts REST products and GraphQL string IDs; register before asserting on a create response.
+  trackProduct(product: Pick<ProductDto, 'id'> | { id: string }): void {
+    this.productIds.add(Number(product.id));
   }
 
   async createProduct(product: ProductCreateDto = generateProduct()): Promise<ProductDto> {

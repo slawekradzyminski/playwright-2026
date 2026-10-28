@@ -4,18 +4,18 @@ Screen = a routed view declared in frontend `src/AppRoutes.tsx`. Count each rout
 
 A screen is covered only when an active, explicit Playwright UI test exercises and asserts functionality of that screen itself. Homepage shortcut and header navigation checks cover the source navigation only; they do not cover the destination screen, even when they assert its title, list, identity fields or empty state. URL-only assertions, setup, cleanup, exploratory CLI checks, skipped tests and frontend unit tests do not count. This measures screens with direct functional tests, not complete workflows, role coverage, accessibility conformance or passing results.
 
-**6 / 29 covered (20.7%); 23 remaining (79.3%).**
+**15 / 29 covered (51.7%); 14 remaining (48.3%).**
 
 | Area | Covered / total | Remaining |
 | --- | ---: | ---: |
 | Public authentication | 2 / 5 | 3 |
 | Homepage | 1 / 1 | 0 |
-| Account and users | 0 / 3 | 3 |
-| Customer commerce | 3 / 5 | 2 |
+| Account and users | 1 / 3 | 2 |
+| Customer commerce | 5 / 5 | 0 |
 | AI workspace | 0 / 4 | 4 |
 | Supporting tools | 0 / 3 | 3 |
 | WebMCP shop lab | 0 / 1 | 1 |
-| Admin commerce and inventory | 0 / 7 | 7 |
+| Admin commerce and inventory | 6 / 7 | 1 |
 
 All routes below are frontend paths relative to the configured gateway. **Covered** requires direct functional tests of the screen; the final column identifies work still needed. Navigation-only destinations remain gaps.
 
@@ -29,12 +29,12 @@ All routes below are frontend paths relative to the configured gateway. **Covere
 | `/` | Client or admin | Covered | Loading/error states and role-specific content beyond existing shortcuts and identity/reload |
 | `/users` | Client or admin; admin actions only | Gap: navigation only | Admin edit/delete controls, client absence, owned-user deletion, loading/error/empty states |
 | `/users/:username/edit` | Admin editor; client sees Access denied | Gap | Prefill, validation, save/cancel, missing user, denial; role handling is inside the page |
-| `/profile` | Client or admin, own account | Gap: navigation only | Save and persistence, system prompts, MFA lifecycle, own orders/filtering/pagination, error recovery |
+| `/profile` | Client or admin, own account | Covered (order history) | Save and persistence, system prompts, MFA lifecycle, order filtering/pagination, REST-mode history |
 | `/products` | Client or admin | Covered | Anonymous/admin access, description/category search, name sorting, catalog loading/empty/error recovery, cart-read failure, stock conflicts, pending writes/transport switching, product-detail keyboard access and remaining accessibility |
 | `/products/:id` | Client or admin | Covered | Admin access, cart-read failure, stock changes/conflicts, pending writes, transport parity, invalid IDs and remaining keyboard/accessibility |
 | `/cart` | Client or admin, own cart | Covered | Admin access, foreign-cart isolation, loading/read errors, mutation-failure recovery, stock conflicts, transport parity and remaining accessibility |
-| `/checkout` | Client or admin, nonempty own cart | Gap | Empty-cart redirect, shipping validation, totals, single order submission, stock/error recovery |
-| `/orders/:id` | Owner; admin for management | Gap | Own detail/address/items, cancellation, allowed admin status changes, forbidden foreign order, invalid ID |
+| `/checkout` | Client or admin, nonempty own cart | Covered | Empty-cart redirect, field validation messages, non-conflict failure alert, REST-mode checkout, uncertain/lost responses |
+| `/orders/:id` | Owner; admin for management | Covered | Foreign order and invalid ID, cancel dismissal/failure, unit-price formatting after [BUG-0028](bugs/ui/BUG-0028-order-unit-price-not-formatted.md) |
 | `/llm` | Client or admin | Gap: navigation only | Open all three modes and return navigation |
 | `/llm/chat` | Client or admin | Gap | Model/settings, persisted prompt, conversation and stream completion/error/stop behavior |
 | `/llm/generate` | Client or admin | Gap | Prompt validation, settings, streamed result, loading/error/retry |
@@ -44,31 +44,27 @@ All routes below are frontend paths relative to the configured gateway. **Covere
 | `/traffic` | Client or admin | Gap: navigation only | Connected state, live session-scoped events, event details, clear and reconnect |
 | `/webmcp` | Client or admin | Gap | Search/stock filter, quantities, add-to-cart/totals; tools available/unavailable/off and explicit fault modes |
 | `/admin` | Admin | Gap: navigation only | Summary data, recent orders, low stock and section shortcuts, loading/error states |
-| `/admin/products` | Admin | Gap | List, new/edit navigation, delete confirmation/cancel, refresh and error states |
-| `/admin/products/new` | Admin | Gap | Field validation, create, feedback and catalog persistence |
-| `/admin/products/edit/:id` | Admin | Gap | Prefill/update, field validation, persistence, missing/invalid product |
-| `/admin/orders` | Admin | Gap | All-customer list, status filter, pagination, details, empty/error states |
-| `/admin/inventory` | Admin | Gap | Search/category/stock filters, threshold, pagination, selection and empty/error states |
-| `/admin/inventory/:productId` | Admin | Gap | Deep-linked selection, signed adjustment/reason validation, resulting stock/movements, invalid IDs |
+| `/admin/products` | Admin | Covered | Delete cancellation, referenced-product delete ([UI-Q7](bugs/ui/QUESTIONS.md)), loading/error states, client denial |
+| `/admin/products/new` | Admin | Covered | Field validation, save feedback after [BUG-0027](bugs/ui/BUG-0027-admin-product-form-gives-no-feedback.md), rejected save |
+| `/admin/products/edit/:id` | Admin | Covered | Field validation, missing/invalid product, save feedback (BUG-0027) |
+| `/admin/orders` | Admin | Covered | Empty/error states, client denial, REST mode |
+| `/admin/inventory` | Admin | Covered | Category/status filters, threshold, pagination, keyboard selection after [BUG-0029](bugs/ui/BUG-0029-inventory-rows-unreachable-by-keyboard.md), empty/error states |
+| `/admin/inventory/:productId` | Admin | Covered | Delta/reason validation, invalid IDs, same-request retry after uncertain responses |
 
-Counted screen coverage comes from `tests/ui/auth/login.ui.spec.ts`, `tests/ui/auth/registration.ui.spec.ts`, the homepage identity/persistence-after-reload scenario in `tests/ui/home/home.ui.spec.ts`, and the direct catalog scenarios in `tests/ui/products/products.ui.spec.ts`. The catalog suite exercises category/search/stock filtering, no-results recovery, numeric price sorting, card data, quantity boundaries and cart add/update/removal/persistence with mutation failure recovery on `/products`. Direct product-detail coverage in `tests/ui/products/product-details.ui.spec.ts` exercises detail data, quantity/stock limits, add/reload/update/removal, failed-update recovery and missing-product navigation. `tests/ui/products/product-details-anonymous.ui.spec.ts` verifies anonymous redirection. Direct cart coverage in `tests/ui/cart/cart.ui.spec.ts` exercises empty and populated states, quantities/totals, reload persistence, keyboard activation of the quantity minimum, removal and multi-item clear confirmation/cancellation. `tests/ui/cart/cart.access.ui.spec.ts` verifies anonymous cart redirection. These suites establish functional coverage of the two separate screens; catalog cart actions alone do not. Homepage shortcuts and `tests/ui/navigation/logged-in-header.ui.spec.ts` / `tests/ui/mobile/logged-in-header.ui.spec.ts` cover navigation, client identity, logout and admin-link visibility; destination screens remain uncovered until they have direct functional tests. These shared checks do not establish full route or API authorization. Separate axe scans in `tests/accessibility/` are supplementary and do not add screens to the numerator.
+Counted screen coverage comes from `tests/ui/auth/login.ui.spec.ts`, `tests/ui/auth/registration.ui.spec.ts`, the homepage identity/persistence-after-reload scenario in `tests/ui/home/home.ui.spec.ts`, and the direct catalog scenarios in `tests/ui/products/products.ui.spec.ts`. The catalog suite exercises category/search/stock filtering, no-results recovery, numeric price sorting, card data, quantity boundaries and cart add/update/removal/persistence with mutation failure recovery on `/products`. Direct product-detail coverage in `tests/ui/products/product-details.ui.spec.ts` exercises detail data, quantity/stock limits, add/reload/update/removal, failed-update recovery and missing-product navigation. `tests/ui/products/product-details-anonymous.ui.spec.ts` verifies anonymous redirection. Direct cart coverage in `tests/ui/cart/cart.ui.spec.ts` exercises empty and populated states, quantities/totals, reload persistence, keyboard activation of the quantity minimum, removal and multi-item clear confirmation/cancellation. `tests/ui/cart/cart.access.ui.spec.ts` verifies anonymous cart redirection. These suites establish functional coverage of the two separate screens; catalog cart actions alone do not. Homepage shortcuts and `tests/ui/navigation/logged-in-header.ui.spec.ts` / `tests/ui/mobile/logged-in-header.ui.spec.ts` cover navigation, client identity, logout and admin-link visibility; destination screens remain uncovered until they have direct functional tests. These shared checks do not establish full route or API authorization. Separate axe scans in `tests/accessibility/` are supplementary and do not add screens to the numerator. `tests/ui/graphql/purchase.ui.spec.ts` and `admin.ui.spec.ts` directly cover checkout, order details, profile order history and six admin product/order/inventory screens.
 
 Remaining priorities:
 
 1. **Authorization and sessions:** for the remaining protected routes verify anonymous redirect to `/login`; for all seven `/admin` routes verify client redirect to `/` and authorized admin content. Check the separate user-editor denial, admin-only user actions, foreign cart/order isolation, refresh/expiry and logout. Verify backend enforcement as well as hidden links; use the API skill for API exploration or defects.
-2. **Customer purchase journey (2 uncovered commerce screens):** checkout → order details, continuing from the covered product details and cart, with shipping validation, duplicate-submit protection and cancellation. Profile remains a separate uncovered account screen. Include the `/orders` → `/profile` alias. Deepen product details and cart with role/isolation checks, stock conflicts, loading and mutation error recovery, transport parity and accessibility. Deepen the covered catalog with role checks, catalog loading/error recovery, stock conflicts, transport parity and accessibility.
-3. **Admin operations (7 uncovered screens) and user editor (1):** dashboard summaries/shortcuts, product create/edit/delete, order filtering/details/status, inventory filtering/adjustments/movement history, and user list/edit/delete. Use owned disposable entities. The configured shared admin is a read-only UI fixture; mutation scenarios need an explicit suitable admin fixture/data lifecycle, without changing the shared admin account or its sessions.
-4. **Account recovery and security (3 uncovered public screens):** password recovery/reset and SSO callback, then direct profile identity/save, prompts, orders and MFA/login challenges. All three account/user screens remain uncovered. Keep success and failure branches explicit; external identity and email delivery need their real dependencies.
+2. **Customer purchase journey depth (all five commerce screens covered):** REST-mode checkout/order details, shipping validation messages, the `/orders` → `/profile` alias, foreign-order isolation, loading and mutation-error recovery, stock conflicts on catalog/detail/cart and remaining accessibility. Profile save/prompts/MFA remain separate account work.
+3. **Admin operations (dashboard and user editor uncovered):** dashboard summaries/shortcuts and user list/edit/delete; deepen covered admin commerce screens with validation, empty/error states, client denial on all `/admin` routes and the defects BUG-0027/BUG-0029. Mutations use `adminCommerceTest` on test-owned entities only, never the shared administrator account itself.
+4. **Account recovery and security (3 uncovered public screens):** password recovery/reset and SSO callback, then direct profile identity/save, prompts and MFA/login challenges. `/users` and `/users/:username/edit` remain uncovered; `/profile` is covered only by order history. Keep success and failure branches explicit; external identity and email delivery need their real dependencies.
 5. **Integrations (4 AI screens, 3 supporting tools and 1 lab screen):** AI overview/mode selection, generation/chat/tool streaming, WebMCP, email, QR and traffic behavior. All require direct functional tests beyond existing navigation checks. For commerce, exercise the shared Shop API REST/GraphQL selector with representative equivalent outcomes, switching/reload, error mapping and pending-mutation behavior; transport modes do not multiply screen counts.
 
 For each group, inspect frontend routes/components, role checks, state/validation and HTTP integration, explore the real UI with Playwright CLI, triage findings, then add representative independent tests when requested. Include meaningful success, validation, loading/error/retry, keyboard and role scenarios according to risk. Use the UI skill's phone, tablet (both orientations) and desktop exploration targets, and functional, accessibility, usability and visual review aspects. Existing desktop automation and selected mobile header tests do not imply responsive coverage of every screen.
 
 Inventory basis: [frontend reference](https://github.com/slawekradzyminski/vite-react-frontend) commit `7392a3a935b373f3160c5a3ae4162c5b2f310624`, `src/AppRoutes.tsx`, `ProtectedRoute`, page-level role checks and the explicit test subjects above: 30 route patterns, 29 screens and one redirect alias. Reconcile source changes and the running application's available routes before extending coverage. Keep runtime checks, build-match uncertainty, findings and task-specific evidence outside this current coverage inventory.
 
-## Explicit GraphQL scenario gaps
+## GraphQL scenarios
 
-No active UI spec in this repository explicitly selects and verifies GraphQL. Transport scenarios do not change the 6 / 29 screen count; existing direct catalog/detail/cart coverage does not establish transport parity.
-
-Prioritize Shop API default/switch/reload and real commerce-request verification, representative GraphQL catalog/detail/cart actions, checkout/order/history/cancellation, and admin products/orders/inventory. Include HTTP-200 execution errors without commerce REST fallback or logout, read recovery, persisted state, refresh, pending writes and uncertain-write handling. Extend existing page objects and owned-data fixtures; do not duplicate all UI tests for both modes. Operation-specific interception is required because every commerce GraphQL operation shares one URL. Admin mutations need a fixture policy beyond the current read-only `adminTest`.
-
-Implementation scope and completion criteria: [GraphQL testing backlog](docs/GRAPHQL-TESTING-DISCOVERY.md#ui-scope). Update screen counts only when new direct functional tests of currently uncovered screens are implemented.
+Done. Shop API modes are scenarios, not screens. `tests/ui/graphql/` covers the selector (default, switching, reload, per-context choice, keyboard), storefront, purchase and admin journeys, operation-specific failures, token refresh, lost checkout responses and pending-write guards; `tests/ui/mobile/commerce-transport.ui.spec.ts` covers phone and tablet. Open defects BUG-0022, BUG-0023 and BUG-0025 get their regressions with the frontend fixes.

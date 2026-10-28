@@ -39,6 +39,10 @@ Reproduced in Chromium against the local Docker runtime using a disposable user 
 
 Both the disposable user and product were deleted after the probe; cleanup returned HTTP `204` for each and follow-up lookups returned HTTP `404`.
 
+### GraphQL reproduction, 2026-10-28
+
+In GraphQL mode the same handler receives an HTTP 200 execution error instead of a 409. With an owned product in the cart at quantity 2, a route returned `{"errors":[{"message":"Insufficient stock","path":["updateCartItem"],"extensions":{"code":"CONFLICT"}}],"data":{"updateCartItem":null}}` for `mutation UpdateCartItem` only. After choosing Update with quantity 3, the row returned to 2 and the toast viewport was empty. The product-details page shows an error toast for the same GraphQL failure (covered by `tests/ui/graphql/storefront.ui.spec.ts`), so the gap is specific to the cart page's handler.
+
 ## Root cause
 
 The `CartItem` update handler catches the rejected request, writes only to `console.error`, and resets local quantity to the saved value. It does not notify the user. See [`CartItem.tsx` at the deployed source revision](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/cart/CartItem.tsx#L30-L43), especially lines 38–40.
@@ -52,3 +56,4 @@ Show an inline or announced error message when the update fails, retain the conf
 - A rejected cart quantity update leaves the saved quantity and totals unchanged.
 - The user receives visible, accessible feedback that the update failed and how to recover.
 - Cover an out-of-stock update rejection and verify the unchanged saved cart through a separate API read.
+- Cover both a REST 409 and a GraphQL HTTP-200 `CONFLICT` execution error.

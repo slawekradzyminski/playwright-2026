@@ -41,11 +41,15 @@ Runtime probe returned `addDisabled: true`, `selectorEnabled: true`, then observ
 
 The same pending-write guard gap was confirmed on `/products/:id` in GraphQL mode, using a new owned client/product, the same gateway/images and Chromium at 1920 × 1080. After a real GraphQL add and saved-cart read, a route gate held only `mutation UpdateCartItem` before reaching the server. The detail action was disabled, while `commerce-transport` remained enabled (`actionDisabled: true`, `selectorEnabled: true`). The held request was then aborted; no switch or server-accepted write was attempted in this additional reproduction. Owned data was deleted after exploration.
 
+### GraphQL cart-page reproduction, 2026-10-28
+
+Confirmed on `/cart` in GraphQL mode with a new disposable client and owned product (Chromium, 1280 × 720). A route gate held only `mutation UpdateCartItem` after decreasing a line and choosing Update; `commerce-transport` remained enabled while the update was pending. The held request was then released and completed normally; no switch was attempted. By contrast, a held `mutation Checkout` disabled the selector, because checkout uses `useMutation`. Owned data was deleted afterwards (204).
+
 ## Root cause
 
 [CommerceTransportSelector.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/layout/CommerceTransportSelector.tsx) uses `useIsMutating()` and `queryClient.isMutating()` for the guard. [ProductCard.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductCard.tsx#L49) performs cart writes through direct API calls plus local `isLoading`, which do not register in the React Query mutation cache. [commerceTransport.ts](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/lib/commerceTransport.ts) explicitly rejects switches when pendingMutations is positive.
 
-[ProductDetails.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductDetails.tsx#L49-L67) also calls cart writes directly and tracks local loading flags. Relevant source matches reference `7392a3a935b373f3160c5a3ae4162c5b2f310624`. CartItem and CartSummary contain similar direct-call patterns; their pending-switch runtime behavior was not rechecked in this reproduction.
+[ProductDetails.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/607fe6be7f3be33ed2e7f47d78957b18b63cb81b/src/components/products/ProductDetails.tsx#L49-L67) also calls cart writes directly and tracks local loading flags. Relevant source matches reference `7392a3a935b373f3160c5a3ae4162c5b2f310624`. [CartItem.tsx](https://github.com/slawekradzyminski/vite-react-frontend/blob/7392a3a935b373f3160c5a3ae4162c5b2f310624/src/components/cart/CartItem.tsx#L30-L43) uses the same direct-call pattern; its gap is runtime-confirmed above. CartSummary's clear action was not rechecked.
 
 ## Acceptance criteria
 

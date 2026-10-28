@@ -32,6 +32,12 @@ Organize UI specs by area under `tests/ui/` (for example `auth/`, `home/`,
 Keep shared authenticated fixtures in `tests/ui/fixtures.ts` and focused mobile
 scenarios in `tests/ui/mobile/`.
 
+## Keep tests short
+
+Prefer short tests. Provide page objects and recurring setup through fixtures,
+and move repeated groups of assertions or verification reads into named helpers,
+so each test shows its scenario and outcome at a glance.
+
 ## Given–When–Then and setup
 
 Structure each scenario with `// given`, `// when` and `// then` comments, as in
@@ -132,4 +138,3 @@ functional UI directory separately. [Playwright's accessibility guidance](https:
 explains that automated checks do not replace manual or assistive-technology
 assessment. A screenshot baseline can help detect visual regressions after a
 stable, approved reference exists; inspect visual quality separately.
-

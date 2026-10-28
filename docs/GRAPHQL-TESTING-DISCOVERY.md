@@ -4,7 +4,7 @@
 
 Add a dedicated GraphQL API suite and a focused set of commerce UI scenarios. Keep the existing REST suite and reuse its data lifecycle. Completion should mean explicit coverage of the **9 query fields and 11 mutation fields**, representative authorization and business failures, and browser evidence that the storefront uses GraphQL correctly. A successful request to the one GraphQL URL or a selected dropdown value is insufficient.
 
-This document prepares implementation; it does not add automated coverage. Current coverage remains **0 / 20 GraphQL root fields** in this repository, alongside **31 / 55 REST endpoints** and **6 / 29 UI screens**. Exploratory checks and tests in the application repositories do not increase these counts.
+**Implementation status:** GQL-01 to GQL-05 and the in-repository part of GQL-07 are implemented: skills, clients/fixtures, **20 / 20 GraphQL root fields** in `tests/api/graphql/`, and GraphQL UI suites in `tests/ui/graphql/` (`npm run test:graphql`, `npm run test:ui:graphql`). Current counts live in the [API test plan](../API-TEST-PLAN.md) and [UI test plan](../UI-TEST-PLAN.md). GQL-06 (application fixes) is not done in this repository: the defects are recorded in `bugs/` (BUG-0022, BUG-0023, BUG-0025 to BUG-0029) and their regressions belong with the fixes.
 
 ## Implementation and existing evidence
 
