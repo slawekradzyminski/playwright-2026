@@ -121,7 +121,7 @@ test.describe('Product catalog', () => {
     await alpha.saveToCart();
 
     // then
-    await products.toast.expectDescription(`2 × ${catalog.alpha.name} added to your cart`);
+    await products.toast.expectSuccess(`2 × ${catalog.alpha.name} added to your cart`);
     await expect(alpha.inCart).toHaveText('2 in cart');
     await products.expectUrl();
 
@@ -151,7 +151,7 @@ test.describe('Product catalog', () => {
     await alpha.saveToCart();
 
     // then
-    await products.toast.expectDescription(`${catalog.alpha.name} quantity set to 1`);
+    await products.toast.expectSuccess(`${catalog.alpha.name} quantity set to 1`);
     await expect(alpha.inCart).toHaveText('1 in cart');
     const response = await clientCart.getCart();
     expect(response.status()).toBe(200);
@@ -171,7 +171,7 @@ test.describe('Product catalog', () => {
     await alpha.removeFromCart();
 
     // then
-    await products.toast.expectDescription(`${catalog.alpha.name} has been removed from your cart`);
+    await products.toast.expectSuccess(`${catalog.alpha.name} has been removed from your cart`);
     await expect(alpha.inCart).toBeHidden();
     await expect(alpha.removeButton).toBeHidden();
     await expect(alpha.addButton).toHaveText('Add to Cart');
@@ -197,7 +197,7 @@ test.describe('Product catalog', () => {
     await alpha.saveToCart();
 
     // then
-    await products.toast.expectDescription(`${catalog.alpha.name} has been removed from your cart`);
+    await products.toast.expectSuccess(`${catalog.alpha.name} has been removed from your cart`);
     await expect(alpha.inCart).toBeHidden();
     await expect(alpha.addButton).toHaveText('Add to Cart');
     const response = await clientCart.getCart();
@@ -245,7 +245,7 @@ test.describe('Product catalog', () => {
     await alpha.saveToCart();
 
     // then
-    await products.toast.expectDescription('Failed to update cart. Please try again.');
+    await products.toast.expectFailure('Failed to update cart. Please try again.');
     await expect(alpha.inCart).toHaveText('1 in cart');
     await expect(alpha.addButton).toBeEnabled();
     const failedCart = await clientCart.getCart();

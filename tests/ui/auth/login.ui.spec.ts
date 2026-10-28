@@ -46,7 +46,7 @@ test.describe('Login UI', () => {
     await loginPage.login(credentials.username, credentials.password);
 
     // then
-    await loginPage.toast.expectDescription('Invalid username/password');
+    await loginPage.toast.expectFailure('Invalid username/password');
     await loginPage.expectUrl();
   });
 

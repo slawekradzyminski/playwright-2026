@@ -452,3 +452,31 @@ Product interactions live in `pages/products.page.ts` and
 `pages/components/product-card.component.ts`. Catalog cart actions do not imply
 coverage of the separate cart or product-details pages. Known defects remain in
 `bugs/ui/`; their regression tests belong with the application fixes.
+
+### Product details and cart UI coverage
+
+Run these suites with:
+
+```bash
+npx playwright test tests/ui/products/product-details*.ui.spec.ts tests/ui/cart/
+```
+
+Product-detail tests cover displayed data, quantity and stock limits, cart
+add/update/removal and reload persistence, rejected-update recovery, missing
+products and anonymous access. They reuse the disposable catalog and same-user
+cart client. Cart tests cover empty and populated states, quantity and totals,
+reload persistence, keyboard activation of the minimum quantity, removal,
+multi-item clear confirmation/cancellation and anonymous access. Each mutation
+journey verifies the saved cart through an independent API read.
+
+Interactions live in `pages/product-details.page.ts` and `pages/cart.page.ts`.
+Both suites use the existing owned-user/product teardown lifecycle. Automated
+tests retain the configured desktop Chromium viewport; exploratory responsive
+checks do not add permanent mobile test projects. The confirmed cart update
+feedback defect is tracked in [BUG-0025](bugs/ui/BUG-0025-cart-update-failure-has-no-feedback.md).
+
+Shared toast assertions check an open toast's status and exact description:
+`pageObject.toast.expectSuccess(message)`, `expectFailure(message)` or
+`expectNotice(message)`. They support concurrent messages. Notice corresponds
+to the application's neutral `default` variant; the application has no warning
+variant.

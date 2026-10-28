@@ -23,7 +23,7 @@ test.describe('Registration UI', () => {
     // then
     await loginPage.expectUrl();
     await expect(loginPage.submitButton).toBeVisible();
-    await loginPage.toast.expectDescription('Registration successful! You can now log in.');
+    await loginPage.toast.expectSuccess('Registration successful! You can now log in.');
   });
 
   test('shows validation errors for empty fields', async () => {
@@ -84,7 +84,7 @@ test.describe('Registration UI', () => {
     await registerPage.register(user);
 
     // then
-    await registerPage.toast.expectDescription('Username already exists');
+    await registerPage.toast.expectFailure('Username already exists');
     await registerPage.expectUrl();
   });
 
@@ -98,7 +98,7 @@ test.describe('Registration UI', () => {
     await registerPage.register(user);
 
     // then
-    await registerPage.toast.expectDescription('Email already exists');
+    await registerPage.toast.expectFailure('Email already exists');
     await registerPage.expectUrl();
   });
 

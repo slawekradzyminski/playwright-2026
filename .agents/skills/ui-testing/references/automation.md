@@ -15,7 +15,7 @@ Follow the [shared automation and verification rules](../../shared/testing.md)
 for representative coverage, known defects and future regressions.
 
 - Prefer existing `data-testid` attributes with `getByTestId`. If no suitable test ID exists, use a stable accessible role or label; avoid brittle CSS and positional selectors.
-- Put reusable page interactions and locators in `pages/`; model shared interface areas as components in `pages/components/` and compose them into page objects (for example, `loginPage.toast.expectDescription(...)`). Keep the shared base page small and add abstractions only when useful.
+- Put reusable page interactions and locators in `pages/`; model shared interface areas as components in `pages/components/` and compose them into page objects (for example, `loginPage.toast.expectFailure(...)`). Use the shared toast component's status-specific assertions (`expectSuccess`, `expectFailure`, `expectNotice`) to check the variant and exact message together. Keep the shared base page small and add abstractions only when useful.
 - Keep exceptional mobile regressions in `tests/ui/mobile/`, with viewport/touch
   configuration local to those tests. Do not duplicate the desktop suite on
   mobile by default. Use a separate mobile header component in
