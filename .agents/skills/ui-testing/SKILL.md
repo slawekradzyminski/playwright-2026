@@ -21,6 +21,55 @@ All other project paths are relative to the repository root.
 Explore the real UI before writing tests; use Playwright CLI when useful and
 verify selectors and messages against the target application.
 
+## Exploration evidence and reports
+
+Do not create standalone exploration/session reports, evidence documents or
+increment summaries in `docs/` or elsewhere unless the user explicitly requests
+such a document. This applies to exploration performed before or during test
+implementation as well as exploration-only tasks. Put scenarios, observations,
+environment/revision details, verification results, limitations and cleanup
+status in the final response. Record confirmed defects and product/policy
+questions in the designated bug reports and questions files, following the
+reporting reference; attach sanitized reproduction artifacts when useful.
+Keep test plans as current coverage inventories, without turning them into
+exploration logs. Temporary scratchpad data for performing checks is allowed;
+it does not require a standalone report or committed evidence document.
+
+## Maintaining the UI test plan
+
+Use `UI-TEST-PLAN.md` as the current screen coverage inventory and prioritized
+backlog, analogous to `API-TEST-PLAN.md` for endpoints. Read it when exploring,
+planning or changing UI coverage. Update it whenever added, removed or changed
+tests alter explicit screen coverage, or frontend route/access changes alter
+the inventory. Update counts, covered routes, remaining scenarios, role/access
+expectations, priorities and the frontend revision/inventory basis together.
+
+Count each routed screen pattern once; distinct create/edit routes count
+separately, while redirect aliases, shared navigation, tabs/dialogs, MFA states,
+viewport variants and REST/GraphQL modes remain scenarios. Count a screen only
+when an active explicit Playwright UI test exercises and asserts functionality
+of that screen itself. Homepage shortcut and header navigation checks cover
+the source navigation only, not the destination screen, even when they assert
+its title, list, identity fields or empty state. Mark navigation-only
+destinations as gaps until direct functional tests exist. URL-only checks,
+setup/cleanup, exploratory CLI checks, skipped tests, frontend unit tests and
+standalone axe scans do not increase screen coverage.
+Do not equate screen counts with workflow completeness, role/authorization
+coverage, accessibility conformance or passing results. Track remaining depth
+even for screens already counted as covered.
+
+Include anonymous, client and admin access, including page-level admin checks
+outside `/admin`. Verify authorized content and unauthorized direct navigation;
+hidden links alone do not establish route or API authorization. Reconcile the
+source inventory with the running app when available, keeping source-only
+expectations distinct from observed behavior.
+
+Keep the plan generic and current: no increment histories, run dates,
+test totals/results, environment snapshots, findings, cleanup logs or links to
+individual session reports. Put task-specific runtime evidence, actual browser
+and viewports, build/revision uncertainty and verification limits in the final
+response and relevant bug reports, following the exploration/reporting references.
+
 ## White-box analysis and integration
 
 Before exploring or automating a view, inspect the relevant frontend source in

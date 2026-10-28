@@ -21,7 +21,8 @@ to the repository root.
   counts, covered endpoints, remaining gaps, priorities and inventory basis only.
   Do not add increment histories, run dates, test totals/results, environment
   snapshots, findings, cleanup details or links to individual increment reports.
-  Put task-specific evidence in a separate evidence document and the final response.
+  Put task-specific evidence in the final response and relevant bug reports,
+  following the exploration evidence rule below.
 - **Change existing API tests:** read automation and re-explore behavior affected
   by the change. Update `API-TEST-PLAN.md` when the change adds or removes
   explicit endpoint coverage. Reuse recorded evidence only if the endpoint,
@@ -33,13 +34,27 @@ to the repository root.
   method + route against an identified backend inventory; count only endpoints
   with explicit tests, list gaps and priorities, and identify the inventory basis.
   Keep the plan a current generic coverage inventory, not an activity log.
-  Put profile, runtime, verification limits and run-specific evidence in a
-  separate document or the final response. Do not equate endpoint counts with
+  Put profile, runtime, verification limits and run-specific evidence in the
+  final response and relevant bug reports. Do not equate endpoint counts with
   scenario coverage or passing tests. Reconcile with the live contract when available.
 
 For combined requests, follow source analysis → curl exploration → finding
 triage → representative automation → verification. An exploration-only request
 does not authorize adding a test suite or fixing the backend.
+
+## Exploration evidence and reports
+
+Do not create standalone exploration/session reports, evidence documents or
+increment summaries in `docs/` or elsewhere unless the user explicitly requests
+such a document. This applies to exploration performed before or during test
+implementation as well as exploration-only tasks. Put scenarios, observations,
+environment/revision details, verification results, limitations and cleanup
+status in the final response. Record confirmed defects and product/policy
+questions in the designated bug reports and questions files, following the
+reporting reference; attach sanitized reproduction artifacts when useful.
+Keep test plans as current coverage inventories, without turning them into
+exploration logs. Temporary scratchpad data for performing checks is allowed;
+it does not require a standalone report or committed evidence document.
 
 ## Project context
 

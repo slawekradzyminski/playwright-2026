@@ -356,6 +356,13 @@ copies live in `.agents/skills/ui-testing/` and `.claude/skills/ui-testing/`.
 Invoke it with `$ui-testing` in Codex or `/ui-testing` in Claude Code, or ask
 for UI testing naturally. `AGENTS.md` routes relevant work to the skill.
 
+Current coverage inventories and priorities live in [API test plan](API-TEST-PLAN.md)
+and [UI test plan](UI-TEST-PLAN.md). Update the relevant plan when explicit
+coverage or the source inventory changes. The UI plan includes client and admin
+screens. Homepage/header navigation checks do not count as coverage of the
+destination screen; the plan counts screens with direct functional tests and
+tracks their remaining workflow scenarios.
+
 Edit the relevant `.agents` copy, then run `npm run skills:sync` and
 `npm run skills:check`. Sync copies source files without deleting extra files;
 if a reference was removed, explicitly remove its obsolete Claude copy too.

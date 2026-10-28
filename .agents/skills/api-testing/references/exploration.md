@@ -38,6 +38,14 @@ Fetch the live OpenAPI document with curl and inspect the operations, parameters
 request/response schemas, security requirements, and documented status codes.
 Save only relevant sanitized evidence in the scratchpad.
 
+Keep routine exploration evidence in the final response and relevant bug
+reports. Do not create standalone exploration/session reports, evidence
+documents or increment summaries in `docs/` or elsewhere unless the user
+explicitly requests such a document, including when exploration accompanies
+test implementation. Temporary scratchpad data supports the checks; it is not
+a reporting deliverable. Keep `API-TEST-PLAN.md` a current coverage inventory,
+not an exploration log.
+
 ## 3. Probe with curl
 
 Use fresh generated test data, track created IDs/usernames, and arrange cleanup

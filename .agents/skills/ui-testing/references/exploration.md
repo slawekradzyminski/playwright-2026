@@ -44,9 +44,13 @@ record console errors and relevant network failures. Check for clipping,
 horizontal overflow, readable feedback, reachable controls and focus order.
 Use disposable data and avoid secrets in evidence. Record environment, browser,
 viewport, scenarios, observations, untested areas and links to findings in the
-chat and relevant bug reports. Do not create separate exploration/session
-documents (for example, date-stamped registration reports) unless the user
-explicitly requests one. Use [reporting](reporting.md) to triage and document findings.
+final response and relevant bug reports. Do not create standalone
+exploration/session reports, evidence documents or increment summaries in
+`docs/` or elsewhere (for example, date-stamped registration reports) unless
+the user explicitly requests such a document. This also applies when exploring
+as part of test implementation. Keep `UI-TEST-PLAN.md` a current coverage
+inventory, not a session log. Use [reporting](reporting.md) to triage and document
+findings; retain useful sanitized reproduction artifacts with the bug reports.
 
 Automate stable, valuable regressions, not every exploratory step;
 run affected automated tests and investigate failures without weakening expected

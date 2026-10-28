@@ -10,7 +10,7 @@ existing reports before writing. Use English throughout.
 | Runtime-confirmed wrong application behavior | `bugs/api/functional/` |
 | Runtime-confirmed contract/documentation mismatch | `bugs/api/documentation/` |
 | Business rule, policy, or environment choice needing a decision | `bugs/api/QUESTIONS.md` |
-| Static suspicion without runtime confirmation | Explicitly labeled code-only finding in the task evidence/final response; not a confirmed bug report |
+| Static suspicion without runtime confirmation | Explicitly labeled code-only finding in the final response; not a confirmed bug report |
 
 Attempt a runtime check for every code suspicion. State why any check remains
 unverified. Do not turn an undocumented preference into a bug or an automated
