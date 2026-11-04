@@ -26,7 +26,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 6 | `/profile` | Profile: personal info, system prompts, 2FA, orders | logged in | 1 | home, header |
 | 7 | `/cart` | Cart (quantity, remove, clear, proceed to checkout) | logged in | 1 | header |
 | 8 | `/email` | Send email | logged in | 1 | home, header |
-| 9 | `/qr` | QR code generator | logged in | 1 | home, header |
+| 9 | `/qr` | QR code generator (generate, clear, validation) | logged in | **2** | `qr.ui.spec.ts`, home, header |
 | 10 | `/llm` | LLM hub (mode selection) | logged in | 1 | home, header |
 | 11 | `/traffic` | Traffic Monitor (events, clearing) | logged in | 1 | home, header |
 | 12 | `/admin` | Admin dashboard (stats, recent orders, low stock) | admin | 1 | header (also client redirect to `/`) |
@@ -109,7 +109,7 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Screen | Scenarios |
 |---|---|
 | `/email` → level 2 | validation; send → message in the local outbox |
-| `/qr` → level 2 | generate a QR image; "Clear" |
+| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; stale image after error as `test.fail()` (BUG-qr-3). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
 | `/traffic` → level 2 | action in the app → event in the list; "Clear Events" |
 | `/llm` → level 2 | navigate to each of the three modes |
 | `/llm/generate`, `/llm/chat`, `/llm/tools` | send a prompt → response from `ollama-mock`; settings |
@@ -120,8 +120,9 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Date | Screens | Findings |
 |---|---|---|
 | 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
+| 2026-11-04 | `/qr` (client; desktop, tablet, mobile) | BUG-qr-1 diacritics/emoji become "?" in the code (backend charset), BUG-qr-2 text > 2953 chars → 500 and generic error, BUG-qr-3 previous code stays after a failed generation; 5 a11y findings added to BUG-004 (Generate focus indicator, focus lost after Generate/Clear, result not announced/generic alt, placeholder contrast, page title); 3 usability findings added to BUG-005 (no success feedback with stale error toast, result below the fold on mobile, no download/copy) |
 
-Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL.
+Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL. `/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-qr-1), 400 with a length message (BUG-qr-2), remove `test.fail()` from the stale-image test (BUG-qr-3).
 
 ### Out of scope / to be decided
 
