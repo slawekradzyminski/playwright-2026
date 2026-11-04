@@ -1,11 +1,11 @@
-# BUG-004 [A11Y] Accessibility findings on Login, Register, Home and Header
+# BUG-004 [A11Y] Accessibility findings on Login, Register, Home, Header and Products
 
 | | |
 |---|---|
 | Category | Accessibility (WCAG 2.2 AA) |
 | Severity / Priority | Minor / P4 |
 | Environment | Chromium, all viewports (1920×1080, 820×1180, 393×852); frontend 3.9.1 |
-| Preconditions | Logged out for Login/Register, logged in for Home/Header |
+| Preconditions | Logged out for Login/Register, logged in for Home/Header/Products |
 
 Each section below is one finding, grouped by screen.
 
@@ -92,3 +92,43 @@ Each section below is one finding, grouped by screen.
 **Expected:** At least 4.5:1 for 14 px text.
 
 **Actual:** White text on sky-blue background, 4.02:1.
+
+## Products
+
+### Product details cannot be opened with the keyboard (WCAG 2.1.1, 4.1.2)
+
+**Steps:** Open `/products`, press Tab repeatedly through a product card.
+
+**Expected:** The product name (or image) is a link to `/products/:id`, reachable with Tab and announced as a link.
+
+**Actual:** Clicking `product-name` / `product-image` navigates to `/products/:id`, but both are plain `h3` / `img` with a click handler: no `href`, no `tabindex`, no role. Tab goes straight from "In stock only" to the "-" button; keyboard and screen reader users cannot reach the details page from the list.
+
+### Quantity buttons are named "-" and "+" with no product context (WCAG 2.4.6, 4.1.2)
+
+**Steps:** Inspect `product-decrease-quantity` / `product-increase-quantity` in the accessibility tree.
+
+**Expected:** e.g. "Decrease quantity of Clean Code" / "Increase quantity of Clean Code"; the value change is announced (`aria-live` or a spinbutton).
+
+**Actual:** 16 buttons named "-" and "+"; the quantity is a plain `span`, changes are not announced.
+
+### Search field has no label (WCAG 3.3.2, 1.3.1)
+
+**Steps:** Inspect `product-search`.
+
+**Expected:** A `<label>` (visible or visually hidden) or `aria-label`, e.g. "Search products".
+
+**Actual:** Only `placeholder="Search products..."`, which disappears on typing.
+
+### Selected category is not exposed (WCAG 4.1.2)
+
+**Steps:** Click "Electronics" in the category list and inspect the button.
+
+**Expected:** `aria-pressed="true"` or `aria-current="true"` on the active category.
+
+**Actual:** The state is shown only by the dark background; the button has no state attribute.
+
+### Generic page title (WCAG 2.4.2)
+
+**Expected:** e.g. "Products – Awesome Testing".
+
+**Actual:** "Awesome Testing".

@@ -10,6 +10,7 @@ export class LoggedInHeader {
   readonly trafficMonitorLink: Locator;
   readonly adminLink: Locator;
   readonly cartLink: Locator;
+  readonly cartItemCount: Locator;
   readonly profileLink: Locator;
   readonly logoutButton: Locator;
 
@@ -23,6 +24,7 @@ export class LoggedInHeader {
     this.trafficMonitorLink = this.root.getByTestId('desktop-menu-traffic-monitor');
     this.adminLink = this.root.getByTestId('desktop-menu-admin');
     this.cartLink = this.root.getByTestId('desktop-cart-icon');
+    this.cartItemCount = this.cartLink.getByTestId('cart-item-count');
     this.profileLink = this.root.getByTestId('username-profile-link');
     this.logoutButton = this.root.getByTestId('logout-button');
   }

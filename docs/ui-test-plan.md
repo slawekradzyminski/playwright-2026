@@ -1,6 +1,6 @@
 # Screen coverage and UI test plan
 
-As of 2026-11-04: frontend `vite-react-frontend` 3.9.1 (routes from `src/AppRoutes.tsx`), backend 3.9.4.
+As of 2026-11-04 (updated after the `/products` session): frontend `vite-react-frontend` 3.9.1 (routes from `src/AppRoutes.tsx`), backend 3.9.4.
 Every screen in the table was opened with `playwright-cli` as an anonymous user, a client and an admin. All of them render and none reports console errors.
 Test data was set up through the API: registration, cart (`POST /api/v1/cart/items`) and order (`POST /api/v1/orders`).
 
@@ -21,7 +21,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 1 | `/login` | Login (+ Forgot password, SSO, Google, GitHub) | anonymous | **2** | `login.ui.spec.ts` |
 | 2 | `/register` | Registration | anonymous | **2** | `register.ui.spec.ts` |
 | 3 | `/` | Home page (greeting, sections, navigation tiles) | logged in | **2** | `home.ui.spec.ts`, `header.ui.spec.ts` |
-| 4 | `/products` | Product list (categories, quantity, add to cart) | logged in | 1 | home, header |
+| 4 | `/products` | Product list (categories, search, sort, stock filter, quantity, add/update/remove in cart) | logged in | **2** | `products.ui.spec.ts`, home, header |
 | 5 | `/users` | User list (Edit/Delete for admin only) | logged in | 1 | home |
 | 6 | `/profile` | Profile: personal info, system prompts, 2FA, orders | logged in | 1 | home, header |
 | 7 | `/cart` | Cart (quantity, remove, clear, proceed to checkout) | logged in | 1 | header |
@@ -33,7 +33,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 13 | `/forgot-password` | Forgot password | anonymous | 0 | – |
 | 14 | `/reset` | Set new password (token from email) | anonymous | 0 | – |
 | 15 | `/auth/sso/callback` | SSO callback (Keycloak) | anonymous | 0 | – |
-| 16 | `/products/:id` | Product details, add to cart | logged in | 0 | – |
+| 16 | `/products/:id` | Product details, add to cart | logged in | 1 | `products.ui.spec.ts` (opened from the list) |
 | 17 | `/checkout` | Checkout: address, summary, place order | logged in | 0 | – |
 | 18 | `/orders` | Redirect to `/profile` | logged in | 0 | – |
 | 19 | `/orders/:id` | Order details: cancel; admin changes status | logged in | 0 | – |
@@ -53,12 +53,13 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 
 | Metric | Result |
 |---|---|
-| Screens opened by any test (level ≥ 1) | **12 / 30 = 40%** |
-| Screens tested functionally (level 2) | **3 / 30 = 10%** |
-| Screens without any test | 18 / 30 = 60% |
+| Screens opened by any test (level ≥ 1) | **13 / 30 = 43%** |
+| Screens tested functionally (level 2) | **4 / 30 = 13%** |
+| Screens without any test | 17 / 30 = 57% |
 
 Notes:
-- Authentication and navigation are tested well, but no business flow (shopping, admin) is covered.
+- Authentication and navigation are tested well. The shopping flow is covered on the product list only; cart, checkout and admin are not.
+- Product tests create their own products (unique category per test) through the admin API and delete them afterwards, so they do not depend on the shared catalog.
 - Access control is checked in two places: logging out blocks `/`, and a client opening `/admin` lands on `/`. The other admin routes and the anonymous redirect are not checked.
 
 ## Plan for the next stages
@@ -67,11 +68,11 @@ The order follows business risk. Every test follows `AGENTS.md`: given/when/then
 
 ### Stage 1 – shopping flow (P1) → 6 screens to level 2
 
-Needed: `ProductsApi`, `CartApi`, `OrdersApi` in `/api` and "user with a cart" / "user with an order" fixtures.
+Done: `ProductsApi`, `CartApi`, `productGenerator` and the `products.fixture` (`createProduct`, `cartApi`). Still needed: `OrdersApi` and a "user with an order" fixture.
 
 | Screen | Scenarios |
 |---|---|
-| `/products` → level 2 | filter by category; change quantity and add to cart from the list; open details |
+| ~~`/products` → level 2~~ | **done 2026-11-04**: category filter, card content, search + empty state/reset, sort by price, "In stock only", add N to cart, update and remove an item already in the cart, quantity capped by stock, open details |
 | `/products/:id` | product details (name, price, availability); add N items → toast and cart counter |
 | `/cart` → level 2 | empty cart; quantity change recalculates the total; remove an item; "Clear Cart"; "Proceed to Checkout" |
 | `/checkout` | required address fields (5 messages); place order → `/orders/:id`, cart is empty |
@@ -114,6 +115,14 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | `/llm/generate`, `/llm/chat`, `/llm/tools` | send a prompt → response from `ollama-mock`; settings |
 | `/webmcp` | add to cart from the catalog, clear the cart |
 
+### Exploratory sessions
+
+| Date | Screens | Findings |
+|---|---|---|
+| 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
+
+Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL.
+
 ### Out of scope / to be decided
 
 - `/auth/sso/callback` and "Sign in with SSO": Keycloak runs locally (`:8082`), so this can be tested, but it needs a Keycloak account. A cheap first step is a test of the "Missing SSO authorization code" error.
@@ -123,7 +132,7 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 
 | After stage | Level ≥ 1 | Level 2 |
 |---|---|---|
-| now | 12/30 (40%) | 3/30 (10%) |
+| now | 13/30 (43%) | 4/30 (13%) |
 | 1 | 16/30 (53%) | 9/30 (30%) |
 | 2 | 23/30 (77%) | 18/30 (60%) |
 | 3 | 25/30 (83%) | 21/30 (70%) |
