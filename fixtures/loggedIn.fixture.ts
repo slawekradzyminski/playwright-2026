@@ -2,6 +2,7 @@ import { UsersApi } from '../api/UsersApi';
 import { generateUser } from '../generators/userGenerator';
 import { ADMIN_PASSWORD, ADMIN_USERNAME, APP_BASE_URL } from '../test-config';
 import type { LoggedInUser } from '../types/auth';
+import { authStorageState } from './authStorageState';
 import { test as pagesTest } from './pages.fixture';
 
 type TestFixtures = {
@@ -37,18 +38,8 @@ export const test = pagesTest.extend<TestFixtures, WorkerFixtures>({
     await request.dispose();
   },
 
-  // The frontend keeps auth in localStorage, so the browser context is created with tokens in place.
   storageState: async ({ user, baseURL }, use) => {
-    await use({
-      cookies: [],
-      origins: [{
-        origin: baseURL!,
-        localStorage: [
-          { name: 'token', value: user.token },
-          { name: 'refreshToken', value: user.refreshToken },
-        ],
-      }],
-    });
+    await use(authStorageState(baseURL!, user));
   },
 });
 

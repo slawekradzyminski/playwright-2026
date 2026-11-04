@@ -24,7 +24,7 @@ test.describe('Login UI tests', () => {
 
     // then
     await homePage.expectToBeOpen();
-    await expect(homePage.profileLink).toBeVisible();
+    await expect(homePage.header.profileLink).toBeVisible();
   });
 
   test('should show error for empty password', async ({ loginPage }) => {

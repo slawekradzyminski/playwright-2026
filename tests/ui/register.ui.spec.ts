@@ -22,7 +22,7 @@ test.describe('Registration UI tests', () => {
 
     // then
     await homePage.expectToBeOpen();
-    await expect(homePage.profileLink).toHaveText(`${user.firstName} ${user.lastName}`);
+    await expect(homePage.header.profileLink).toHaveText(`${user.firstName} ${user.lastName}`);
   });
 
   test('should require all registration fields', async ({ registerPage }) => {
