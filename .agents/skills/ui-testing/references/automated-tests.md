@@ -43,11 +43,11 @@ test.describe('Products page UI tests', () => {
 
 - One class per route in `pages/`, extending `BasePage`; set `protected readonly path`.
 - Locators are `readonly` fields built in the constructor with `page.getByTestId(...)`.
-- Override `expectToBeOpen()` to check a page-specific element (title text) on top of the URL.
+- Override `expectToBeOpen()` to check a page-specific element (title text) on top of the URL. Pages with error or redirect states (`:id` routes) also get an `open()` that navigates without that check, since `goto()` always checks.
 - Methods model user actions (`login(credentials)`, `selectCategory(name)`, `search(text)`); assertions that are reused across tests may be methods too (`toast.expectError(...)`).
 - Parts that appear on many screens or many times go to `pages/components/` and take a root `Locator` (`ProductCard`) or `Page` (`Toast`, headers).
 - Toasts are not uniform: some error toasts (e.g. "Failed to update cart") have no `toast-title` test id, so `Toast.expectError()` fails there. Check the toast's test ids first.
-- Dynamic test ids get a helper method that documents the rule (`categoryButton(category)`).
+- Dynamic test ids get a helper method that documents the rule (`categoryButton(category)`); a repeated part keyed by an entity id is a component built with `(page, id)` (`CartItemRow` for `cart-item-<productId>`).
 - Register every new page object in `fixtures/pages.fixture.ts`. Pages with route params (`ProductDetailsPage(page, id)`) are created in the test.
 
 ## Selectors
@@ -62,7 +62,7 @@ Never CSS classes, XPath or nth-child. If a needed element has no test id, note 
 - Pick the fixture by role: `pages.fixture` (anonymous), `loggedIn.fixture` (`user` – fresh client, deleted after the test), `loggedInAdmin.fixture` (`admin` – shared, never deleted), `products.fixture` (`createProduct`, `cartApi`).
 - Login is injected via `storageState` (tokens in localStorage), never through the login form, except in login tests.
 - Data comes from generators (`generateUser`, `generateProduct`, `generateCategory`) with unique values; override only what the test checks.
-- Every record a test creates is deleted in fixture teardown (after `use`), whether the test passed or failed. Mind dependencies (clear the cart before deleting a product → 409 otherwise).
+- Teardown order matters: clear the cart before deleting a product (409 otherwise).
 - Scope list assertions to the test's own data (own category, own product name). The admin account and dashboards are shared: never assert totals or "first row".
 - New API needs: add a client in `api/` (constructor takes `APIRequestContext` and token, methods assert the expected status), types in `types/`, a generator in `generators/`, then a fixture exposing it.
 - A fixture that needs HTTP before `storageState` creates its own `playwright.request.newContext({ baseURL })` and disposes it.

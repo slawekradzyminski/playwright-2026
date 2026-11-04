@@ -30,6 +30,10 @@ After an exploratory session:
 
 New routes in the app: add them to "Current state" at level 0, renumber, and recompute the summary (the denominator changes).
 
+## Parallel sessions
+
+When several sessions work on different screens at once, each one changes only its own screen's rows (current state, stage, regression candidates), adds one session-log row, and appends new findings at the end of the shared a11y/usability reports. The merging session resolves the conflicts, renames working bug names (`BUG-<screen>-N`) to the next numbers in files, specs and the plan, and recounts the "As of" line, Summary, Notes and Coverage forecast.
+
 ## Style
 
 Short, factual, English, tables over prose. Dates as `YYYY-MM-DD`. Route paths and file names in backticks.

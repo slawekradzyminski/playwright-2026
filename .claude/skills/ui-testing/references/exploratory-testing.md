@@ -26,6 +26,8 @@ Every screen is checked for each role that can open it (anonymous / client / adm
 ### Functional
 - Happy path and every alternative path (buttons, links, Enter key, Back button).
 - Validation: empty fields, too short / too long, invalid format, whitespace-only, leading/trailing spaces, duplicates.
+- Routes with `:id`: non-numeric id and the id of a deleted record.
+- Stale state: change the data through the API while the page is open, then act on it; after an error no previous result stays on screen.
 - Server errors: wrong credentials, already existing data. Message must be shown and understandable.
 - Session and access: deep links as anonymous, opening anonymous pages while logged in, logout and Back, refresh.
 - Injection: HTML/script in text fields must render as text.
@@ -33,12 +35,12 @@ Every screen is checked for each role that can open it (anonymous / client / adm
 
 ### Visual (on each of the 3 viewports)
 - Full-page screenshot of every state (empty, filled, errors, toast, open menu).
-- No horizontal scroll (`scrollWidth > innerWidth`), no element outside the viewport, no clipped or overlapping text.
+- No horizontal scroll (`scrollWidth > innerWidth`), no element outside the viewport, no clipped or overlapping text. An element hidden inside a sideways-scrolling box is usually a usability finding, not a visual one.
 - Repeat with long data (long names, long emails).
 - Layout switches correctly (desktop menu vs hamburger), touch targets at least 24×24 px.
 
 ### Accessibility (WCAG 2.2 AA)
-- Keyboard only: Tab order follows visual order, focus is always visible, no traps, Escape closes menus/dialogs.
+- Keyboard only: Tab order follows visual order, focus is always visible and not lost when the focused button becomes disabled or disappears, no traps, Escape closes menus/dialogs.
 - Accessibility tree (`ariaSnapshot()` or DevTools): every control has a name, icon-only links/buttons have `aria-label`, toggles expose `aria-expanded`.
 - Forms: labels linked to inputs, errors linked with `aria-describedby` and `aria-invalid`, `autocomplete` on personal data.
 - Structure: `lang` on `<html>`, unique `<title>` per page, one `h1`, logical heading levels, landmarks (`main`, `nav`).
@@ -48,7 +50,7 @@ Every screen is checked for each role that can open it (anonymous / client / adm
 - Is it clear what to do and what happened (feedback after every action)?
 - Does the app prevent mistakes (trimming, autocomplete, keeping entered data after an error)?
 - Is the behaviour consistent between screens and viewports?
-- Would a real user be surprised (e.g. silent logout, lost input)?
+- Would a real user be surprised (e.g. silent logout, lost input, unsaved changes dropped without a warning when leaving the screen)?
 
 ## 3. Report bugs
 

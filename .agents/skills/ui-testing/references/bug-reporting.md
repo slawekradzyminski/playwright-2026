@@ -5,7 +5,7 @@ Bugs live in `/bugs`, one Markdown file per report, written from [../assets/bug-
 ## Before creating a file
 
 1. Search `/bugs` for the same problem (`grep -ril "<keyword>" bugs`). If it is already reported, add new evidence or a new viewport to that report instead.
-2. Find the next number: the highest existing `BUG-NNN` + 1 (`ls bugs | grep -o 'BUG-[0-9]*' | sort -u | tail -1`).
+2. Find the next number: the highest existing `BUG-NNN` + 1 (`ls bugs | grep -o 'BUG-[0-9]*' | sort -u | tail -1`). In parallel sessions use a working name `BUG-<screen>-N` instead (screenshots `bugs/img/<screen>-*`); the merging session assigns the numbers (see [test-plan.md](test-plan.md)).
 
 ## File and title
 
