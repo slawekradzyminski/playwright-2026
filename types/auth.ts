@@ -11,6 +11,7 @@ export interface RegisterDto extends LoginDto {
 
 export interface LoginResponseDto {
   token: string;
+  refreshToken: string;
   username: string;
   email: string;
   firstName: string;
@@ -21,4 +22,9 @@ export interface LoginResponseDto {
 export interface ErrorResponse {
   message?: string;
   errors?: Record<string, string[]>;
+}
+
+export interface LoggedInUser extends RegisterDto {
+  token: string;
+  refreshToken: string;
 }

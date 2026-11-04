@@ -1,4 +1,4 @@
-import { test, expect } from '../../pages/fixtures';
+import { test, expect } from '../../fixtures/pages.fixture';
 import type { LoginDto } from '../../types/auth';
 import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
 

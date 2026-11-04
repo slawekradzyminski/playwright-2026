@@ -1,5 +1,5 @@
 import { generateUser } from '../../generators/userGenerator';
-import { expect, test } from '../../pages/fixtures';
+import { expect, test } from '../../fixtures/pages.fixture';
 
 test.describe('Registration UI tests', () => {
   test.beforeEach(async ({ registerPage }) => {
