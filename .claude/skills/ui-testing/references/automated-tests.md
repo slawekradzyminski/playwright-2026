@@ -46,6 +46,7 @@ test.describe('Products page UI tests', () => {
 - Override `expectToBeOpen()` to check a page-specific element (title text) on top of the URL.
 - Methods model user actions (`login(credentials)`, `selectCategory(name)`, `search(text)`); assertions that are reused across tests may be methods too (`toast.expectError(...)`).
 - Parts that appear on many screens or many times go to `pages/components/` and take a root `Locator` (`ProductCard`) or `Page` (`Toast`, headers).
+- Toasts are not uniform: some error toasts (e.g. "Failed to update cart") have no `toast-title` test id, so `Toast.expectError()` fails there. Check the toast's test ids first.
 - Dynamic test ids get a helper method that documents the rule (`categoryButton(category)`).
 - Register every new page object in `fixtures/pages.fixture.ts`. Pages with route params (`ProductDetailsPage(page, id)`) are created in the test.
 
@@ -65,6 +66,8 @@ Never CSS classes, XPath or nth-child. If a needed element has no test id, note 
 - Scope list assertions to the test's own data (own category, own product name). The admin account and dashboards are shared: never assert totals or "first row".
 - New API needs: add a client in `api/` (constructor takes `APIRequestContext` and token, methods assert the expected status), types in `types/`, a generator in `generators/`, then a fixture exposing it.
 - A fixture that needs HTTP before `storageState` creates its own `playwright.request.newContext({ baseURL })` and disposes it.
+- Logged-out case inside a logged-in spec: a nested `describe` with `test.use({ storageState: { cookies: [], origins: [] } })`.
+- An id that surely does not exist: create a product through the API and delete it, don't guess a large number. `createProduct` teardown expects 204, so a test that deletes its product itself must not get it from `createProduct`.
 
 ## Verify
 
@@ -75,4 +78,4 @@ npm run test:ui
 npx tsc --noEmit
 ```
 
-All must pass. A known bug is not hidden by a weaker assertion: report it (see [bug-reporting.md](bug-reporting.md)) and leave it out of the suite or mark it `test.fail()` with the bug number in a comment.
+All must pass. A known bug is not hidden by a weaker assertion: report it (see [bug-reporting.md](bug-reporting.md)) and leave it out of the suite or mark it `test.fail()` with the bug number in a comment. A `test.fail()` test prints ✘ in the list reporter but counts as passed.

@@ -17,7 +17,7 @@ The output of a session is bug reports in `/bugs` (see [bug-reporting.md](bug-re
 | tablet | 820×1180 | iPad Air, touch |
 | mobile | 393×852 | iPhone 16/17, touch, `isMobile` |
 
-Tools: `playwright-cli` or a throwaway Playwright script (do not commit it), DevTools, screen reader (VoiceOver) for spot checks.
+Tools: `playwright-cli` or a throwaway Playwright script (do not commit it), DevTools, screen reader (VoiceOver) for spot checks. Keep throwaway scripts in the scratchpad and run them with `NODE_PATH=<repo>/node_modules node x.cjs`; set up their data through the API inside the script. Chromium's `BarcodeDetector` can decode QR codes during exploration on macOS (not on Linux CI, so never in the suite).
 
 ## 2. Explore — four aspects
 
@@ -42,7 +42,7 @@ Every screen is checked for each role that can open it (anonymous / client / adm
 - Accessibility tree (`ariaSnapshot()` or DevTools): every control has a name, icon-only links/buttons have `aria-label`, toggles expose `aria-expanded`.
 - Forms: labels linked to inputs, errors linked with `aria-describedby` and `aria-invalid`, `autocomplete` on personal data.
 - Structure: `lang` on `<html>`, unique `<title>` per page, one `h1`, logical heading levels, landmarks (`main`, `nav`).
-- Contrast: 4.5:1 for normal text, 3:1 for large text and UI components. Check computed colours; automated contrast scripts give false positives on translucent backgrounds, so confirm by eye.
+- Contrast: 4.5:1 for normal text, 3:1 for large text and UI components. Check computed colours; automated contrast scripts give false positives on translucent backgrounds and cannot parse `oklch()` colours, so convert or confirm by eye.
 
 ### Usability
 - Is it clear what to do and what happened (feedback after every action)?
