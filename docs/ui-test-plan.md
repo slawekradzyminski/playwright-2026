@@ -64,7 +64,7 @@ Notes:
 
 ## Plan for the next stages
 
-The order follows business risk. Every test follows `AGENTS.md`: given/when/then, page objects in `/pages`, `data-testid` selectors, independent tests that can run in parallel. Test data is set up through the API, not through the UI.
+The order follows business risk. Every test follows the `ui-testing` skill (`.claude/skills/ui-testing`): given/when/then, page objects in `/pages`, `data-testid` selectors, independent tests that can run in parallel. Test data is set up through the API, not through the UI.
 
 ### Stage 1 – shopping flow (P1) → 6 screens to level 2
 

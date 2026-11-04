@@ -1,9 +1,8 @@
 # BUG-NNN [FUNCTIONAL | VISUAL | A11Y | USABILITY] <what is wrong, where — one line>
 
 <!--
-File name: BUG-NNN-<type>-<short-slug>.md, e.g. BUG-012-visual-cart-total-overlaps-button.md
-Accessibility and usability findings: one collective report per type (e.g. BUG-004-a11y-....md),
-each finding as a `##` section with Steps, Expected and Actual. Numbers continue from the highest existing BUG-NNN. Screenshots go to bugs/img/BUG-NNN-<name>.png.
+Copy to bugs/BUG-NNN-<type>-<short-slug>.md, e.g. BUG-012-visual-cart-total-overlaps-button.md.
+Rules (numbering, collective a11y/usability reports, severity): ../references/bug-reporting.md
 -->
 
 | | |

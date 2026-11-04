@@ -1,8 +1,8 @@
 # Exploratory testing procedure
 
-Exploratory testing complements the automated suite: it looks for defects nobody wrote a test for. Run a session for every screen that reaches coverage level 2 (see [ui-test-plan.md](ui-test-plan.md)) and after major UI changes.
+Exploratory testing complements the automated suite: it looks for defects nobody wrote a test for. Run a session for every screen that reaches coverage level 2 (see `docs/ui-test-plan.md`) and after major UI changes.
 
-The only output of a session is bug reports in [`/bugs`](../bugs), one file per bug, written from [`bugs/TEMPLATE.md`](../bugs/TEMPLATE.md). No session report is written.
+The output of a session is bug reports in `/bugs` (see [bug-reporting.md](bug-reporting.md)) and one row in the session log of `docs/ui-test-plan.md` (see [test-plan.md](test-plan.md)). No separate session report is written.
 
 ## 1. Prepare the session
 
@@ -52,22 +52,10 @@ Every screen is checked for each role that can open it (anonymous / client / adm
 
 ## 3. Report bugs
 
-Every finding is confirmed (reproduced at least twice) before it is reported.
-
-1. Copy [`bugs/TEMPLATE.md`](../bugs/TEMPLATE.md) to `bugs/BUG-NNN-<type>-<short-slug>.md`. `NNN` continues from the highest existing number; `<type>` is `functional`, `visual`, `a11y` or `usability`.
-2. The title starts with the number and the type tag: `# BUG-012 [VISUAL] Cart total overlaps the checkout button on mobile`.
-3. Accessibility and usability findings have lower priority: collect them in one report per type (`BUG-NNN-a11y-<scope>.md`, `BUG-NNN-usability-<scope>.md`), grouped by screen, each finding as its own section with Expected and Actual. Add new findings to the existing open report instead of creating a new file. Functional and visual bugs get one report each.
-4. Save screenshots to `bugs/img/BUG-NNN-<name>.png` and embed them in the report (`![…](img/BUG-NNN-<name>.png)`), so the problem is visible without opening anything else.
-
-Rules for a good report:
-- One bug per report; the title says what and where, not "doesn't work".
-- Steps start from a known state and are minimal; anyone can repeat them.
-- Expected and actual are concrete (texts, values, status codes), not opinions.
-- Evidence attached; for visual bugs a screenshot of the broken and of a correct viewport.
-- Severity is the impact on the user, priority is the order of fixing.
-
-Severity guide: **Blocker** – no workaround, main flow impossible; **Critical** – data loss or security; **Major** – important function broken or a user group excluded; **Minor** – workaround exists, cosmetic impact on a few users; **Trivial** – polish.
+Confirm every finding (reproduce it at least twice), then report it following [bug-reporting.md](bug-reporting.md). Take screenshots while exploring; they are the evidence.
 
 ## 4. Close the session
 
-For each reported bug decide whether a regression test belongs in the automated suite once it is fixed.
+1. Add a row to "Exploratory sessions" in `docs/ui-test-plan.md`: date, screens (roles, viewports), findings with bug numbers.
+2. For each reported bug decide whether a regression test belongs in the automated suite once it is fixed; list it under "Regression candidates".
+3. Delete throwaway scripts and screenshots that did not end up in `bugs/img/`.
