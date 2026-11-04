@@ -1,15 +1,24 @@
-import type { Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { expect, test } from '../../fixtures/loggedIn.fixture';
+import type { BasePage } from '../../pages/BasePage';
+import { CartPage } from '../../pages/CartPage';
+import { EmailPage } from '../../pages/EmailPage';
 import type { HomePage } from '../../pages/HomePage';
+import { LlmPage } from '../../pages/LlmPage';
+import { ProductsPage } from '../../pages/ProductsPage';
+import { ProfilePage } from '../../pages/ProfilePage';
+import { QrCodePage } from '../../pages/QrCodePage';
+import { TrafficMonitorPage } from '../../pages/TrafficMonitorPage';
+import { UsersPage } from '../../pages/UsersPage';
 
-const navigationButtons: { name: string; button: (homePage: HomePage) => Locator; path: string }[] = [
-  { name: 'Products', button: (homePage) => homePage.productsButton, path: '/products' },
-  { name: 'Users', button: (homePage) => homePage.usersButton, path: '/users' },
-  { name: 'Profile & Orders', button: (homePage) => homePage.profileButton, path: '/profile' },
-  { name: 'Open AI Assistant', button: (homePage) => homePage.llmButton, path: '/llm' },
-  { name: 'Open Traffic Monitor', button: (homePage) => homePage.trafficButton, path: '/traffic' },
-  { name: 'Generate QR Codes', button: (homePage) => homePage.qrButton, path: '/qr' },
-  { name: 'Send Emails', button: (homePage) => homePage.emailButton, path: '/email' },
+const navigationButtons: { name: string; button: (homePage: HomePage) => Locator; TargetPage: new (page: Page) => BasePage }[] = [
+  { name: 'Products', button: (homePage) => homePage.productsButton, TargetPage: ProductsPage },
+  { name: 'Users', button: (homePage) => homePage.usersButton, TargetPage: UsersPage },
+  { name: 'Profile & Orders', button: (homePage) => homePage.profileButton, TargetPage: ProfilePage },
+  { name: 'Open AI Assistant', button: (homePage) => homePage.llmButton, TargetPage: LlmPage },
+  { name: 'Open Traffic Monitor', button: (homePage) => homePage.trafficButton, TargetPage: TrafficMonitorPage },
+  { name: 'Generate QR Codes', button: (homePage) => homePage.qrButton, TargetPage: QrCodePage },
+  { name: 'Send Emails', button: (homePage) => homePage.emailButton, TargetPage: EmailPage },
 ];
 
 test.describe('Home page UI tests', () => {
@@ -31,13 +40,13 @@ test.describe('Home page UI tests', () => {
     await expect(homePage.utilitiesTitle).toHaveText('Supporting tools');
   });
 
-  for (const { name, button, path } of navigationButtons) {
-    test(`should navigate to ${path} when ${name} button is clicked`, async ({ homePage, page }) => {
+  for (const { name, button, TargetPage } of navigationButtons) {
+    test(`should open ${TargetPage.name} when ${name} button is clicked`, async ({ homePage, page }) => {
       // when
       await button(homePage).click();
 
       // then
-      await expect(page).toHaveURL(new RegExp(`${path}$`));
+      await new TargetPage(page).expectToBeOpen();
     });
   }
 });

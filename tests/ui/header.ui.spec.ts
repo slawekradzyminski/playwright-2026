@@ -1,16 +1,24 @@
-import type { Locator } from '@playwright/test';
+import type { Locator, Page } from '@playwright/test';
 import { test as adminTest } from '../../fixtures/loggedInAdmin.fixture';
 import { expect, test as userTest } from '../../fixtures/loggedIn.fixture';
+import type { BasePage } from '../../pages/BasePage';
+import { CartPage } from '../../pages/CartPage';
 import type { LoggedInHeader } from '../../pages/components/LoggedInHeader';
+import { EmailPage } from '../../pages/EmailPage';
+import { LlmPage } from '../../pages/LlmPage';
+import { ProductsPage } from '../../pages/ProductsPage';
+import { ProfilePage } from '../../pages/ProfilePage';
+import { QrCodePage } from '../../pages/QrCodePage';
+import { TrafficMonitorPage } from '../../pages/TrafficMonitorPage';
 
-const menuLinks: { name: string; link: (header: LoggedInHeader) => Locator; path: string }[] = [
-  { name: 'Products', link: (header) => header.productsLink, path: '/products' },
-  { name: 'Send Email', link: (header) => header.sendEmailLink, path: '/email' },
-  { name: 'QR Code', link: (header) => header.qrCodeLink, path: '/qr' },
-  { name: 'LLM', link: (header) => header.llmLink, path: '/llm' },
-  { name: 'Traffic Monitor', link: (header) => header.trafficMonitorLink, path: '/traffic' },
-  { name: 'cart', link: (header) => header.cartLink, path: '/cart' },
-  { name: 'profile', link: (header) => header.profileLink, path: '/profile' },
+const menuLinks: { name: string; link: (header: LoggedInHeader) => Locator; TargetPage: new (page: Page) => BasePage }[] = [
+  { name: 'Products', link: (header) => header.productsLink, TargetPage: ProductsPage },
+  { name: 'Send Email', link: (header) => header.sendEmailLink, TargetPage: EmailPage },
+  { name: 'QR Code', link: (header) => header.qrCodeLink, TargetPage: QrCodePage },
+  { name: 'LLM', link: (header) => header.llmLink, TargetPage: LlmPage },
+  { name: 'Traffic Monitor', link: (header) => header.trafficMonitorLink, TargetPage: TrafficMonitorPage },
+  { name: 'cart', link: (header) => header.cartLink, TargetPage: CartPage },
+  { name: 'profile', link: (header) => header.profileLink, TargetPage: ProfilePage },
 ];
 
 userTest.describe('Logged in header UI tests - regular user', () => {
@@ -25,13 +33,13 @@ userTest.describe('Logged in header UI tests - regular user', () => {
     await expect(homePage.header.adminLink).toBeHidden();
   });
 
-  for (const { name, link, path } of menuLinks) {
-    userTest(`should navigate to ${path} when ${name} link is clicked`, async ({ homePage, page }) => {
+  for (const { name, link, TargetPage } of menuLinks) {
+    userTest(`should open ${TargetPage.name} when ${name} link is clicked`, async ({ homePage, page }) => {
       // when
       await link(homePage.header).click();
 
       // then
-      await expect(page).toHaveURL(new RegExp(`${path}$`));
+      await new TargetPage(page).expectToBeOpen();
     });
   }
 
