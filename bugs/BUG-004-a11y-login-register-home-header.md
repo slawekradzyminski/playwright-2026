@@ -132,3 +132,19 @@ Each section below is one finding, grouped by screen.
 **Expected:** e.g. "Products – Awesome Testing".
 
 **Actual:** "Awesome Testing".
+
+## Cart
+
+### Row controls are named "-", "+", "Update" and "Remove" with no product context (WCAG 2.4.6, 4.1.2)
+
+**Steps:** Fill the cart with two products through the API, open `/cart`, inspect a row in the accessibility tree.
+
+**Expected:** e.g. "Decrease quantity of Clean Code", "Remove Clean Code from cart"; the quantity change is announced (`aria-live` or a spinbutton); "-" is disabled at 1.
+
+**Actual:** Every row has buttons named "-", "+", "Remove" (and "Update" while a change is pending); the quantity is a plain `span`, changes are not announced; "-" stays enabled at 1 and does nothing.
+
+### Generic page title (WCAG 2.4.2)
+
+**Expected:** e.g. "Cart – Awesome Testing".
+
+**Actual:** "Awesome Testing".

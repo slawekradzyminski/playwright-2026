@@ -73,3 +73,34 @@
 **Expected:** The product is found (users often type without Polish characters).
 
 **Actual:** No results; only `zażółć` / `ZAŻÓŁĆ` match.
+
+## Cart: a changed quantity is silently discarded on "Proceed to Checkout"
+
+**Steps:**
+1. With 2 pieces of a $12.50 product in the cart, open `/cart`.
+2. Click "+" (quantity shows 3 and an "Update" link appears).
+3. Click "Proceed to Checkout".
+
+**Expected:** The new quantity is saved automatically, or the user is warned about the unsaved change.
+
+**Actual:** `/checkout` shows quantity 2 and $25.00; the change is lost without a word. Until "Update" is clicked the line total and the summary also keep the old values (quantity 3, line total $25.00), and the small "Update" link is easy to miss.
+
+![Pending quantity with old totals](img/cart-pending-quantity.png)
+
+## Cart: no feedback after Update, Remove or Clear Cart
+
+**Steps:** On `/cart` change a quantity and click "Update", click "Remove", then "Clear Cart" and confirm.
+
+**Expected:** A toast like on `/products` ("Cart updated", "Removed from cart").
+
+**Actual:** No toast for any of the three actions; only the numbers change. The same actions on `/products` show toasts.
+
+## Cart: on mobile and tablet the quantity and Remove columns are off-screen
+
+**Steps:** Open `/cart` with items at 393×852 (and 820×1180).
+
+**Expected:** Rows stack or fit the screen, so quantity and "Remove" are visible.
+
+**Actual:** The table is 1034 px wide inside a horizontally scrollable box. On mobile only Product and Price are visible, on tablet the Actions column is cut off; nothing hints that the table scrolls sideways.
+
+![Mobile cart table](img/cart-mobile-items.png)
