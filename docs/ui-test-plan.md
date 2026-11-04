@@ -33,7 +33,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 13 | `/forgot-password` | Forgot password | anonymous | 0 | – |
 | 14 | `/reset` | Set new password (token from email) | anonymous | 0 | – |
 | 15 | `/auth/sso/callback` | SSO callback (Keycloak) | anonymous | 0 | – |
-| 16 | `/products/:id` | Product details, add to cart | logged in | 1 | `products.ui.spec.ts` (opened from the list) |
+| 16 | `/products/:id` | Product details (add, update, remove in cart; out of stock; not found) | logged in | **2** | `product-details.ui.spec.ts`, `products.ui.spec.ts` (opened from the list) |
 | 17 | `/checkout` | Checkout: address, summary, place order | logged in | 0 | – |
 | 18 | `/orders` | Redirect to `/profile` | logged in | 0 | – |
 | 19 | `/orders/:id` | Order details: cancel; admin changes status | logged in | 0 | – |
@@ -73,7 +73,7 @@ Done: `ProductsApi`, `CartApi`, `productGenerator` and the `products.fixture` (`
 | Screen | Scenarios |
 |---|---|
 | ~~`/products` → level 2~~ | **done 2026-11-04**: category filter, card content, search + empty state/reset, sort by price, "In stock only", add N to cart, update and remove an item already in the cart, quantity capped by stock, open details |
-| `/products/:id` | product details (name, price, availability); add N items → toast and cart counter |
+| ~~`/products/:id` → level 2~~ | **done 2026-11-04**: name, price, description, category, stock; add N → toast, cart counter, "N in cart"; update and remove an item already in the cart; quantity capped by stock; out of stock (Add disabled, no quantity controls); stock lowered after page load → error toast; deleted product → error box and link back; back link; anonymous → `/login`. Not automated: non-numeric id (BUG-pd-1). Frontend request: `toast-title` test id on the "Failed to update cart" error toast |
 | `/cart` → level 2 | empty cart; quantity change recalculates the total; remove an item; "Clear Cart"; "Proceed to Checkout" |
 | `/checkout` | required address fields (5 messages); place order → `/orders/:id`, cart is empty |
 | `/orders/:id` | items and address match the order; cancel a PENDING order |
@@ -120,8 +120,9 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Date | Screens | Findings |
 |---|---|---|
 | 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
+| 2026-11-04 | `/products/:id` (client, anonymous; desktop, tablet, mobile) | BUG-pd-1 (non-numeric id → `/api/v1/products/NaN`, 4 requests, 7 s loading); no visual bugs (long name with diacritics, HTML in name/description rendered as text, price 99999999.99); 3 a11y findings added to BUG-004 ("-"/"+" names and unannounced quantity, error state not announced, page title); 5 usability findings added to BUG-005 (quantity 0 / "Update" removes, generic stock-conflict error with stale stock, "Error loading" for a missing product, Back resets the category, deep link lost after login) |
 
-Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL.
+Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-pd-1), stock conflict toast names the reason, deep link kept after login.
 
 ### Out of scope / to be decided
 
