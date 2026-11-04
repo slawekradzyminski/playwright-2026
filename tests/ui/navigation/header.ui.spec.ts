@@ -1,15 +1,15 @@
 import type { Locator, Page } from '@playwright/test';
-import { test as adminTest } from '../../fixtures/loggedInAdmin.fixture';
-import { expect, test as userTest } from '../../fixtures/loggedIn.fixture';
-import type { BasePage } from '../../pages/BasePage';
-import { CartPage } from '../../pages/CartPage';
-import type { LoggedInHeader } from '../../pages/components/LoggedInHeader';
-import { EmailPage } from '../../pages/EmailPage';
-import { LlmPage } from '../../pages/LlmPage';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { ProfilePage } from '../../pages/ProfilePage';
-import { QrCodePage } from '../../pages/QrCodePage';
-import { TrafficMonitorPage } from '../../pages/TrafficMonitorPage';
+import { test as adminTest } from '../../../fixtures/loggedInAdmin.fixture';
+import { expect, test as userTest } from '../../../fixtures/loggedIn.fixture';
+import type { BasePage } from '../../../pages/BasePage';
+import { CartPage } from '../../../pages/shop/CartPage';
+import type { LoggedInHeader } from '../../../pages/components/LoggedInHeader';
+import { EmailPage } from '../../../pages/tools/EmailPage';
+import { LlmPage } from '../../../pages/tools/LlmPage';
+import { ProductsPage } from '../../../pages/shop/ProductsPage';
+import { ProfilePage } from '../../../pages/users/ProfilePage';
+import { QrCodePage } from '../../../pages/tools/QrCodePage';
+import { TrafficMonitorPage } from '../../../pages/tools/TrafficMonitorPage';
 
 const menuLinks: { name: string; link: (header: LoggedInHeader) => Locator; TargetPage: new (page: Page) => BasePage }[] = [
   { name: 'Products', link: (header) => header.productsLink, TargetPage: ProductsPage },

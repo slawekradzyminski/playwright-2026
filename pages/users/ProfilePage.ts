@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from '../BasePage';
 
 export class ProfilePage extends BasePage {
   protected readonly path = '/profile';

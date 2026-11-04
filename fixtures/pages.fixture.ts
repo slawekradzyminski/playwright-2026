@@ -1,12 +1,12 @@
 import { test as base } from '@playwright/test';
-import { AdminPage } from '../pages/AdminPage';
-import { CartPage } from '../pages/CartPage';
-import { CheckoutPage } from '../pages/CheckoutPage';
+import { AdminPage } from '../pages/admin/AdminPage';
+import { CartPage } from '../pages/shop/CartPage';
+import { CheckoutPage } from '../pages/shop/CheckoutPage';
 import { HomePage } from '../pages/HomePage';
-import { LoginPage } from '../pages/LoginPage';
-import { ProductsPage } from '../pages/ProductsPage';
-import { QrCodePage } from '../pages/QrCodePage';
-import { RegisterPage } from '../pages/RegisterPage';
+import { LoginPage } from '../pages/auth/LoginPage';
+import { ProductsPage } from '../pages/shop/ProductsPage';
+import { QrCodePage } from '../pages/tools/QrCodePage';
+import { RegisterPage } from '../pages/auth/RegisterPage';
 
 type Pages = {
   adminPage: AdminPage;

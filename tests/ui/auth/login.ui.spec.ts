@@ -1,6 +1,6 @@
-import { test, expect } from '../../fixtures/pages.fixture';
-import type { LoginDto } from '../../types/auth';
-import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../test-config';
+import { test, expect } from '../../../fixtures/pages.fixture';
+import type { LoginDto } from '../../../types/auth';
+import { ADMIN_PASSWORD, ADMIN_USERNAME } from '../../../test-config';
 
 test.describe('Login UI tests', () => {
   test.beforeEach(async ({ loginPage }) => {

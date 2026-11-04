@@ -9,7 +9,7 @@
 ## Spec structure
 
 ```ts
-import { expect, test } from '../../fixtures/products.fixture';
+import { expect, test } from '../../../fixtures/products.fixture';
 
 test.describe('Products page UI tests', () => {
   test('should add selected quantity of a product to the cart', async ({ productsPage, createProduct, cartApi }) => {
@@ -31,7 +31,7 @@ test.describe('Products page UI tests', () => {
 });
 ```
 
-- File: `tests/ui/<screen>.ui.spec.ts`, `test.describe('<Screen> UI tests')`, test names start with `should …`.
+- File: `tests/ui/<area>/<screen>.ui.spec.ts`, `test.describe('<Screen> UI tests')`, test names start with `should …`.
 - `// when` holds exactly the action under test; preparation (navigation, data, preceding clicks) is `// given`.
 - A shared `goto()` may live in `beforeEach` when every test starts on the same screen; then a test may begin at `// when`.
 - A second when/then pair is fine only for a short flow (e.g. register → log in).
@@ -41,10 +41,10 @@ test.describe('Products page UI tests', () => {
 
 ## Page objects
 
-- One class per route in `pages/`, extending `BasePage`; set `protected readonly path`.
+- One class per route in `pages/<area>/`, extending `BasePage`; set `protected readonly path`.
 - Locators are `readonly` fields built in the constructor with `page.getByTestId(...)`.
 - Override `expectToBeOpen()` to check a page-specific element (title text) on top of the URL. Pages with error or redirect states (`:id` routes) also get an `open()` that navigates without that check, since `goto()` always checks.
-- Methods model user actions (`login(credentials)`, `selectCategory(name)`, `search(text)`); assertions that are reused across tests may be methods too (`toast.expectError(...)`).
+- Methods model user actions (`login(credentials)`, `selectCategory(name)`, `search(text)`); assertions that are reused across tests may be methods too (`toast.expectError(...)`). A `// then` with more than about four assertions on one page or component becomes an `expect…` method there (`cartPage.expectEmpty()`, `detailsPage.expectInCart(3)`, `registerPage.expectErrors({...})`).
 - Parts that appear on many screens or many times go to `pages/components/` and take a root `Locator` (`ProductCard`) or `Page` (`Toast`, headers).
 - Toasts are not uniform: some error toasts (e.g. "Failed to update cart") have no `toast-title` test id, so `Toast.expectError()` fails there. Check the toast's test ids first.
 - Dynamic test ids get a helper method that documents the rule (`categoryButton(category)`); a repeated part keyed by an entity id is a component built with `(page, id)` (`CartItemRow` for `cart-item-<productId>`).
@@ -72,10 +72,10 @@ Never CSS classes, XPath or nth-child. If a needed element has no test id, note 
 ## Verify
 
 ```bash
-npx playwright test tests/ui/<screen>.ui.spec.ts
-npx playwright test tests/ui/<screen>.ui.spec.ts --repeat-each=3
+npx playwright test tests/ui/<area>/<screen>.ui.spec.ts
+npx playwright test tests/ui/<area>/<screen>.ui.spec.ts --repeat-each=3
 npm run test:ui
 npx tsc --noEmit
 ```
 
-All must pass. A known bug is not hidden by a weaker assertion: report it (see [bug-reporting.md](bug-reporting.md)) and leave it out of the suite or mark it `test.fail()` with the bug number in a comment. A `test.fail()` test prints ✘ in the list reporter but counts as passed.
+All must pass. A known bug is not hidden by a weaker assertion: report it (see [bug-reporting.md](bug-reporting.md)) and leave it out of the suite (no `test.fail()`, no `test.skip()`); the bug's regression test goes to "Regression candidates" in the plan.

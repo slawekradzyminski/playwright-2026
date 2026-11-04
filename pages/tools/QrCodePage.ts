@@ -1,5 +1,5 @@
 import { expect, type Locator, type Page, type Request } from '@playwright/test';
-import { BasePage } from './BasePage';
+import { BasePage } from '../BasePage';
 
 export class QrCodePage extends BasePage {
   protected readonly path = '/qr';
@@ -21,6 +21,14 @@ export class QrCodePage extends BasePage {
   override async expectToBeOpen() {
     await super.expectToBeOpen();
     await expect(this.title).toHaveText('QR Code Generator');
+  }
+
+  async expectEmptyForm() {
+    await expect(this.textInput).toHaveValue('');
+    await expect(this.textInput).toHaveAttribute('placeholder', 'Enter text or URL');
+    await expect(this.generateButton).toBeEnabled();
+    await expect(this.clearButton).toBeDisabled();
+    await expect(this.image).toBeHidden();
   }
 
   /** Clicks "Generate QR Code" and returns the request sent to the generator endpoint. */

@@ -1,4 +1,4 @@
-import type { Locator } from '@playwright/test';
+import { expect, type Locator } from '@playwright/test';
 
 /** One product tile on the product list. */
 export class ProductCard {
@@ -28,6 +28,16 @@ export class ProductCard {
     this.cartQuantity = root.getByTestId('product-card-cart-quantity');
     this.addButton = root.getByTestId('product-add-button');
     this.removeButton = root.getByTestId('product-remove-button');
+  }
+
+  async expectInCart(quantity: number) {
+    await expect(this.cartQuantity).toHaveText(`${quantity} in cart`);
+    await expect(this.addButton).toHaveText('Update Cart');
+  }
+
+  async expectNotInCart() {
+    await expect(this.cartQuantity).toBeHidden();
+    await expect(this.addButton).toHaveText('Add to Cart');
   }
 
   async increaseQuantity(times: number) {

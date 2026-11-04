@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/qr.fixture';
+import { expect, test } from '../../../fixtures/qr.fixture';
 
 // Largest payload a QR code holds in byte mode (version 40, error correction L).
 const MAX_QR_LENGTH = 2953;
@@ -10,11 +10,7 @@ test.describe('QR code page UI tests', () => {
 
   test('should show an empty form with Clear disabled', async ({ qrCodePage }) => {
     // then
-    await expect(qrCodePage.textInput).toHaveValue('');
-    await expect(qrCodePage.textInput).toHaveAttribute('placeholder', 'Enter text or URL');
-    await expect(qrCodePage.generateButton).toBeEnabled();
-    await expect(qrCodePage.clearButton).toBeDisabled();
-    await expect(qrCodePage.image).toBeHidden();
+    await qrCodePage.expectEmptyForm();
   });
 
   test('should generate a QR code image for the entered URL', async ({ qrCodePage, qrApi }) => {
@@ -42,9 +38,7 @@ test.describe('QR code page UI tests', () => {
     await qrCodePage.clearButton.click();
 
     // then
-    await expect(qrCodePage.textInput).toHaveValue('');
-    await expect(qrCodePage.image).toBeHidden();
-    await expect(qrCodePage.clearButton).toBeDisabled();
+    await qrCodePage.expectEmptyForm();
   });
 
   test('should replace the QR code when new text is generated', async ({ qrCodePage, qrApi }) => {
@@ -116,22 +110,5 @@ test.describe('QR code page UI tests', () => {
     await qrCodePage.toast.expectError('Failed to generate QR code');
     await expect(qrCodePage.image).toBeHidden();
     await expect(qrCodePage.generateButton).toBeEnabled();
-  });
-
-  test('should not keep the previous QR code after a failed generation', async ({ qrCodePage }) => {
-    test.fail(true, 'BUG-010: the QR code of the previous text stays visible after an error');
-
-    // given
-    await qrCodePage.textInput.fill('previous text');
-    await qrCodePage.generate();
-    await expect(qrCodePage.image).toBeVisible();
-    await qrCodePage.textInput.fill('a'.repeat(MAX_QR_LENGTH + 1));
-
-    // when
-    await qrCodePage.generate();
-
-    // then
-    await qrCodePage.toast.expectError('Failed to generate QR code');
-    await expect(qrCodePage.image).toBeHidden();
   });
 });

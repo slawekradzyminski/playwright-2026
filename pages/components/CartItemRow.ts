@@ -1,4 +1,4 @@
-import type { Locator, Page } from '@playwright/test';
+import { expect, type Locator, type Page } from '@playwright/test';
 
 /** One row of the cart table; every test id in the row ends with the product id. */
 export class CartItemRow {
@@ -13,7 +13,7 @@ export class CartItemRow {
   readonly total: Locator;
   readonly removeButton: Locator;
 
-  constructor(page: Page, productId: number) {
+  constructor(page: Page, private readonly productId: number) {
     this.root = page.getByTestId(`cart-item-${productId}`);
     this.name = this.root.getByTestId(`cart-item-name-${productId}`);
     this.price = this.root.getByTestId(`cart-item-price-${productId}`);
@@ -23,6 +23,14 @@ export class CartItemRow {
     this.updateButton = this.root.getByTestId(`cart-item-update-${productId}`);
     this.total = this.root.getByTestId(`cart-item-total-${productId}`);
     this.removeButton = this.root.getByTestId(`cart-item-remove-${productId}`);
+  }
+
+  async expectItem({ name, price, quantity, total }: { name: string; price: string; quantity: number; total: string }) {
+    await expect(this.name).toHaveText(name);
+    await expect(this.name).toHaveAttribute('href', `/products/${this.productId}`);
+    await expect(this.price).toHaveText(price);
+    await expect(this.quantity).toHaveText(String(quantity));
+    await expect(this.total).toHaveText(total);
   }
 
   async increaseQuantity(times: number) {

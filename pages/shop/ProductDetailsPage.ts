@@ -1,6 +1,6 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { LoggedInHeader } from './components/LoggedInHeader';
+import { BasePage } from '../BasePage';
+import { LoggedInHeader } from '../components/LoggedInHeader';
 
 export class ProductDetailsPage extends BasePage {
   protected readonly path: string;
@@ -53,6 +53,35 @@ export class ProductDetailsPage extends BasePage {
   /** Navigates without expecting the details to load (error states, redirects). */
   async open() {
     await this.page.goto(this.path);
+  }
+
+  async expectProduct({ name, price, description, category, stock }: { name: string; price: string; description: string; category: string; stock: string }) {
+    await expect(this.title).toHaveText(name);
+    await expect(this.price).toHaveText(price);
+    await expect(this.description).toHaveText(description);
+    await expect(this.category).toHaveText(category);
+    await expect(this.stock).toHaveText(stock);
+  }
+
+  async expectInCart(quantity: number) {
+    await expect(this.cartQuantity).toHaveText(`${quantity} in cart`);
+    await expect(this.addButton).toHaveText('Update Cart');
+    await expect(this.header.cartItemCount).toHaveText(String(quantity));
+  }
+
+  /** The product is not in the cart and the cart is empty. */
+  async expectNotInCart() {
+    await expect(this.cartQuantity).toBeHidden();
+    await expect(this.removeButton).toBeHidden();
+    await expect(this.addButton).toHaveText('Add to Cart');
+    await expect(this.header.cartItemCount).toBeHidden();
+  }
+
+  async expectOutOfStock() {
+    await expect(this.stock).toHaveText('Out of stock');
+    await expect(this.addButton).toBeDisabled();
+    await expect(this.increaseButton).toBeHidden();
+    await expect(this.quantity).toBeHidden();
   }
 
   async increaseQuantity(times: number) {

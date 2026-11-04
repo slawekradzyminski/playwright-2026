@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import type { RegisterDto } from '../types/auth';
-import { BasePage } from './BasePage';
-import { LoggedOutHeader } from './components/LoggedOutHeader';
+import type { RegisterDto } from '../../types/auth';
+import { BasePage } from '../BasePage';
+import { LoggedOutHeader } from '../components/LoggedOutHeader';
 
 export class RegisterPage extends BasePage {
   protected readonly path = '/register';
@@ -45,6 +45,21 @@ export class RegisterPage extends BasePage {
     await this.firstNameInput.fill(firstName);
     await this.lastNameInput.fill(lastName);
     await this.submitButton.click();
+  }
+
+  /** Checks the given field errors; fields left out must show no error. */
+  async expectErrors(errors: Partial<Record<keyof RegisterDto, string>>) {
+    const fields: Record<keyof RegisterDto, Locator> = {
+      username: this.usernameError,
+      email: this.emailError,
+      password: this.passwordError,
+      firstName: this.firstNameError,
+      lastName: this.lastNameError,
+    };
+    for (const [field, error] of Object.entries(fields) as [keyof RegisterDto, Locator][]) {
+      const message = errors[field];
+      await (message ? expect(error).toHaveText(message) : expect(error).toBeHidden());
+    }
   }
 
   override async expectToBeOpen() {

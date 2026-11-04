@@ -1,7 +1,7 @@
-import { expect, test } from '../../fixtures/products.fixture';
-import { generateCategory } from '../../generators/productGenerator';
-import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
-import type { ProductSort } from '../../pages/ProductsPage';
+import { expect, test } from '../../../fixtures/products.fixture';
+import { generateCategory } from '../../../generators/productGenerator';
+import { ProductDetailsPage } from '../../../pages/shop/ProductDetailsPage';
+import type { ProductSort } from '../../../pages/shop/ProductsPage';
 
 // Every test creates its own products in its own category, so it never depends on the shared catalog.
 test.describe('Products page UI tests', () => {
@@ -34,7 +34,7 @@ test.describe('Products page UI tests', () => {
     await expect(card.category).toHaveText(product.category, { ignoreCase: true });
     await expect(card.description).toHaveText(product.description);
     await expect(card.quantity).toHaveText('1');
-    await expect(card.addButton).toHaveText('Add to Cart');
+    await card.expectNotInCart();
   });
 
   test('should filter products by search text', async ({ productsPage, createProduct }) => {
@@ -120,8 +120,7 @@ test.describe('Products page UI tests', () => {
 
     // then
     await productsPage.toast.expectToast('Added to cart', `3 × ${product.name} added to your cart`);
-    await expect(card.cartQuantity).toHaveText('3 in cart');
-    await expect(card.addButton).toHaveText('Update Cart');
+    await card.expectInCart(3);
     await expect(productsPage.header.cartItemCount).toHaveText('3');
     expect((await cartApi.get()).items).toEqual([{ productId: product.id, quantity: 3 }]);
   });
@@ -141,7 +140,7 @@ test.describe('Products page UI tests', () => {
 
     // then
     await productsPage.toast.expectToast('Cart updated', `${product.name} quantity set to 1`);
-    await expect(card.cartQuantity).toHaveText('1 in cart');
+    await card.expectInCart(1);
     expect((await cartApi.get()).items).toEqual([{ productId: product.id, quantity: 1 }]);
   });
 
@@ -158,8 +157,7 @@ test.describe('Products page UI tests', () => {
 
     // then
     await productsPage.toast.expectToast('Removed from cart', `${product.name} has been removed from your cart`);
-    await expect(card.cartQuantity).toBeHidden();
-    await expect(card.addButton).toHaveText('Add to Cart');
+    await card.expectNotInCart();
     expect((await cartApi.get()).items).toEqual([]);
   });
 

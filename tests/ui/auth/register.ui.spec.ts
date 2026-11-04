@@ -1,5 +1,5 @@
-import { generateUser } from '../../generators/userGenerator';
-import { expect, test } from '../../fixtures/pages.fixture';
+import { generateUser } from '../../../generators/userGenerator';
+import { expect, test } from '../../../fixtures/pages.fixture';
 
 test.describe('Registration UI tests', () => {
   test.beforeEach(async ({ registerPage }) => {
@@ -30,11 +30,13 @@ test.describe('Registration UI tests', () => {
     await registerPage.submitButton.click();
 
     // then
-    await expect(registerPage.usernameError).toHaveText('Username is required');
-    await expect(registerPage.emailError).toHaveText('Email is required');
-    await expect(registerPage.passwordError).toHaveText('Password is required');
-    await expect(registerPage.firstNameError).toHaveText('First name is required');
-    await expect(registerPage.lastNameError).toHaveText('Last name is required');
+    await registerPage.expectErrors({
+      username: 'Username is required',
+      email: 'Email is required',
+      password: 'Password is required',
+      firstName: 'First name is required',
+      lastName: 'Last name is required',
+    });
     await registerPage.expectToBeOpen();
   });
 
@@ -52,11 +54,12 @@ test.describe('Registration UI tests', () => {
     await registerPage.register(user);
 
     // then
-    await expect(registerPage.usernameError).toHaveText('Username must be at least 4 characters');
-    await expect(registerPage.emailError).toHaveText('Invalid email format');
-    await expect(registerPage.passwordError).toHaveText('Password must be at least 8 characters');
-    await expect(registerPage.firstNameError).toHaveText('First name must be at least 4 characters');
-    await expect(registerPage.lastNameError).toBeHidden();
+    await registerPage.expectErrors({
+      username: 'Username must be at least 4 characters',
+      email: 'Invalid email format',
+      password: 'Password must be at least 8 characters',
+      firstName: 'First name must be at least 4 characters',
+    });
     await registerPage.expectToBeOpen();
   });
 

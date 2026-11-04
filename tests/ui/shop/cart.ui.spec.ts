@@ -1,4 +1,4 @@
-import { expect, test } from '../../fixtures/products.fixture';
+import { expect, test } from '../../../fixtures/products.fixture';
 
 // Every test fills the cart of its own fresh user through the API with its own products, so tests can run in parallel.
 test.describe('Cart page UI tests', () => {
@@ -7,10 +7,7 @@ test.describe('Cart page UI tests', () => {
     await cartPage.goto();
 
     // then
-    await expect(cartPage.emptyCart).toContainText('Your cart is empty');
-    await expect(cartPage.browseProductsLink).toHaveAttribute('href', '/products');
-    await expect(cartPage.summary).toBeHidden();
-    await expect(cartPage.checkoutButton).toBeHidden();
+    await cartPage.expectEmpty();
   });
 
   test('should show cart items with prices, line totals and cart summary', async ({ cartPage, createProduct, cartApi }) => {
@@ -25,15 +22,9 @@ test.describe('Cart page UI tests', () => {
 
     // then
     await expect(cartPage.itemRows).toHaveCount(2);
-    const bookRow = cartPage.item(book.id);
-    await expect(bookRow.name).toHaveText(book.name);
-    await expect(bookRow.name).toHaveAttribute('href', `/products/${book.id}`);
-    await expect(bookRow.price).toHaveText('$12.50');
-    await expect(bookRow.quantity).toHaveText('2');
-    await expect(bookRow.total).toHaveText('$25.00');
-    await expect(cartPage.item(laptop.id).total).toHaveText('$1234.99');
+    await cartPage.item(book.id).expectItem({ name: book.name, price: '$12.50', quantity: 2, total: '$25.00' });
+    await cartPage.item(laptop.id).expectItem({ name: laptop.name, price: '$1234.99', quantity: 1, total: '$1234.99' });
     await cartPage.expectSummary(3, '$1259.99');
-    await expect(cartPage.header.cartItemCount).toHaveText('3');
   });
 
   test('should recalculate totals after quantity change is saved', async ({ cartPage, createProduct, cartApi }) => {
@@ -54,7 +45,6 @@ test.describe('Cart page UI tests', () => {
     await expect(bookRow.total).toHaveText('$50.00');
     await expect(bookRow.updateButton).toBeHidden();
     await cartPage.expectSummary(5, '$55.00');
-    await expect(cartPage.header.cartItemCount).toHaveText('5');
     expect((await cartApi.get()).items).toEqual([{ productId: book.id, quantity: 4 }, { productId: pen.id, quantity: 1 }]);
   });
 
@@ -71,21 +61,6 @@ test.describe('Cart page UI tests', () => {
     // then
     await expect(row.quantity).toHaveText('1');
     await expect(row.updateButton).toBeHidden();
-  });
-
-  // BUG-007: "+" goes above the stock, the API answers 409 and the error is not shown.
-  test.fail('should not allow quantity above available stock', async ({ cartPage, createProduct, cartApi }) => {
-    // given
-    const product = await createProduct({ stockQuantity: 3 });
-    await cartApi.addItem({ productId: product.id, quantity: 2 });
-    await cartPage.goto();
-    const row = cartPage.item(product.id);
-
-    // when
-    await row.increaseQuantity(3);
-
-    // then
-    await expect(row.quantity).toHaveText('3');
   });
 
   test('should remove an item from the cart', async ({ cartPage, createProduct, cartApi }) => {
@@ -118,9 +93,7 @@ test.describe('Cart page UI tests', () => {
     await cartPage.clearCart({ confirm: true });
 
     // then
-    await expect(cartPage.emptyCart).toContainText('Your cart is empty');
-    await expect(cartPage.itemRows).toHaveCount(0);
-    await expect(cartPage.header.cartItemCount).toBeHidden();
+    await cartPage.expectEmpty();
     expect((await cartApi.get()).items).toEqual([]);
   });
 

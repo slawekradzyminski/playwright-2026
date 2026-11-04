@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { CartItemRow } from './components/CartItemRow';
-import { LoggedInHeader } from './components/LoggedInHeader';
+import { BasePage } from '../BasePage';
+import { CartItemRow } from '../components/CartItemRow';
+import { LoggedInHeader } from '../components/LoggedInHeader';
 
 export class CartPage extends BasePage {
   protected readonly path = '/cart';
@@ -47,8 +47,19 @@ export class CartPage extends BasePage {
     await this.clearButton.click();
   }
 
+  /** Summary box and the cart counter in the header. */
   async expectSummary(itemsCount: number, totalPrice: string) {
     await expect(this.summaryItemsCount).toHaveText(String(itemsCount));
     await expect(this.summaryTotalPrice).toHaveText(totalPrice);
+    await expect(this.header.cartItemCount).toHaveText(String(itemsCount));
+  }
+
+  async expectEmpty() {
+    await expect(this.emptyCart).toContainText('Your cart is empty');
+    await expect(this.browseProductsLink).toHaveAttribute('href', '/products');
+    await expect(this.itemRows).toHaveCount(0);
+    await expect(this.summary).toBeHidden();
+    await expect(this.checkoutButton).toBeHidden();
+    await expect(this.header.cartItemCount).toBeHidden();
   }
 }

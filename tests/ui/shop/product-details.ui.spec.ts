@@ -1,6 +1,6 @@
-import { expect, test } from '../../fixtures/productDetails.fixture';
-import { generateProduct } from '../../generators/productGenerator';
-import { ProductDetailsPage } from '../../pages/ProductDetailsPage';
+import { expect, test } from '../../../fixtures/productDetails.fixture';
+import { generateProduct } from '../../../generators/productGenerator';
+import { ProductDetailsPage } from '../../../pages/shop/ProductDetailsPage';
 
 // Every test creates its own product, so it never depends on the shared catalog.
 test.describe('Product details UI tests', () => {
@@ -13,15 +13,9 @@ test.describe('Product details UI tests', () => {
     await detailsPage.goto();
 
     // then
-    await expect(detailsPage.title).toHaveText(product.name);
-    await expect(detailsPage.price).toHaveText('$1234.50');
-    await expect(detailsPage.description).toHaveText(product.description);
-    await expect(detailsPage.category).toHaveText(product.category);
-    await expect(detailsPage.stock).toHaveText('7 in stock');
-    await expect(detailsPage.cartQuantity).toBeHidden();
+    await detailsPage.expectProduct({ ...product, price: '$1234.50', stock: '7 in stock' });
     await expect(detailsPage.quantity).toHaveText('1');
-    await expect(detailsPage.addButton).toHaveText('Add to Cart');
-    await expect(detailsPage.removeButton).toBeHidden();
+    await detailsPage.expectNotInCart();
   });
 
   test('should add selected quantity of the product to the cart', async ({ page, createProduct, cartApi }) => {
@@ -36,9 +30,7 @@ test.describe('Product details UI tests', () => {
 
     // then
     await detailsPage.toast.expectToast('Added to cart', `3 × ${product.name} added to your cart`);
-    await expect(detailsPage.cartQuantity).toHaveText('3 in cart');
-    await expect(detailsPage.addButton).toHaveText('Update Cart');
-    await expect(detailsPage.header.cartItemCount).toHaveText('3');
+    await detailsPage.expectInCart(3);
     expect((await cartApi.get()).items).toEqual([{ productId: product.id, quantity: 3 }]);
   });
 
@@ -48,7 +40,7 @@ test.describe('Product details UI tests', () => {
     await cartApi.addItem({ productId: product.id, quantity: 2 });
     const detailsPage = new ProductDetailsPage(page, product.id);
     await detailsPage.goto();
-    await expect(detailsPage.cartQuantity).toHaveText('2 in cart');
+    await detailsPage.expectInCart(2);
     await expect(detailsPage.quantity).toHaveText('2');
     await detailsPage.increaseQuantity(2);
 
@@ -57,8 +49,7 @@ test.describe('Product details UI tests', () => {
 
     // then
     await detailsPage.toast.expectToast('Cart updated', `${product.name} quantity set to 4`);
-    await expect(detailsPage.cartQuantity).toHaveText('4 in cart');
-    await expect(detailsPage.header.cartItemCount).toHaveText('4');
+    await detailsPage.expectInCart(4);
     expect((await cartApi.get()).items).toEqual([{ productId: product.id, quantity: 4 }]);
   });
 
@@ -74,10 +65,7 @@ test.describe('Product details UI tests', () => {
 
     // then
     await detailsPage.toast.expectToast('Removed from cart', `${product.name} has been removed from your cart`);
-    await expect(detailsPage.cartQuantity).toBeHidden();
-    await expect(detailsPage.removeButton).toBeHidden();
-    await expect(detailsPage.addButton).toHaveText('Add to Cart');
-    await expect(detailsPage.header.cartItemCount).toBeHidden();
+    await detailsPage.expectNotInCart();
     expect((await cartApi.get()).items).toEqual([]);
   });
 
@@ -103,10 +91,7 @@ test.describe('Product details UI tests', () => {
     await detailsPage.goto();
 
     // then
-    await expect(detailsPage.stock).toHaveText('Out of stock');
-    await expect(detailsPage.addButton).toBeDisabled();
-    await expect(detailsPage.increaseButton).toBeHidden();
-    await expect(detailsPage.quantity).toBeHidden();
+    await detailsPage.expectOutOfStock();
   });
 
   test('should show an error when stock dropped below the selected quantity', async ({ page, createProduct, productsApi, cartApi }) => {
@@ -124,7 +109,7 @@ test.describe('Product details UI tests', () => {
     // This error toast has no `toast-title` test id (unlike login/register errors), so expectError() cannot be used.
     await expect(detailsPage.toast.root).toContainText('Error');
     await expect(detailsPage.toast.description).toHaveText('Failed to update cart. Please try again.');
-    await expect(detailsPage.cartQuantity).toBeHidden();
+    await detailsPage.expectNotInCart();
     expect((await cartApi.get()).items).toEqual([]);
   });
 

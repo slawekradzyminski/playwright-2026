@@ -74,7 +74,7 @@ Done: `ProductsApi`, `CartApi`, `productGenerator` and the `products.fixture` (`
 |---|---|
 | ~~`/products` → level 2~~ | **done 2026-11-04**: category filter, card content, search + empty state/reset, sort by price, "In stock only", add N to cart, update and remove an item already in the cart, quantity capped by stock, open details |
 | ~~`/products/:id` → level 2~~ | **done 2026-11-04**: name, price, description, category, stock; add N → toast, cart counter, "N in cart"; update and remove an item already in the cart; quantity capped by stock; out of stock (Add disabled, no quantity controls); stock lowered after page load → error toast; deleted product → error box and link back; back link; anonymous → `/login`. Not automated: non-numeric id (BUG-006). Frontend request: `toast-title` test id on the "Failed to update cart" error toast |
-| ~~`/cart` → level 2~~ | **done 2026-11-04**: empty cart; items, line totals and summary; quantity change + "Update" recalculates totals (UI and API); "-" stops at 1; quantity above stock (`test.fail`, BUG-007); remove an item; "Clear Cart" confirmed and cancelled; "Proceed to Checkout" → `/checkout` |
+| ~~`/cart` → level 2~~ | **done 2026-11-04**: empty cart; items, line totals and summary; quantity change + "Update" recalculates totals (UI and API); "-" stops at 1; not automated: quantity above stock (BUG-007); remove an item; "Clear Cart" confirmed and cancelled; "Proceed to Checkout" → `/checkout` |
 | `/checkout` | required address fields (5 messages); place order → `/orders/:id`, cart is empty |
 | `/orders/:id` | items and address match the order; cancel a PENDING order |
 | `/profile` (orders section) | order visible in "Your Orders", link to details |
@@ -109,7 +109,7 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Screen | Scenarios |
 |---|---|
 | `/email` → level 2 | validation; send → message in the local outbox |
-| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; stale image after error as `test.fail()` (BUG-010). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
+| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; not automated: stale image after error (BUG-010). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
 | `/traffic` → level 2 | action in the app → event in the list; "Clear Events" |
 | `/llm` → level 2 | navigate to each of the three modes |
 | `/llm/generate`, `/llm/chat`, `/llm/tools` | send a prompt → response from `ollama-mock`; settings |
@@ -125,8 +125,8 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | 2026-11-04 | `/qr` (client; desktop, tablet, mobile) | BUG-008 diacritics/emoji become "?" in the code (backend charset), BUG-009 text > 2953 chars → 500 and generic error, BUG-010 previous code stays after a failed generation; 5 a11y findings added to BUG-004 (Generate focus indicator, focus lost after Generate/Clear, result not announced/generic alt, placeholder contrast, page title); 3 usability findings added to BUG-005 (no success feedback with stale error toast, result below the fold on mobile, no download/copy) |
 
 Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-006), stock conflict toast names the reason, deep link kept after login.
-`/cart`: "+" capped by stock / 409 shown (BUG-007, drop `test.fail`), toasts after cart actions, pending quantity saved before checkout.
-`/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-008), 400 with a length message (BUG-009), remove `test.fail()` from the stale-image test (BUG-010).
+`/cart`: "+" capped by stock / 409 shown (BUG-007), toasts after cart actions, pending quantity saved before checkout.
+`/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-008), 400 with a length message (BUG-009), previous code hidden after a failed generation (BUG-010).
 
 ### Out of scope / to be decided
 

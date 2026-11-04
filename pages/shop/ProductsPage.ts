@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import { BasePage } from './BasePage';
-import { LoggedInHeader } from './components/LoggedInHeader';
-import { ProductCard } from './components/ProductCard';
+import { BasePage } from '../BasePage';
+import { LoggedInHeader } from '../components/LoggedInHeader';
+import { ProductCard } from '../components/ProductCard';
 
 export type ProductSort = 'name-asc' | 'name-desc' | 'price-asc' | 'price-desc';
 

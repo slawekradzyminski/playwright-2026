@@ -123,7 +123,7 @@ npx playwright test tests/api/login.api.spec.ts
 ```bash
 npm run test:ui
 # or
-npx playwright test tests/ui/login.ui.spec.ts
+npx playwright test tests/ui/auth/login.ui.spec.ts
 ```
 
 **All Tests**
@@ -155,7 +155,7 @@ These tests cover various scenarios for the `/api/v1/users/signin` endpoint, ord
 - **Validation Errors (400)**: Tests for empty username, short username, and short password scenarios with appropriate error messages
 - **Authentication Errors (422)**: Invalid credentials result in 422 status codes with error messages
 
-### UI Tests (`tests/ui/login.ui.spec.ts`)
+### UI Tests (`tests/ui/auth/login.ui.spec.ts`)
 
 These tests validate the login page's functionality and user experience:
 

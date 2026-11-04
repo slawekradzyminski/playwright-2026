@@ -17,8 +17,8 @@ Five activities share this skill. Pick the matching reference and read it before
 
 ## Project map
 
-- `tests/ui/*.ui.spec.ts` – UI specs, one file per screen or area.
-- `pages/` – page objects (extend `BasePage`), `pages/components/` – reusable parts (headers, `Toast`, `ProductCard`).
+- `tests/ui/<area>/*.ui.spec.ts` – UI specs, one file per screen or area, grouped by area: `auth/`, `shop/`, `tools/`, `navigation/` (add `admin/`, `users/` when needed).
+- `pages/<area>/` – page objects (extend `BasePage`) grouped like the specs (`auth/`, `shop/`, `tools/`, `admin/`, `users/`); `BasePage` and `HomePage` stay in `pages/`, reusable parts in `pages/components/` (headers, `Toast`, `ProductCard`).
 - `fixtures/` – `pages.fixture` (page objects), `loggedIn.fixture` (fresh client per test), `loggedInAdmin.fixture` (shared admin), `products.fixture` (`createProduct`, `cartApi`).
 - `api/`, `generators/`, `types/` – API clients, faker-based data, DTOs used to set up test data.
 - `bugs/` – bug reports and `bugs/img/` screenshots.

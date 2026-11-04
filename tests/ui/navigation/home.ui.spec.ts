@@ -1,15 +1,15 @@
 import type { Locator, Page } from '@playwright/test';
-import { expect, test } from '../../fixtures/loggedIn.fixture';
-import type { BasePage } from '../../pages/BasePage';
-import { CartPage } from '../../pages/CartPage';
-import { EmailPage } from '../../pages/EmailPage';
-import type { HomePage } from '../../pages/HomePage';
-import { LlmPage } from '../../pages/LlmPage';
-import { ProductsPage } from '../../pages/ProductsPage';
-import { ProfilePage } from '../../pages/ProfilePage';
-import { QrCodePage } from '../../pages/QrCodePage';
-import { TrafficMonitorPage } from '../../pages/TrafficMonitorPage';
-import { UsersPage } from '../../pages/UsersPage';
+import { expect, test } from '../../../fixtures/loggedIn.fixture';
+import type { BasePage } from '../../../pages/BasePage';
+import { CartPage } from '../../../pages/shop/CartPage';
+import { EmailPage } from '../../../pages/tools/EmailPage';
+import type { HomePage } from '../../../pages/HomePage';
+import { LlmPage } from '../../../pages/tools/LlmPage';
+import { ProductsPage } from '../../../pages/shop/ProductsPage';
+import { ProfilePage } from '../../../pages/users/ProfilePage';
+import { QrCodePage } from '../../../pages/tools/QrCodePage';
+import { TrafficMonitorPage } from '../../../pages/tools/TrafficMonitorPage';
+import { UsersPage } from '../../../pages/users/UsersPage';
 
 const navigationButtons: { name: string; button: (homePage: HomePage) => Locator; TargetPage: new (page: Page) => BasePage }[] = [
   { name: 'Products', button: (homePage) => homePage.productsButton, TargetPage: ProductsPage },

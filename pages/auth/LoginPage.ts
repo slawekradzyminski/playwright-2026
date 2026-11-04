@@ -1,7 +1,7 @@
 import { expect, type Locator, type Page } from '@playwright/test';
-import type { LoginDto } from '../types/auth';
-import { BasePage } from './BasePage';
-import { LoggedOutHeader } from './components/LoggedOutHeader';
+import type { LoginDto } from '../../types/auth';
+import { BasePage } from '../BasePage';
+import { LoggedOutHeader } from '../components/LoggedOutHeader';
 
 export class LoginPage extends BasePage {
   protected readonly path = '/login';
