@@ -157,3 +157,33 @@
 **Actual:** The table is 1034 px wide inside a horizontally scrollable box. On mobile only Product and Price are visible, on tablet the Actions column is cut off; nothing hints that the table scrolls sideways.
 
 ![Mobile cart table](img/cart-mobile-items.png)
+
+## QR code: no success feedback, a previous error toast stays next to the new code
+
+**Steps:**
+1. On `/qr` click "Generate QR Code" with empty text – toast "Error – Please enter text to generate QR code".
+2. Within 5 s type `https://awesome-testing.com` and click "Generate QR Code".
+
+**Expected:** The error is dismissed and the success is confirmed (e.g. toast "QR code generated" or a caption under the image).
+
+**Actual:** The code appears while the red "Please enter text…" toast is still shown; success itself never gives any message.
+
+![Generated code with the old error toast](img/qr-stale-error-toast.png)
+
+## QR code: on mobile the generated code appears below the fold
+
+**Steps:** On 393×852 (`isMobile`) open `/qr`, enter a URL, tap "Generate QR Code".
+
+**Expected:** The result is scrolled into view (or placed where the user looks).
+
+**Actual:** Nothing visibly changes; only 2% of the image is inside the viewport, the user has to guess to scroll down.
+
+![Mobile right after generating, code below the fold](img/qr-mobile-result-below-fold.png)
+
+## QR code: no way to download or copy the code
+
+**Steps:** Generate a code on `/qr`.
+
+**Expected:** "Download PNG" / "Copy" buttons, as the page says "PNG output is returned directly".
+
+**Actual:** Only the image; the user must use the browser's context menu (or long-press on mobile); the image `src` is a `blob:` URL.

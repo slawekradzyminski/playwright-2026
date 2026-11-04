@@ -171,4 +171,44 @@ Each section below is one finding, grouped by screen.
 
 **Expected:** e.g. "Cart – Awesome Testing".
 
+## QR code
+
+### "Generate QR Code" has no visible focus indicator; textarea focus ring 1.5:1 (WCAG 2.4.7, 1.4.11)
+
+**Steps:** Open `/qr` (1920×1080), Tab to the textarea, then to "Generate QR Code".
+
+**Expected:** A clearly visible focus indicator with at least 3:1 contrast on both, as on "Clear".
+
+**Actual:** The focused "Generate QR Code" looks the same as unfocused (no outline, no ring). The textarea's focus ring is slate-300 on white, about 1.5:1.
+
+![Generate QR Code focused, no indicator](img/qr-generate-button-focus.png)
+
+### Focus is lost after Generate and Clear (WCAG 2.4.3)
+
+**Steps:** With the keyboard, type a text, press Enter on "Generate QR Code"; then Tab to "Clear" and press Space.
+
+**Expected:** Focus stays on the button (or moves to the result / the textarea after Clear).
+
+**Actual:** Both buttons become disabled (Generate while "Generating...", Clear when the text is empty) and focus falls back to `<body>`; the next Tab starts from an unexpected place.
+
+### Generated code is not announced and its alt text does not say what it encodes (WCAG 4.1.3, 1.1.1)
+
+**Steps:** Generate a code for `https://www.awesome-testing.com` with a screen reader on, inspect `qr-code-image`.
+
+**Expected:** A status message ("QR code generated") in a live region; `alt` describes the content, e.g. "QR code for https://www.awesome-testing.com".
+
+**Actual:** No live region and no success message, nothing is announced; `alt` is always "Generated QR Code".
+
+### Placeholder contrast 2.6:1 (WCAG 1.4.3)
+
+**Steps:** Inspect the placeholder "Enter text or URL" of `qr-text-input`.
+
+**Expected:** At least 4.5:1.
+
+**Actual:** slate-400 on white, about 2.6:1.
+
+### Generic page title (WCAG 2.4.2)
+
+**Expected:** e.g. "QR Code Generator – Awesome Testing".
+
 **Actual:** "Awesome Testing".

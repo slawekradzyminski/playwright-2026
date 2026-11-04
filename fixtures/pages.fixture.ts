@@ -5,6 +5,7 @@ import { CheckoutPage } from '../pages/CheckoutPage';
 import { HomePage } from '../pages/HomePage';
 import { LoginPage } from '../pages/LoginPage';
 import { ProductsPage } from '../pages/ProductsPage';
+import { QrCodePage } from '../pages/QrCodePage';
 import { RegisterPage } from '../pages/RegisterPage';
 
 type Pages = {
@@ -15,6 +16,7 @@ type Pages = {
   registerPage: RegisterPage;
   cartPage: CartPage;
   checkoutPage: CheckoutPage;
+  qrCodePage: QrCodePage;
 };
 
 export const test = base.extend<Pages>({
@@ -25,6 +27,7 @@ export const test = base.extend<Pages>({
   registerPage: async ({ page }, use) => use(new RegisterPage(page)),
   cartPage: async ({ page }, use) => use(new CartPage(page)),
   checkoutPage: async ({ page }, use) => use(new CheckoutPage(page)),
+  qrCodePage: async ({ page }, use) => use(new QrCodePage(page)),
 });
 
 export { expect } from '@playwright/test';

@@ -26,7 +26,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 6 | `/profile` | Profile: personal info, system prompts, 2FA, orders | logged in | 1 | home, header |
 | 7 | `/cart` | Cart (quantity, remove, clear, proceed to checkout) | logged in | **2** | `cart.ui.spec.ts`, header |
 | 8 | `/email` | Send email | logged in | 1 | home, header |
-| 9 | `/qr` | QR code generator | logged in | 1 | home, header |
+| 9 | `/qr` | QR code generator (generate, clear, validation) | logged in | **2** | `qr.ui.spec.ts`, home, header |
 | 10 | `/llm` | LLM hub (mode selection) | logged in | 1 | home, header |
 | 11 | `/traffic` | Traffic Monitor (events, clearing) | logged in | 1 | home, header |
 | 12 | `/admin` | Admin dashboard (stats, recent orders, low stock) | admin | 1 | header (also client redirect to `/`) |
@@ -109,7 +109,7 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Screen | Scenarios |
 |---|---|
 | `/email` → level 2 | validation; send → message in the local outbox |
-| `/qr` → level 2 | generate a QR image; "Clear" |
+| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; stale image after error as `test.fail()` (BUG-qr-3). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
 | `/traffic` → level 2 | action in the app → event in the list; "Clear Events" |
 | `/llm` → level 2 | navigate to each of the three modes |
 | `/llm/generate`, `/llm/chat`, `/llm/tools` | send a prompt → response from `ollama-mock`; settings |
@@ -122,9 +122,11 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
 | 2026-11-04 | `/products/:id` (client, anonymous; desktop, tablet, mobile) | BUG-pd-1 (non-numeric id → `/api/v1/products/NaN`, 4 requests, 7 s loading); no visual bugs (long name with diacritics, HTML in name/description rendered as text, price 99999999.99); 3 a11y findings added to BUG-004 ("-"/"+" names and unannounced quantity, error state not announced, page title); 5 usability findings added to BUG-005 (quantity 0 / "Update" removes, generic stock-conflict error with stale stock, "Error loading" for a missing product, Back resets the category, deep link lost after login) |
 | 2026-11-04 | `/cart` (client, anonymous redirect to `/login`; desktop, tablet, mobile) | BUG-cart-1 (quantity above stock, 409 not shown); 2 a11y findings added to BUG-004 (row controls without product context, page title); 3 usability findings added to BUG-005 (pending quantity lost on checkout, no toasts, quantity/Remove off-screen on mobile and tablet) |
+| 2026-11-04 | `/qr` (client; desktop, tablet, mobile) | BUG-qr-1 diacritics/emoji become "?" in the code (backend charset), BUG-qr-2 text > 2953 chars → 500 and generic error, BUG-qr-3 previous code stays after a failed generation; 5 a11y findings added to BUG-004 (Generate focus indicator, focus lost after Generate/Clear, result not announced/generic alt, placeholder contrast, page title); 3 usability findings added to BUG-005 (no success feedback with stale error toast, result below the fold on mobile, no download/copy) |
 
 Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-pd-1), stock conflict toast names the reason, deep link kept after login.
 `/cart`: "+" capped by stock / 409 shown (BUG-cart-1, drop `test.fail`), toasts after cart actions, pending quantity saved before checkout.
+`/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-qr-1), 400 with a length message (BUG-qr-2), remove `test.fail()` from the stale-image test (BUG-qr-3).
 
 ### Out of scope / to be decided
 
