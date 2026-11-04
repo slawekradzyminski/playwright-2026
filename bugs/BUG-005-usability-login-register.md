@@ -187,3 +187,21 @@
 **Expected:** "Download PNG" / "Copy" buttons, as the page says "PNG output is returned directly".
 
 **Actual:** Only the image; the user must use the browser's context menu (or long-press on mobile); the image `src` is a `blob:` URL.
+
+## Send Email: success message describes delivery while the message is still queued
+
+**Steps:** In the local profile, open `/email` as a client, enter a valid message with a unique `@example.invalid` recipient, and click Send Email. Compare the immediate confirmation with the page notice and the local outbox.
+
+**Expected:** The confirmation says the message was queued, consistent with the page notice about asynchronous delivery.
+
+**Actual:** The browser displays “Email sent successfully” immediately after the POST returns HTTP 200. The backend has scheduled the send for later. The message was absent on the first check and appeared in the local outbox about seven minutes later.
+
+## Send Email: whitespace-only fields produce a toast without field-level errors
+
+**Steps:** Enter a valid recipient, three spaces in Subject, and ten spaces in Message. Click Send Email.
+
+**Expected:** The form treats both fields as empty and shows both required errors next to their fields.
+
+**Actual:** The form submits both fields. The backend returns HTTP 400 and the browser shows a toast reading “Email content is required”. Neither field shows an inline error, and the toast does not identify the empty subject. Reproduced twice on Chromium 153.0.8010.12.
+
+![Only the message error is shown in a toast](img/BUG-005-email-whitespace.png)

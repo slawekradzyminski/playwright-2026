@@ -13,6 +13,8 @@ export class LoginPage extends BasePage {
   readonly passwordError: Locator;
   readonly submitButton: Locator;
   readonly registerButton: Locator;
+  readonly mfaCode: Locator;
+  readonly mfaSubmit: Locator;
 
   constructor(page: Page) {
     super(page);
@@ -24,6 +26,8 @@ export class LoginPage extends BasePage {
     this.passwordError = page.getByTestId('login-password-error');
     this.submitButton = page.getByTestId('login-submit-button');
     this.registerButton = page.getByTestId('login-register-link');
+    this.mfaCode = page.getByTestId('login-mfa-code-input');
+    this.mfaSubmit = page.getByTestId('login-mfa-submit-button');
   }
 
   async login({ username, password }: LoginDto) {

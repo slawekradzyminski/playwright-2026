@@ -212,3 +212,39 @@ Each section below is one finding, grouped by screen.
 **Expected:** e.g. "QR Code Generator – Awesome Testing".
 
 **Actual:** "Awesome Testing".
+
+## Profile
+
+### Email validation error is not associated with the input (WCAG 3.3.1)
+
+**Steps:** Sign in as a client, open `/profile`, enter `invalid` in Email, and select “Save Changes”. Inspect the input in the accessibility tree.
+
+**Expected:** The Email input exposes its invalid state and references the visible error so the user can hear the reason when returning to the field.
+
+**Actual:** “Invalid email format” appears as a separate alert. The Email input exposes neither `aria-invalid` nor a reference to the error.
+
+![Email field showing the validation error](img/BUG-004-profile-email-error.png)
+
+### Generic page title (WCAG 2.4.2)
+
+**Expected:** “Profile – Awesome Testing”.
+
+**Actual:** The document title remains “Awesome Testing” after navigation and reload.
+
+## Admin Dashboard and Send Email
+
+### Generic page title on both routes (WCAG 2.4.2)
+
+**Steps:** Sign in as an administrator and navigate between `/admin` and `/email`.
+
+**Expected:** Each route exposes a page-specific title, such as “Admin Dashboard – Awesome Testing” or “Send Email – Awesome Testing”.
+
+**Actual:** Both routes expose “Awesome Testing” as the document title.
+
+### Send Email validation errors are not associated with their fields (WCAG 3.3.1)
+
+**Steps:** Open `/email` as a client, submit the empty form, and inspect the To, Subject, and Message controls.
+
+**Expected:** Each field exposes its invalid state and references its own visible error.
+
+**Actual:** Three separate alerts appear. The fields expose no `aria-invalid`, `aria-describedby`, or `aria-errormessage`. Returning to a field does not expose its error as part of that control.
