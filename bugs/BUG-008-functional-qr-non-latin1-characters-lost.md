@@ -1,6 +1,4 @@
-# BUG-qr-1 [FUNCTIONAL] QR code replaces Polish diacritics and emoji with "?"
-
-<!-- Working number; the final BUG-NNN and file name are assigned at merge. Suggested slug: functional-qr-non-latin1-characters-lost -->
+# BUG-008 [FUNCTIONAL] QR code replaces Polish diacritics and emoji with "?"
 
 | | |
 |---|---|
@@ -21,7 +19,7 @@
 **Evidence:**
 - The frontend sends the text correctly: request `POST /api/v1/qr/create` body `{"text":"Zażółć gęślą jaźń ŻÓŁW €😀"}`.
 - The API alone reproduces it: `POST /api/v1/qr/create` with `{"text":"żółw"}` (`Content-Type: application/json; charset=utf-8`) → 200, PNG decodes to `?ó?w`.
-- Capacity matches Latin-1 bytes: 2953 characters is the maximum (see BUG-qr-2), the byte-mode limit of a version 40-L code.
+- Capacity matches Latin-1 bytes: 2953 characters is the maximum (see BUG-009), the byte-mode limit of a version 40-L code.
 
 ![Diacritics in the input; the generated code decodes with "?"](img/qr-diacritics.png)
 

@@ -1,6 +1,4 @@
-# BUG-qr-3 [FUNCTIONAL] QR code of the previous text stays on screen after a failed generation
-
-<!-- Working number; the final BUG-NNN and file name are assigned at merge. Suggested slug: functional-qr-stale-image-after-error -->
+# BUG-010 [FUNCTIONAL] QR code of the previous text stays on screen after a failed generation
 
 | | |
 |---|---|
@@ -11,7 +9,7 @@
 
 **Steps to reproduce**
 1. Open `/qr`, enter `previous text`, click "Generate QR Code" – the code appears.
-2. Replace the text with 2954 characters (any text the generator rejects, see BUG-qr-2).
+2. Replace the text with 2954 characters (any text the generator rejects, see BUG-009).
 3. Click "Generate QR Code".
 
 **Expected:** The old code is removed (or clearly marked as outdated) when generation for the new text fails.

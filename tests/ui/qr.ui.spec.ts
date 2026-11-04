@@ -80,7 +80,7 @@ test.describe('QR code page UI tests', () => {
     });
   }
 
-  // The UI must send the text unchanged. BUG-qr-1: the backend encodes characters outside Latin-1 as "?",
+  // The UI must send the text unchanged. BUG-008: the backend encodes characters outside Latin-1 as "?",
   // which only a QR decoder can see (regression candidate at API level).
   const specialTexts = [
     { name: 'Polish diacritics and emoji', text: 'Zażółć gęślą jaźń 😀' },
@@ -119,7 +119,7 @@ test.describe('QR code page UI tests', () => {
   });
 
   test('should not keep the previous QR code after a failed generation', async ({ qrCodePage }) => {
-    test.fail(true, 'BUG-qr-3: the QR code of the previous text stays visible after an error');
+    test.fail(true, 'BUG-010: the QR code of the previous text stays visible after an error');
 
     // given
     await qrCodePage.textInput.fill('previous text');

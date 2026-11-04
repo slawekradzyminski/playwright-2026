@@ -1,4 +1,4 @@
-# BUG-pd-1 [FUNCTIONAL] Product details with a non-numeric id request `/api/v1/products/NaN` and load for 7 s
+# BUG-006 [FUNCTIONAL] Product details with a non-numeric id request `/api/v1/products/NaN` and load for 7 s
 
 | | |
 |---|---|

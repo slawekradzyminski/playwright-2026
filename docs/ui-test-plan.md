@@ -1,6 +1,6 @@
 # Screen coverage and UI test plan
 
-As of 2026-11-04 (updated after the `/products` session): frontend `vite-react-frontend` 3.9.1 (routes from `src/AppRoutes.tsx`), backend 3.9.4.
+As of 2026-11-04 (updated after the `/products/:id`, `/cart` and `/qr` sessions): frontend `vite-react-frontend` 3.9.1 (routes from `src/AppRoutes.tsx`), backend 3.9.4.
 Every screen in the table was opened with `playwright-cli` as an anonymous user, a client and an admin. All of them render and none reports console errors.
 Test data was set up through the API: registration, cart (`POST /api/v1/cart/items`) and order (`POST /api/v1/orders`).
 
@@ -34,7 +34,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 14 | `/reset` | Set new password (token from email) | anonymous | 0 | – |
 | 15 | `/auth/sso/callback` | SSO callback (Keycloak) | anonymous | 0 | – |
 | 16 | `/products/:id` | Product details (add, update, remove in cart; out of stock; not found) | logged in | **2** | `product-details.ui.spec.ts`, `products.ui.spec.ts` (opened from the list) |
-| 17 | `/checkout` | Checkout: address, summary, place order | logged in | 0 | – |
+| 17 | `/checkout` | Checkout: address, summary, place order | logged in | 1 | `cart.ui.spec.ts` ("Proceed to Checkout") |
 | 18 | `/orders` | Redirect to `/profile` | logged in | 0 | – |
 | 19 | `/orders/:id` | Order details: cancel; admin changes status | logged in | 0 | – |
 | 20 | `/users/:username/edit` | Edit user (client sees "Access denied") | admin | 0 | – |
@@ -53,12 +53,12 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 
 | Metric | Result |
 |---|---|
-| Screens opened by any test (level ≥ 1) | **13 / 30 = 43%** |
-| Screens tested functionally (level 2) | **4 / 30 = 13%** |
-| Screens without any test | 17 / 30 = 57% |
+| Screens opened by any test (level ≥ 1) | **14 / 30 = 47%** |
+| Screens tested functionally (level 2) | **7 / 30 = 23%** |
+| Screens without any test | 16 / 30 = 53% |
 
 Notes:
-- Authentication and navigation are tested well. The shopping flow is covered on the product list only; cart, checkout and admin are not.
+- Authentication and navigation are tested well. The shopping flow is covered up to the cart (list, details, cart); checkout, orders and admin are not.
 - Product tests create their own products (unique category per test) through the admin API and delete them afterwards, so they do not depend on the shared catalog.
 - Access control is checked in two places: logging out blocks `/`, and a client opening `/admin` lands on `/`. The other admin routes and the anonymous redirect are not checked.
 
@@ -73,8 +73,8 @@ Done: `ProductsApi`, `CartApi`, `productGenerator` and the `products.fixture` (`
 | Screen | Scenarios |
 |---|---|
 | ~~`/products` → level 2~~ | **done 2026-11-04**: category filter, card content, search + empty state/reset, sort by price, "In stock only", add N to cart, update and remove an item already in the cart, quantity capped by stock, open details |
-| ~~`/products/:id` → level 2~~ | **done 2026-11-04**: name, price, description, category, stock; add N → toast, cart counter, "N in cart"; update and remove an item already in the cart; quantity capped by stock; out of stock (Add disabled, no quantity controls); stock lowered after page load → error toast; deleted product → error box and link back; back link; anonymous → `/login`. Not automated: non-numeric id (BUG-pd-1). Frontend request: `toast-title` test id on the "Failed to update cart" error toast |
-| ~~`/cart` → level 2~~ | **done 2026-11-04**: empty cart; items, line totals and summary; quantity change + "Update" recalculates totals (UI and API); "-" stops at 1; quantity above stock (`test.fail`, BUG-cart-1); remove an item; "Clear Cart" confirmed and cancelled; "Proceed to Checkout" → `/checkout` |
+| ~~`/products/:id` → level 2~~ | **done 2026-11-04**: name, price, description, category, stock; add N → toast, cart counter, "N in cart"; update and remove an item already in the cart; quantity capped by stock; out of stock (Add disabled, no quantity controls); stock lowered after page load → error toast; deleted product → error box and link back; back link; anonymous → `/login`. Not automated: non-numeric id (BUG-006). Frontend request: `toast-title` test id on the "Failed to update cart" error toast |
+| ~~`/cart` → level 2~~ | **done 2026-11-04**: empty cart; items, line totals and summary; quantity change + "Update" recalculates totals (UI and API); "-" stops at 1; quantity above stock (`test.fail`, BUG-007); remove an item; "Clear Cart" confirmed and cancelled; "Proceed to Checkout" → `/checkout` |
 | `/checkout` | required address fields (5 messages); place order → `/orders/:id`, cart is empty |
 | `/orders/:id` | items and address match the order; cancel a PENDING order |
 | `/profile` (orders section) | order visible in "Your Orders", link to details |
@@ -109,7 +109,7 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Screen | Scenarios |
 |---|---|
 | `/email` → level 2 | validation; send → message in the local outbox |
-| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; stale image after error as `test.fail()` (BUG-qr-3). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
+| ~~`/qr` → level 2~~ | **done 2026-11-04**: empty form state, generate (request body + displayed PNG equals `POST /api/v1/qr/create` for the same text), replace with new text, "Clear", empty/whitespace-only error, diacritics/emoji, HTML, multi-line, spaces, max length 2953, too long → error; stale image after error as `test.fail()` (BUG-010). Helpers: `QrApi`, `qr.fixture` (`qrApi`). Frontend request: `qr-code-container` test id is used twice once a code is shown |
 | `/traffic` → level 2 | action in the app → event in the list; "Clear Events" |
 | `/llm` → level 2 | navigate to each of the three modes |
 | `/llm/generate`, `/llm/chat`, `/llm/tools` | send a prompt → response from `ollama-mock`; settings |
@@ -120,13 +120,13 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 | Date | Screens | Findings |
 |---|---|---|
 | 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
-| 2026-11-04 | `/products/:id` (client, anonymous; desktop, tablet, mobile) | BUG-pd-1 (non-numeric id → `/api/v1/products/NaN`, 4 requests, 7 s loading); no visual bugs (long name with diacritics, HTML in name/description rendered as text, price 99999999.99); 3 a11y findings added to BUG-004 ("-"/"+" names and unannounced quantity, error state not announced, page title); 5 usability findings added to BUG-005 (quantity 0 / "Update" removes, generic stock-conflict error with stale stock, "Error loading" for a missing product, Back resets the category, deep link lost after login) |
-| 2026-11-04 | `/cart` (client, anonymous redirect to `/login`; desktop, tablet, mobile) | BUG-cart-1 (quantity above stock, 409 not shown); 2 a11y findings added to BUG-004 (row controls without product context, page title); 3 usability findings added to BUG-005 (pending quantity lost on checkout, no toasts, quantity/Remove off-screen on mobile and tablet) |
-| 2026-11-04 | `/qr` (client; desktop, tablet, mobile) | BUG-qr-1 diacritics/emoji become "?" in the code (backend charset), BUG-qr-2 text > 2953 chars → 500 and generic error, BUG-qr-3 previous code stays after a failed generation; 5 a11y findings added to BUG-004 (Generate focus indicator, focus lost after Generate/Clear, result not announced/generic alt, placeholder contrast, page title); 3 usability findings added to BUG-005 (no success feedback with stale error toast, result below the fold on mobile, no download/copy) |
+| 2026-11-04 | `/products/:id` (client, anonymous; desktop, tablet, mobile) | BUG-006 (non-numeric id → `/api/v1/products/NaN`, 4 requests, 7 s loading); no visual bugs (long name with diacritics, HTML in name/description rendered as text, price 99999999.99); 3 a11y findings added to BUG-004 ("-"/"+" names and unannounced quantity, error state not announced, page title); 5 usability findings added to BUG-005 (quantity 0 / "Update" removes, generic stock-conflict error with stale stock, "Error loading" for a missing product, Back resets the category, deep link lost after login) |
+| 2026-11-04 | `/cart` (client, anonymous redirect to `/login`; desktop, tablet, mobile) | BUG-007 (quantity above stock, 409 not shown); 2 a11y findings added to BUG-004 (row controls without product context, page title); 3 usability findings added to BUG-005 (pending quantity lost on checkout, no toasts, quantity/Remove off-screen on mobile and tablet) |
+| 2026-11-04 | `/qr` (client; desktop, tablet, mobile) | BUG-008 diacritics/emoji become "?" in the code (backend charset), BUG-009 text > 2953 chars → 500 and generic error, BUG-010 previous code stays after a failed generation; 5 a11y findings added to BUG-004 (Generate focus indicator, focus lost after Generate/Clear, result not announced/generic alt, placeholder contrast, page title); 3 usability findings added to BUG-005 (no success feedback with stale error toast, result below the fold on mobile, no download/copy) |
 
-Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-pd-1), stock conflict toast names the reason, deep link kept after login.
-`/cart`: "+" capped by stock / 409 shown (BUG-cart-1, drop `test.fail`), toasts after cart actions, pending quantity saved before checkout.
-`/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-qr-1), 400 with a length message (BUG-qr-2), remove `test.fail()` from the stale-image test (BUG-qr-3).
+Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-006), stock conflict toast names the reason, deep link kept after login.
+`/cart`: "+" capped by stock / 409 shown (BUG-007, drop `test.fail`), toasts after cart actions, pending quantity saved before checkout.
+`/qr`: content of the decoded code for UTF-8 text (API level, needs a QR decoder; BUG-008), 400 with a length message (BUG-009), remove `test.fail()` from the stale-image test (BUG-010).
 
 ### Out of scope / to be decided
 
@@ -137,10 +137,10 @@ Regression candidates once fixed: keyboard access to product details, out-of-sto
 
 | After stage | Level ≥ 1 | Level 2 |
 |---|---|---|
-| now | 13/30 (43%) | 4/30 (13%) |
-| 1 | 16/30 (53%) | 9/30 (30%) |
-| 2 | 23/30 (77%) | 18/30 (60%) |
-| 3 | 25/30 (83%) | 21/30 (70%) |
+| now | 14/30 (47%) | 7/30 (23%) |
+| 1 | 16/30 (53%) | 10/30 (33%) |
+| 2 | 23/30 (77%) | 19/30 (63%) |
+| 3 | 25/30 (83%) | 22/30 (73%) |
 | 4 | 29/30 (97%) | 29/30 (97%) |
 
 `/auth/sso/callback` remains, pending the SSO decision.

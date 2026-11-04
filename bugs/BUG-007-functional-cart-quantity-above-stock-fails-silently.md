@@ -1,4 +1,4 @@
-# BUG-cart-1 [FUNCTIONAL] Cart lets the quantity go above stock and silently drops the 409 on "Update"
+# BUG-007 [FUNCTIONAL] Cart lets the quantity go above stock and silently drops the 409 on "Update"
 
 | | |
 |---|---|

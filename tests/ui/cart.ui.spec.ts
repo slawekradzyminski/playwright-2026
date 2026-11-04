@@ -73,7 +73,7 @@ test.describe('Cart page UI tests', () => {
     await expect(row.updateButton).toBeHidden();
   });
 
-  // BUG-cart-1: "+" goes above the stock, the API answers 409 and the error is not shown.
+  // BUG-007: "+" goes above the stock, the API answers 409 and the error is not shown.
   test.fail('should not allow quantity above available stock', async ({ cartPage, createProduct, cartApi }) => {
     // given
     const product = await createProduct({ stockQuantity: 3 });
