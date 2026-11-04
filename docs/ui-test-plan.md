@@ -24,7 +24,7 @@ The unit is a route from `AppRoutes.tsx` (30 routes).
 | 4 | `/products` | Product list (categories, search, sort, stock filter, quantity, add/update/remove in cart) | logged in | **2** | `products.ui.spec.ts`, home, header |
 | 5 | `/users` | User list (Edit/Delete for admin only) | logged in | 1 | home |
 | 6 | `/profile` | Profile: personal info, system prompts, 2FA, orders | logged in | 1 | home, header |
-| 7 | `/cart` | Cart (quantity, remove, clear, proceed to checkout) | logged in | 1 | header |
+| 7 | `/cart` | Cart (quantity, remove, clear, proceed to checkout) | logged in | **2** | `cart.ui.spec.ts`, header |
 | 8 | `/email` | Send email | logged in | 1 | home, header |
 | 9 | `/qr` | QR code generator | logged in | 1 | home, header |
 | 10 | `/llm` | LLM hub (mode selection) | logged in | 1 | home, header |
@@ -74,7 +74,7 @@ Done: `ProductsApi`, `CartApi`, `productGenerator` and the `products.fixture` (`
 |---|---|
 | ~~`/products` → level 2~~ | **done 2026-11-04**: category filter, card content, search + empty state/reset, sort by price, "In stock only", add N to cart, update and remove an item already in the cart, quantity capped by stock, open details |
 | ~~`/products/:id` → level 2~~ | **done 2026-11-04**: name, price, description, category, stock; add N → toast, cart counter, "N in cart"; update and remove an item already in the cart; quantity capped by stock; out of stock (Add disabled, no quantity controls); stock lowered after page load → error toast; deleted product → error box and link back; back link; anonymous → `/login`. Not automated: non-numeric id (BUG-pd-1). Frontend request: `toast-title` test id on the "Failed to update cart" error toast |
-| `/cart` → level 2 | empty cart; quantity change recalculates the total; remove an item; "Clear Cart"; "Proceed to Checkout" |
+| ~~`/cart` → level 2~~ | **done 2026-11-04**: empty cart; items, line totals and summary; quantity change + "Update" recalculates totals (UI and API); "-" stops at 1; quantity above stock (`test.fail`, BUG-cart-1); remove an item; "Clear Cart" confirmed and cancelled; "Proceed to Checkout" → `/checkout` |
 | `/checkout` | required address fields (5 messages); place order → `/orders/:id`, cart is empty |
 | `/orders/:id` | items and address match the order; cancel a PENDING order |
 | `/profile` (orders section) | order visible in "Your Orders", link to details |
@@ -121,8 +121,10 @@ Parallelism constraint: the admin is a single shared account and the dashboard s
 |---|---|---|
 | 2026-11-04 | `/products` (client; desktop, tablet, mobile) | no functional or visual bugs; 5 a11y findings added to BUG-004 (details not reachable by keyboard, unnamed "-"/"+" buttons, unlabelled search, category state, page title); 5 usability findings added to BUG-005 (out-of-stock card, quantity 0, filters lost on refresh, price formatting, diacritics in search) |
 | 2026-11-04 | `/products/:id` (client, anonymous; desktop, tablet, mobile) | BUG-pd-1 (non-numeric id → `/api/v1/products/NaN`, 4 requests, 7 s loading); no visual bugs (long name with diacritics, HTML in name/description rendered as text, price 99999999.99); 3 a11y findings added to BUG-004 ("-"/"+" names and unannounced quantity, error state not announced, page title); 5 usability findings added to BUG-005 (quantity 0 / "Update" removes, generic stock-conflict error with stale stock, "Error loading" for a missing product, Back resets the category, deep link lost after login) |
+| 2026-11-04 | `/cart` (client, anonymous redirect to `/login`; desktop, tablet, mobile) | BUG-cart-1 (quantity above stock, 409 not shown); 2 a11y findings added to BUG-004 (row controls without product context, page title); 3 usability findings added to BUG-005 (pending quantity lost on checkout, no toasts, quantity/Remove off-screen on mobile and tablet) |
 
 Regression candidates once fixed: keyboard access to product details, out-of-stock label, "-" disabled at 1, filters kept in the URL; `/products/:id`: non-numeric id shows the error at once without `NaN` requests (BUG-pd-1), stock conflict toast names the reason, deep link kept after login.
+`/cart`: "+" capped by stock / 409 shown (BUG-cart-1, drop `test.fail`), toasts after cart actions, pending quantity saved before checkout.
 
 ### Out of scope / to be decided
 
