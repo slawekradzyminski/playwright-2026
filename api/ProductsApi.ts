@@ -13,6 +13,12 @@ export class ProductsApi {
     return response.json();
   }
 
+  async update(id: number, product: ProductCreateDto): Promise<ProductDto> {
+    const response = await this.request.put(`${PRODUCTS_ENDPOINT}/${id}`, { data: product, headers: this.headers() });
+    expect(response.status()).toBe(200);
+    return response.json();
+  }
+
   /** The backend answers 409 while the product is still in a cart or an order. */
   async delete(id: number) {
     const response = await this.request.delete(`${PRODUCTS_ENDPOINT}/${id}`, { headers: this.headers() });

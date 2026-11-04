@@ -1,11 +1,11 @@
-# BUG-004 [A11Y] Accessibility findings on Login, Register, Home, Header and Products
+# BUG-004 [A11Y] Accessibility findings on Login, Register, Home, Header, Products and Product details
 
 | | |
 |---|---|
 | Category | Accessibility (WCAG 2.2 AA) |
 | Severity / Priority | Minor / P4 |
 | Environment | Chromium, all viewports (1920×1080, 820×1180, 393×852); frontend 3.9.1 |
-| Preconditions | Logged out for Login/Register, logged in for Home/Header/Products |
+| Preconditions | Logged out for Login/Register, logged in for Home/Header/Products/Product details |
 
 Each section below is one finding, grouped by screen.
 
@@ -132,3 +132,28 @@ Each section below is one finding, grouped by screen.
 **Expected:** e.g. "Products – Awesome Testing".
 
 **Actual:** "Awesome Testing".
+
+## Product details
+
+### Quantity buttons are named "-" and "+" (WCAG 2.4.6, 4.1.2)
+
+**Steps:** Open `/products/:id` for any product and inspect `decrease-quantity` / `increase-quantity` in the accessibility tree.
+
+**Expected:** e.g. "Decrease quantity" / "Increase quantity", the "Quantity" heading linked to the control group, and the value exposed as a spinbutton or announced through `aria-live`.
+
+**Actual:** Buttons are named "-" and "+"; `quantity-value` is a plain `span`, so pressing "+" changes nothing a screen reader announces. Same pattern as the product cards on `/products`.
+
+### "Product not found" state is not announced (WCAG 4.1.3)
+
+**Steps:** Open `/products/<id of a deleted product>`.
+
+**Expected:** The error box has `role="alert"` (or focus moves to it) and a heading, so screen reader users learn the page failed to load.
+
+**Actual:** `product-not-found` is a plain `div` with a `p` "Error loading product details" and a link; no role, no heading, no `h1` on the page.
+
+### Generic page title (WCAG 2.4.2)
+
+**Expected:** The product name in the title, e.g. "Clean Code – Awesome Testing".
+
+**Actual:** "Awesome Testing" on every product.
+
