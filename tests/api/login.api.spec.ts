@@ -52,7 +52,7 @@ test.describe('/api/v1/users/signin API tests', () => {
     // then
     expect(response.status()).toBe(400);
     const responseBody = await response.json();
-    expect(responseBody.username).toBe('Minimum username length: 4 characters');
+    expect(responseBody.username).toBe('Username is required');
   });
 
   test('should return validation error for username too short - 400', async ({ request }) => {
